@@ -28,3 +28,42 @@ A lightweight, multi-lingual web portal built to help KAEFER Saudi Arabia employ
 ---
 
 ## 🏗️ System Architecture
+
+┌────────────────────────────────┐
+                           │   GitHub Pages Frontend        │
+                           │   (HTML5, Tailwind CSS, JS)    │
+                           └───────────────┬────────────────┘
+                                           │
+                            ┌──────────────┴──────────────┐
+                            ▼                             ▼
+                 ┌──────────────────┐          ┌──────────────────┐
+                 │ OT & Payslip     │          │ Ticket Submission│
+                 │ Calculation      │          │ & Tracking Engine│
+                 │ Engine (Local)   │          └──────────┬───────┘
+                 └──────────────────┘                     │
+                                                          │ Async JSON Fetch
+                                                          ▼
+                                               ┌────────────────────┐
+                                               │ Google Apps Script │
+                                               │ Webhook Engine     │
+                                               └──────────┬─────────┘
+                                                          │
+                                                          ▼
+                                               ┌────────────────────┐
+                                               │ Google Sheets DB   │
+                                               │ (Support Dashboard)│
+                                               └────────────────────┘
+
+---
+
+## ⚠️ Important Notice & Disclaimer
+
+> **PLEASE NOTE:** This portal is an **unofficial, community-built utility** operating under **Test Mode** for limited sites. It is intended to assist employees with quick estimations and streamline support follow-ups. All calculations are approximate reference figures; official earnings remain subject to SAP payroll processing.
+
+---
+
+## 🛠️ Technology Stack
+
+* **Frontend:** Single-page app hosted via **GitHub Pages** (HTML5, Tailwind CSS, FontAwesome, Vanilla JS).
+* **Backend:** **Google Apps Script** deployed as a Web App API endpoint.
+* **Database / Admin Dashboard:** **Google Sheets** for real-time ticket review, HR notes, and task resolution.
