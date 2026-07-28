@@ -3,201 +3,292 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KAEFER Employee Portal</title>
-    <!-- Tailwind CSS for Responsive UI -->
+    <title>KAEFER Saudi Arabia - Employee Self-Service & Support Portal</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        .tab-active { border-bottom: 4px solid #0056b3; color: #0056b3; font-weight: bold; }
+        .tab-active { border-bottom: 4px solid #1e3a8a; color: #1e3a8a; font-weight: 700; background-color: #f8fafc; }
+        .tab-inactive { color: #64748b; font-weight: 500; }
+        .tab-inactive:hover { color: #1e3a8a; }
     </style>
 </head>
-<body class="bg-slate-100 font-sans text-slate-800">
+<body class="bg-slate-100 font-sans text-slate-800 min-h-screen flex flex-col justify-between">
 
-    <!-- Header -->
-    <header class="bg-blue-900 text-white p-4 shadow-md flex justify-between items-center">
-        <div class="flex items-center gap-2">
-            <i class="fa-solid fa-calculator text-2xl"></i>
-            <h1 class="text-xl font-bold tracking-wide">KAEFER Portal</h1>
-        </div>
-        <div>
-            <!-- Quick Language Selector -->
-            <select id="langSelect" onchange="changeLanguage()" class="bg-blue-800 text-sm p-2 rounded text-white border border-blue-600">
-                <option value="en">🌐 English</option>
-                <option value="ar">🌐 العربية</option>
-                <option value="hi">🌐 हिंदी</option>
-                <option value="ur">🌐 اردو</option>
-            </select>
+    <!-- App Header -->
+    <header class="bg-blue-900 text-white shadow-md">
+        <div class="max-w-4xl mx-auto p-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="bg-white text-blue-900 font-black px-3 py-1 rounded text-lg tracking-wider">KAEFER</div>
+                <div>
+                    <h1 class="text-base font-bold leading-tight" data-key="header_title">Employee Portal</h1>
+                    <p class="text-xs text-blue-200" data-key="header_sub">Payslip Calculator & Support Center</p>
+                </div>
+            </div>
+            
+            <!-- Language Selector -->
+            <div>
+                <select id="langSelect" onchange="changeLanguage()" class="bg-blue-800 text-white text-xs font-semibold p-2 rounded border border-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                    <option value="en">🌐 English</option>
+                    <option value="ar">🌐 العربية</option>
+                    <option value="hi">🌐 हिंदी</option>
+                    <option value="ur">🌐 اردو</option>
+                </select>
+            </div>
         </div>
     </header>
 
     <!-- Navigation Tabs -->
-    <div class="bg-white shadow flex justify-around text-center border-b">
-        <button onclick="switchTab('calc')" id="tab-calc" class="w-1/2 py-3 tab-active flex justify-center items-center gap-2">
-            <i class="fa-solid fa-coins"></i> <span data-key="nav_calc">OT & Payslip Calculator</span>
-        </button>
-        <button onclick="switchTab('support')" id="tab-support" class="w-1/2 py-3 text-slate-500 flex justify-center items-center gap-2">
-            <i class="fa-solid fa-headset"></i> <span data-key="nav_support">Support Center</span>
-        </button>
+    <div class="bg-white shadow border-b border-slate-200">
+        <div class="max-w-4xl mx-auto flex">
+            <button onclick="switchTab('calc')" id="tab-calc" class="w-1/2 py-3.5 tab-active flex justify-center items-center gap-2 text-sm transition-all">
+                <i class="fa-solid fa-calculator text-base"></i>
+                <span data-key="nav_calc">OT & Payslip Calculator</span>
+            </button>
+            <button onclick="switchTab('support')" id="tab-support" class="w-1/2 py-3.5 tab-inactive flex justify-center items-center gap-2 text-sm transition-all">
+                <i class="fa-solid fa-headset text-base"></i>
+                <span data-key="nav_support">Support Center</span>
+            </button>
+        </div>
     </div>
 
-    <main class="max-w-2xl mx-auto p-4">
-        
+    <!-- Main Content Area -->
+    <main class="max-w-3xl w-full mx-auto p-4 space-y-6 my-2">
+
         <!-- ================= CALCULATOR SECTION ================= -->
         <section id="section-calc" class="space-y-4">
-            <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
-                <h2 class="text-lg font-bold text-slate-700 mb-3 border-b pb-2 flex items-center gap-2">
-                    <i class="fa-solid fa-money-bill-wave text-green-600"></i>
-                    <span data-key="title_salary">Salary & Allowance</span>
+            
+            <!-- Pay Cycle Info Banner -->
+            <div class="bg-amber-50 border-l-4 border-amber-500 p-3.5 rounded-r-lg shadow-sm text-xs text-amber-900 space-y-1">
+                <div class="font-bold flex items-center gap-1.5">
+                    <i class="fa-solid fa-calendar-days text-amber-600 text-sm"></i>
+                    <span data-key="cutoff_title">Pay Cutoff System (25th Cutoff Rule)</span>
+                </div>
+                <p data-key="cutoff_desc">
+                    Overtime is calculated from 26th of previous month to 25th of current month. Overtime worked from 26th to month-end appears as Retro OT in your payslip.
+                </p>
+            </div>
+
+            <!-- Base Earnings Form -->
+            <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 space-y-4">
+                <h2 class="text-base font-bold text-slate-800 border-b pb-2 flex items-center gap-2">
+                    <i class="fa-solid fa-sack-dollar text-green-600"></i>
+                    <span data-key="title_salary">1. Salary & Allowances</span>
                 </h2>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-sm font-semibold mb-1" data-key="label_basic">Basic Salary (SAR)</label>
-                        <input type="number" id="basicSalary" value="1200" oninput="calculate()" class="w-full border p-2 rounded focus:ring-2 focus:ring-blue-500 outline-none">
+                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1" data-key="label_basic">Basic Salary (SAR)</label>
+                        <input type="number" id="basicSalary" value="1200" min="0" oninput="calculate()" class="w-full border border-slate-300 p-2.5 rounded-lg text-sm font-semibold focus:ring-2 focus:ring-blue-600 focus:outline-none">
                     </div>
                     <div>
-                        <label class="block text-sm font-semibold mb-1" data-key="label_allowance">Other Allowances (SAR)</label>
-                        <input type="number" id="allowance" value="200" oninput="calculate()" class="w-full border p-2 rounded focus:ring-2 focus:ring-blue-500 outline-none">
+                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1" data-key="label_allowance">Other Allowances (SAR)</label>
+                        <input type="number" id="allowance" value="200" min="0" oninput="calculate()" class="w-full border border-slate-300 p-2.5 rounded-lg text-sm font-semibold focus:ring-2 focus:ring-blue-600 focus:outline-none">
                     </div>
                 </div>
             </div>
 
-            <!-- Overtime Breakdown Cutoff Info -->
-            <div class="bg-amber-50 border-l-4 border-amber-500 p-3 rounded text-xs text-amber-800">
-                <i class="fa-solid fa-circle-info mr-1"></i> 
-                <strong>Cutoff Rule:</strong> Retro OT (26th to End of Prev. Month) + Current OT (1st to 25th of Current Month).[cite: 1]
-            </div>
-
-            <!-- OT Hours Inputs -->
+            <!-- Overtime Inputs Form -->
             <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 space-y-4">
-                <h2 class="text-lg font-bold text-slate-700 border-b pb-2 flex items-center gap-2">
+                <h2 class="text-base font-bold text-slate-800 border-b pb-2 flex items-center gap-2">
                     <i class="fa-solid fa-clock text-blue-600"></i>
-                    <span data-key="title_ot">Overtime Hours Worked</span>
+                    <span data-key="title_ot">2. Overtime Hours Breakdown</span>
                 </h2>
 
                 <div class="space-y-3">
                     <!-- Normal OT -->
-                    <div class="flex justify-between items-center bg-slate-50 p-3 rounded border">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-slate-50 p-3 rounded-lg border border-slate-200 gap-2">
                         <div>
-                            <p class="font-bold text-slate-800 text-sm" data-key="ot_normal">Normal OT (1.5x)</p>
-                            <p class="text-xs text-slate-500">Regular Working Days</p>
+                            <p class="font-bold text-slate-800 text-sm" data-key="ot_normal">Normal OT (1.5x Multiplier)</p>
+                            <p class="text-xs text-slate-500" data-key="ot_normal_sub">1st to 25th (Regular Working Days)</p>
                         </div>
-                        <input type="number" id="normalOT" value="84" oninput="calculate()" class="w-24 border p-2 rounded text-right font-bold">
+                        <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+                            <input type="number" id="normalOT" value="84" min="0" oninput="calculate()" class="w-28 border border-slate-300 p-2 rounded-lg text-right font-bold text-sm">
+                            <span class="text-xs text-slate-500">Hrs</span>
+                        </div>
                     </div>
 
                     <!-- Holiday OT -->
-                    <div class="flex justify-between items-center bg-slate-50 p-3 rounded border">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-slate-50 p-3 rounded-lg border border-slate-200 gap-2">
                         <div>
-                            <p class="font-bold text-slate-800 text-sm" data-key="ot_holiday">Holiday OT (1.5x)</p>
-                            <p class="text-xs text-slate-500">Fridays / Holidays</p>
+                            <p class="font-bold text-slate-800 text-sm" data-key="ot_holiday">Holiday OT (1.5x Multiplier)</p>
+                            <p class="text-xs text-slate-500" data-key="ot_holiday_sub">Fridays / Official Company Holidays</p>
                         </div>
-                        <input type="number" id="holidayOT" value="48" oninput="calculate()" class="w-24 border p-2 rounded text-right font-bold">
+                        <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+                            <input type="number" id="holidayOT" value="48" min="0" oninput="calculate()" class="w-28 border border-slate-300 p-2 rounded-lg text-right font-bold text-sm">
+                            <span class="text-xs text-slate-500">Hrs</span>
+                        </div>
                     </div>
 
-                    <!-- Retro OT -->
-                    <div class="flex justify-between items-center bg-slate-50 p-3 rounded border">
+                    <!-- Retro Normal OT -->
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-slate-50 p-3 rounded-lg border border-slate-200 gap-2">
                         <div>
-                            <p class="font-bold text-slate-800 text-sm" data-key="ot_retro">Retro OT Hours (1.5x)</p>
-                            <p class="text-xs text-slate-500">From Previous Month (26th-End)</p>
+                            <p class="font-bold text-slate-800 text-sm" data-key="ot_retro_normal">Retro Normal OT (1.5x Multiplier)</p>
+                            <p class="text-xs text-slate-500" data-key="ot_retro_normal_sub">26th to End of Previous Month</p>
                         </div>
-                        <input type="number" id="retroOT" value="29.3" oninput="calculate()" class="w-24 border p-2 rounded text-right font-bold">
+                        <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+                            <input type="number" id="retroNormalOT" value="18.32" min="0" oninput="calculate()" class="w-28 border border-slate-300 p-2 rounded-lg text-right font-bold text-sm">
+                            <span class="text-xs text-slate-500">Hrs</span>
+                        </div>
+                    </div>
+
+                    <!-- Retro Holiday OT -->
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-slate-50 p-3 rounded-lg border border-slate-200 gap-2">
+                        <div>
+                            <p class="font-bold text-slate-800 text-sm" data-key="ot_retro_holiday">Retro Holiday OT (1.5x Multiplier)</p>
+                            <p class="text-xs text-slate-500" data-key="ot_retro_holiday_sub">Previous Month Holidays (26th-End)</p>
+                        </div>
+                        <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+                            <input type="number" id="retroHolidayOT" value="10.99" min="0" oninput="calculate()" class="w-28 border border-slate-300 p-2 rounded-lg text-right font-bold text-sm">
+                            <span class="text-xs text-slate-500">Hrs</span>
+                        </div>
                     </div>
 
                     <!-- Bonus OT -->
-                    <div class="flex justify-between items-center bg-slate-50 p-3 rounded border">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-slate-50 p-3 rounded-lg border border-slate-200 gap-2">
                         <div>
-                            <p class="font-bold text-slate-800 text-sm" data-key="ot_bonus">Bonus OT (1.0x Base Rate)</p>
-                            <p class="text-xs text-slate-500">Special Incentives</p>
+                            <p class="font-bold text-slate-800 text-sm" data-key="ot_bonus">Bonus OT / Incentive (1.0x Base Rate)</p>
+                            <p class="text-xs text-slate-500" data-key="ot_bonus_sub">Formula: Basic ÷ 30 ÷ 8</p>
                         </div>
-                        <input type="number" id="bonusOT" value="0" oninput="calculate()" class="w-24 border p-2 rounded text-right font-bold">
+                        <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+                            <input type="number" id="bonusOT" value="0" min="0" oninput="calculate()" class="w-28 border border-slate-300 p-2 rounded-lg text-right font-bold text-sm">
+                            <span class="text-xs text-slate-500">Hrs</span>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Complete Breakdown Card -->
-            <div class="bg-blue-900 text-white p-5 rounded-xl shadow-md space-y-3">
-                <h3 class="text-lg font-bold border-b border-blue-700 pb-2" data-key="title_breakdown">Estimated Breakdown</h3>
-                <div class="text-sm space-y-2">
-                    <div class="flex justify-between"><span>Hourly Rate (Base):</span><span id="rateBase">0.00 SAR</span></div>
-                    <div class="flex justify-between"><span>OT Rate (1.5x):</span><span id="rateOT">0.00 SAR</span></div>
+            <!-- Complete Calculation Breakdown Output -->
+            <div class="bg-blue-900 text-white p-5 rounded-xl shadow-lg space-y-4">
+                <h3 class="text-base font-bold border-b border-blue-800 pb-2 flex items-center justify-between">
+                    <span data-key="title_breakdown">Estimated Payslip Breakdown</span>
+                    <i class="fa-solid fa-file-invoice-dollar text-blue-300"></i>
+                </h3>
+                
+                <div class="text-xs sm:text-sm space-y-2">
+                    <div class="flex justify-between text-blue-200">
+                        <span data-key="rate_base">Base Hourly Rate (Basic ÷ 240):</span>
+                        <span id="rateBase" class="font-mono font-bold">0.00 SAR</span>
+                    </div>
+                    <div class="flex justify-between text-blue-200">
+                        <span data-key="rate_ot">OT Hourly Rate (Base x 1.5):</span>
+                        <span id="rateOT" class="font-mono font-bold">0.00 SAR</span>
+                    </div>
                     <hr class="border-blue-800">
-                    <div class="flex justify-between"><span>Basic Salary:</span><span id="outBasic">0.00 SAR</span></div>
-                    <div class="flex justify-between"><span>Allowances:</span><span id="outAllowance">0.00 SAR</span></div>
-                    <div class="flex justify-between"><span>Normal + Holiday OT:</span><span id="outNormalOT">0.00 SAR</span></div>
-                    <div class="flex justify-between"><span>Retro OT Pay:</span><span id="outRetroOT">0.00 SAR</span></div>
-                    <div class="flex justify-between"><span>Bonus OT Pay:</span><span id="outBonusOT">0.00 SAR</span></div>
+                    <div class="flex justify-between">
+                        <span data-key="out_basic">Basic Salary:</span>
+                        <span id="outBasic" class="font-mono">0.00 SAR</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span data-key="out_allowance">Allowances:</span>
+                        <span id="outAllowance" class="font-mono">0.00 SAR</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span data-key="out_normal_ot">Normal + Holiday OT Pay:</span>
+                        <span id="outNormalOT" class="font-mono">0.00 SAR</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span data-key="out_retro_ot">Retro OT Pay:</span>
+                        <span id="outRetroOT" class="font-mono">0.00 SAR</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span data-key="out_bonus_ot">Bonus OT Pay:</span>
+                        <span id="outBonusOT" class="font-mono">0.00 SAR</span>
+                    </div>
                 </div>
-                <div class="border-t-2 border-blue-400 pt-3 flex justify-between items-center text-lg font-extrabold">
-                    <span data-key="total_est">Approx Net Pay:</span>
-                    <span id="outNetPay" class="text-green-400 text-2xl">0.00 SAR</span>
+
+                <div class="border-t-2 border-blue-400 pt-3 flex justify-between items-center">
+                    <div>
+                        <p class="text-xs text-blue-200 font-bold uppercase" data-key="out_net_label">Approx Total Net Payable</p>
+                        <p class="text-xs text-blue-300" data-key="out_net_sub">(Before Deductions)</p>
+                    </div>
+                    <div id="outNetPay" class="text-green-400 font-extrabold text-2xl font-mono">0.00 SAR</div>
                 </div>
             </div>
         </section>
 
-
         <!-- ================= SUPPORT CENTER SECTION ================= -->
-        <section id="section-support" class="hidden space-y-4">
+        <section id="section-support" class="hidden space-y-6">
             
             <!-- Raise Ticket Form -->
             <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 space-y-4">
-                <h2 class="text-lg font-bold text-slate-700 border-b pb-2 flex items-center gap-2">
+                <h2 class="text-base font-bold text-slate-800 border-b pb-2 flex items-center gap-2">
                     <i class="fa-solid fa-paper-plane text-blue-600"></i>
-                    <span data-key="raise_ticket">Raise Salary Concern</span>
+                    <span data-key="raise_ticket">1. Submit Salary Query / Support Concern</span>
                 </h2>
                 
-                <form id="supportForm" onsubmit="submitTicket(event)" class="space-y-3">
-                    <div>
-                        <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Employee ID *</label>
-                        <input type="text" id="empId" required placeholder="e.g. 61102044" class="w-full border p-2 rounded">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Mobile Number *</label>
-                        <input type="tel" id="empPhone" required placeholder="05xxxxxxxx" class="w-full border p-2 rounded">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Issue Category *</label>
-                        <select id="issueCategory" class="w-full border p-2 rounded bg-white">
-                            <option value="Overtime Discrepancy">Overtime Hours Missing / Wrong</option>
-                            <option value="Allowance Missing">Allowance Not Added</option>
-                            <option value="Retro OT Issue">Retro Overtime Incorrect</option>
-                            <option value="Other">Other Query</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Details / Explanation</label>
-                        <textarea id="issueDetails" rows="3" placeholder="Explain your concern simply..." class="w-full border p-2 rounded"></textarea>
+                <form id="supportForm" onsubmit="submitTicket(event)" class="space-y-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-slate-700 mb-1" data-key="lbl_emp_id">Employee ID *</label>
+                            <input type="text" id="empId" required placeholder="e.g. 61102044" class="w-full border border-slate-300 p-2.5 rounded-lg text-sm focus:ring-2 focus:ring-blue-600 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-slate-700 mb-1" data-key="lbl_phone">Mobile Number *</label>
+                            <input type="tel" id="empPhone" required placeholder="05XXXXXXXX" class="w-full border border-slate-300 p-2.5 rounded-lg text-sm focus:ring-2 focus:ring-blue-600 focus:outline-none">
+                        </div>
                     </div>
 
-                    <button type="submit" id="btnSubmit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg shadow flex justify-center items-center gap-2">
-                        <i class="fa-solid fa-paper-plane"></i> Submit Ticket
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-700 mb-1" data-key="lbl_category">Category of Issue *</label>
+                        <select id="issueCategory" class="w-full border border-slate-300 p-2.5 rounded-lg text-sm bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none">
+                            <option value="Overtime Hours Discrepancy">Overtime Hours Missing or Wrong</option>
+                            <option value="Allowance Issue">Allowance Missing / Incorrect</option>
+                            <option value="Retro OT Problem">Retro Overtime Pay Discrepancy</option>
+                            <option value="Payslip Understanding">Payslip Layout / Calculation Guidance</option>
+                            <option value="Other Issue">Other General Concern</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-700 mb-1" data-key="lbl_details">Details / Explanation *</label>
+                        <textarea id="issueDetails" required rows="3" placeholder="Please describe your issue simply (e.g. My Holiday OT hours on 12th were not fully counted)..." class="w-full border border-slate-300 p-2.5 rounded-lg text-sm focus:ring-2 focus:ring-blue-600 focus:outline-none"></textarea>
+                    </div>
+
+                    <button type="submit" id="btnSubmit" class="w-full bg-blue-900 hover:bg-blue-800 text-white font-bold py-3 rounded-lg shadow flex justify-center items-center gap-2 transition-all text-sm">
+                        <i class="fa-solid fa-paper-plane"></i>
+                        <span data-key="btn_submit">Submit Concern</span>
                     </button>
                 </form>
             </div>
 
-            <!-- Check Ticket Status -->
+            <!-- Track Ticket Status -->
             <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 space-y-4">
-                <h2 class="text-lg font-bold text-slate-700 border-b pb-2 flex items-center gap-2">
+                <h2 class="text-base font-bold text-slate-800 border-b pb-2 flex items-center gap-2">
                     <i class="fa-solid fa-magnifying-glass text-blue-600"></i>
-                    <span data-key="check_status">Track Ticket Status</span>
+                    <span data-key="check_status">2. Track Existing Ticket Status</span>
                 </h2>
 
-                <div class="flex gap-2">
-                    <input type="text" id="trackTicketId" placeholder="Enter Support Ticket # (e.g. T-1002)" class="w-full border p-2 rounded">
-                    <button onclick="trackTicket()" class="bg-slate-800 text-white px-4 rounded font-bold">Search</button>
+                <div class="flex flex-col sm:flex-row gap-2">
+                    <input type="text" id="trackTicketId" placeholder="Enter Ticket # (e.g. T-582910)" class="w-full border border-slate-300 p-2.5 rounded-lg text-sm font-semibold uppercase focus:ring-2 focus:ring-blue-600 focus:outline-none">
+                    <button onclick="trackTicket()" id="btnTrack" class="bg-slate-800 hover:bg-slate-900 text-white px-6 py-2.5 rounded-lg font-bold text-sm transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-search"></i>
+                        <span data-key="btn_search">Search</span>
+                    </button>
                 </div>
 
                 <!-- Status Output Card -->
-                <div id="statusResult" class="hidden border p-4 rounded-lg bg-slate-50 space-y-2">
-                    <div class="flex justify-between items-center">
-                        <span class="font-bold text-sm" id="resTicketNo">Ticket #</span>
-                        <span id="resStatusBadge" class="px-2 py-1 text-xs rounded font-bold bg-yellow-200 text-yellow-800">Pending</span>
+                <div id="statusResult" class="hidden border border-slate-200 p-4 rounded-xl bg-slate-50 space-y-3">
+                    <div class="flex justify-between items-center border-b border-slate-200 pb-2">
+                        <span class="font-bold text-sm text-slate-800" id="resTicketNo">Ticket #</span>
+                        <span id="resStatusBadge" class="px-2.5 py-1 text-xs rounded-full font-bold uppercase bg-yellow-100 text-yellow-800">OPEN</span>
                     </div>
-                    <p class="text-xs text-slate-600"><strong>HR Response:</strong> <span id="resHRComment">Under review by HR team.</span></p>
+
+                    <div class="text-xs space-y-1">
+                        <p class="text-slate-500 font-semibold uppercase" data-key="lbl_hr_comment">HR Support Response:</p>
+                        <div id="resHRComment" class="p-3 bg-white border rounded-lg text-slate-700 whitespace-pre-wrap font-sans">Under review...</div>
+                    </div>
 
                     <!-- Re-open / Reply Section -->
-                    <div id="reopenBox" class="pt-2 border-t space-y-2">
-                        <p class="text-xs text-red-600 font-bold">Not satisfied with resolution?</p>
-                        <textarea id="reopenComment" placeholder="Write reason to re-open ticket..." class="w-full border p-2 rounded text-xs"></textarea>
-                        <button onclick="reopenTicket()" class="w-full bg-red-600 text-white text-xs py-2 rounded font-bold">Send Back to Support</button>
+                    <div id="reopenBox" class="pt-2 border-t border-slate-200 space-y-2">
+                        <p class="text-xs text-red-600 font-bold flex items-center gap-1" data-key="msg_not_satisfied">
+                            <i class="fa-solid fa-circle-exclamation"></i> Not satisfied with the resolution?
+                        </p>
+                        <textarea id="reopenComment" rows="2" placeholder="Write reason why issue is not resolved..." class="w-full border border-slate-300 p-2 rounded-lg text-xs focus:ring-2 focus:ring-red-500 focus:outline-none"></textarea>
+                        <button onclick="reopenTicket()" id="btnReopen" class="w-full bg-red-600 hover:bg-red-700 text-white text-xs py-2.5 rounded-lg font-bold transition-all flex justify-center items-center gap-1.5">
+                            <i class="fa-solid fa-rotate-left"></i>
+                            <span data-key="btn_reopen">Re-open & Send Back to HR</span>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -205,147 +296,297 @@
         </section>
     </main>
 
-    <script>
-        // WEBHOOK URL FROM GOOGLE APPS SCRIPT (Replace with deployed App URL)
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyZzAu_qI4HKDZBrr832Sb9EAF_kFlyQOWUHg35lBoROb6RxOSLY2mb_vGDcIhg8tEkqA/exec";
+    <!-- Footer -->
+    <footer class="bg-slate-800 text-slate-400 text-xs py-4 text-center mt-auto border-t border-slate-700">
+        <div class="max-w-4xl mx-auto px-4 space-y-1">
+            <p>KAEFER Saudi Arabia Co. — Internal Employee Assistance Service</p>
+            <p class="text-slate-500">Approximations are for reference only. Official figures are subject to SAP payroll processing.</p>
+        </div>
+    </footer>
 
-        // Multi-language dictionary
+    <!-- JavaScript Logic -->
+    <script>
+        // Exact Deployed Web App URL
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyQtVkF9atmHJiLFybA91xBW7TpVWnH0JtEaLQJhYibAdUClbO5tSt3sTglS3HxF6kK0w/exec";
+
+        // Multi-Language Dictionary
         const translations = {
             en: {
-                nav_calc: "OT Calculator", nav_support: "Support Center",
-                title_salary: "Salary & Allowance", label_basic: "Basic Salary (SAR)", label_allowance: "Other Allowances (SAR)",
-                title_ot: "Overtime Hours", ot_normal: "Normal OT (1.5x)", ot_holiday: "Holiday OT (1.5x)",
-                ot_retro: "Retro OT (1.5x)", ot_bonus: "Bonus OT (1.0x)", title_breakdown: "Estimated Breakdown",
-                total_est: "Approx Net Pay:", raise_ticket: "Raise Salary Concern", check_status: "Track Ticket Status"
+                header_title: "Employee Portal", header_sub: "Payslip Calculator & Support Center",
+                nav_calc: "OT & Payslip Calculator", nav_support: "Support Center",
+                cutoff_title: "Pay Cutoff System (25th Cutoff Rule)",
+                cutoff_desc: "Overtime is calculated from 26th of previous month to 25th of current month. Overtime worked from 26th to month-end appears as Retro OT in your payslip.",
+                title_salary: "1. Salary & Allowances", label_basic: "Basic Salary (SAR)", label_allowance: "Other Allowances (SAR)",
+                title_ot: "2. Overtime Hours Breakdown",
+                ot_normal: "Normal OT (1.5x Multiplier)", ot_normal_sub: "1st to 25th (Regular Working Days)",
+                ot_holiday: "Holiday OT (1.5x Multiplier)", ot_holiday_sub: "Fridays / Official Company Holidays",
+                ot_retro_normal: "Retro Normal OT (1.5x Multiplier)", ot_retro_normal_sub: "26th to End of Previous Month",
+                ot_retro_holiday: "Retro Holiday OT (1.5x Multiplier)", ot_retro_holiday_sub: "Previous Month Holidays (26th-End)",
+                ot_bonus: "Bonus OT / Incentive (1.0x Base Rate)", ot_bonus_sub: "Formula: Basic ÷ 30 ÷ 8",
+                title_breakdown: "Estimated Payslip Breakdown",
+                rate_base: "Base Hourly Rate (Basic ÷ 240):", rate_ot: "OT Hourly Rate (Base x 1.5):",
+                out_basic: "Basic Salary:", out_allowance: "Allowances:", out_normal_ot: "Normal + Holiday OT Pay:",
+                out_retro_ot: "Retro OT Pay:", out_bonus_ot: "Bonus OT Pay:",
+                out_net_label: "Approx Total Net Payable", out_net_sub: "(Before Deductions)",
+                raise_ticket: "1. Submit Salary Query / Support Concern",
+                lbl_emp_id: "Employee ID *", lbl_phone: "Mobile Number *", lbl_category: "Category of Issue *",
+                lbl_details: "Details / Explanation *", btn_submit: "Submit Concern",
+                check_status: "2. Track Existing Ticket Status", btn_search: "Search",
+                lbl_hr_comment: "HR Support Response:", msg_not_satisfied: "Not satisfied with the resolution?", btn_reopen: "Re-open & Send Back to HR"
             },
             ar: {
-                nav_calc: "حاسبة الإضافي", nav_support: "مركز الدعم",
-                title_salary: "الراتب والبدلات", label_basic: "الراتب الأساسي (SAR)", label_allowance: "بدلات أخرى (SAR)",
-                title_ot: "ساعات العمل الإضافي", ot_normal: "إضافي عادي (1.5x)", ot_holiday: "إضافي العطلات (1.5x)",
-                ot_retro: "إضافي بأثر رجعي (1.5x)", ot_bonus: "إضافي المكافأة (1.0x)", title_breakdown: "تفاصيل الحساب المقدرة",
-                total_est: "إجمالي الراتب التقريبي:", raise_ticket: "تقديم شكوى / استفسار", check_status: "متابعة حالة الطلب"
+                header_title: "بوابة الموظفين", header_sub: "حاسبة العمل الإضافي ومركز الدعم",
+                cutoff_title: "نظام قطع راتب العمل الإضافي (يوم 25)",
+                cutoff_desc: "يتم حساب العمل الإضافي من 26 من الشهر السابق إلى 25 من الشهر الحالي. العمل الإضافي من 26 إلى نهاية الشهر يظهر كعمل إضافي بأثر رجعي (Retro OT).",
+                nav_calc: "حاسبة الإضافي والراتب", nav_support: "مركز الدعم",
+                title_salary: "1. الراتب الأساسي والبدلات", label_basic: "الراتب الأساسي (ريال)", label_allowance: "البدلات الأخرى (ريال)",
+                title_ot: "2. تفاصيل ساعات العمل الإضافي",
+                ot_normal: "إضافي عادي (1.5x)", ot_normal_sub: "من 1 إلى 25 (أيام العمل العادية)",
+                ot_holiday: "إضافي العطلات (1.5x)", ot_holiday_sub: "أيام الجمعة / العطلات الرسمية",
+                ot_retro_normal: "إضافي عادي بأثر رجعي (1.5x)", ot_retro_normal_sub: "من 26 إلى نهاية الشهر السابق",
+                ot_retro_holiday: "إضافي عطلات بأثر رجعي (1.5x)", ot_retro_holiday_sub: "عطلات الشهر السابق (26-النهاية)",
+                ot_bonus: "إضافي المكافأة (1.0x معدل الأساسي)", ot_bonus_sub: "المعادلة: الأساسي ÷ 30 ÷ 8",
+                title_breakdown: "تفاصيل الراتب المقدرة",
+                rate_base: "أجر الساعة الأساسي (الأساسي ÷ 240):", rate_ot: "أجر ساعة الإضافي (الأساسي x 1.5):",
+                out_basic: "الراتب الأساسي:", out_allowance: "البدلات:", out_normal_ot: "أجر الإضافي العادي والعطلات:",
+                out_retro_ot: "أجر الإضافي بأثر رجعي:", out_bonus_ot: "أجر إضافي المكافأة:",
+                out_net_label: "إجمالي الراتب الصافي التقريبي", out_net_sub: "(قبل الخصومات)",
+                raise_ticket: "1. تقديم استفسار عن الراتب / شكوى",
+                lbl_emp_id: "الرقم الوظيفي *", lbl_phone: "رقم الجوال *", lbl_category: "نوع المشكلة *",
+                lbl_details: "التفاصيل / الشرح *", btn_submit: "إرسال الطلب",
+                check_status: "2. متابعة حالة طلب سابق", btn_search: "بحث",
+                lbl_hr_comment: "رد فريق الموارد البشرية:", msg_not_satisfied: "غير راضٍ عن الحل المقدم؟", btn_reopen: "إعادة فتح الطلب وإرساله للحوار"
             },
             hi: {
+                header_title: "कर्मचारी पोर्टल", header_sub: "ओटी कैलकुलेटर और सहायता केंद्र",
+                cutoff_title: "वेतन कटऑफ नियम (25 तारीख नियम)",
+                cutoff_desc: "ओवरटाइम की गणना पिछले महीने की 26 तारीख से वर्तमान महीने की 25 तारीख तक की जाती है। 26 तारीख से महीने के अंत तक किया गया ओटी पेस्लिप में Retro OT के रूप में दिखता है।",
                 nav_calc: "ओटी कैलकुलेटर", nav_support: "सहायता केंद्र",
-                title_salary: "वेतन और भत्ता", label_basic: "मूल वेतन (SAR)", label_allowance: "अन्य भत्ते (SAR)",
-                title_ot: "ओवरटाइम घंटे", ot_normal: "सामान्य ओटी (1.5x)", ot_holiday: "छुट्टी का ओटी (1.5x)",
-                ot_retro: "पिछला बकाया ओटी (1.5x)", ot_bonus: "बोनस ओटी (1.0x)", title_breakdown: "अनुमानित ब्रेकडाउन",
-                total_est: "अनुमानित कुल वेतन:", raise_ticket: "समस्या दर्ज करें", check_status: "स्थिति की जांच करें"
+                title_salary: "1. वेतन और भत्ते", label_basic: "मूल वेतन (SAR)", label_allowance: "अन्य भत्ते (SAR)",
+                title_ot: "2. ओवर-टाइम घंटे",
+                ot_normal: "सामान्य ओटी (1.5x)", ot_normal_sub: "1 से 25 तारीख (सामान्य कार्य दिवस)",
+                ot_holiday: "छुट्टी का ओटी (1.5x)", ot_holiday_sub: "शुक्रवार / कंपनी की आधिकारिक छुट्टियां",
+                ot_retro_normal: "पिछला बकाया सामान्य ओटी (1.5x)", ot_retro_normal_sub: "पिछले महीने की 26 से अंत तक",
+                ot_retro_holiday: "पिछला बकाया छुट्टी ओटी (1.5x)", ot_retro_holiday_sub: "पिछले महीने की छुट्टियां (26-अंत)",
+                ot_bonus: "बोनस ओटी (1.0x मूल दर)", ot_bonus_sub: "सूत्र: मूल वेतन ÷ 30 ÷ 8",
+                title_breakdown: "अनुमानित वेतन विवरण",
+                rate_base: "मूल प्रति घंटा दर (मूल ÷ 240):", rate_ot: "ओटी प्रति घंटा दर (मूल x 1.5):",
+                out_basic: "मूल वेतन:", out_allowance: "भत्ते:", out_normal_ot: "सामान्य + छुट्टी ओटी वेतन:",
+                out_retro_ot: "पिछला बकाया (Retro) ओटी वेतन:", out_bonus_ot: "बोनस ओटी वेतन:",
+                out_net_label: "अनुमानित कुल वेतन", out_net_sub: "(कटौती से पहले)",
+                raise_ticket: "1. समस्या या सवाल दर्ज करें",
+                lbl_emp_id: "कर्मचारी आईडी (Emp ID) *", lbl_phone: "मोबाइल नंबर *", lbl_category: "समस्या की श्रेणी *",
+                lbl_details: "विवरण / स्पष्टीकरण *", btn_submit: "सबमिट करें",
+                check_status: "2. दर्ज की गई समस्या की स्थिति देखें", btn_search: "खोजें",
+                lbl_hr_comment: "एचआर (HR) टीम का जवाब:", msg_not_satisfied: "क्या आप समाधान से संतुष्ट नहीं हैं?", btn_reopen: "टिकट फिर से खोलें"
             },
             ur: {
+                header_title: "ملازمین پورٹل", header_sub: "اوور ٹائم کیلکولیٹر اور سپورٹ سینٹر",
+                cutoff_title: "تنخواہ کی کٹ آف کا طریقہ (25 تاریخ کا قانون)",
+                cutoff_desc: "اوور ٹائم کی گنتی گزشتہ ماہ کی 26 تاریخ سے موجودہ ماہ کی 25 تاریخ تک کی جاتی ہے۔ 26 تاریخ سے ماہ کے اختتام تک کا اوور ٹائم پے سلپ میں Retro OT کے طور پر دکھایا جاتا ہے۔",
                 nav_calc: "اوور ٹائم کیلکولیٹر", nav_support: "سپورٹ سینٹر",
-                title_salary: "بنیادی تنخواہ اور الاؤنس", label_basic: "بنیادی تنخواہ (SAR)", label_allowance: "دیگر الاؤنسز (SAR)",
-                title_ot: "اوور ٹائم کے گھنٹے", ot_normal: "نارمل اوور ٹائم (1.5x)", ot_holiday: "چھٹی کا اوور ٹائم (1.5x)",
-                ot_retro: "پچھلا بقایا اوور ٹائم (1.5x)", ot_bonus: "بونس اوور ٹائم (1.0x)", title_breakdown: "تخمینہ شدہ تفصیلات",
-                total_est: "تخمینہ شدہ کل تنخواہ:", raise_ticket: "شکایت درج کریں", check_status: "اسٹیٹس چیک کریں"
+                title_salary: "1. بنیادی تنخواہ اور الاؤنس", label_basic: "بنیادی تنخواہ (SAR)", label_allowance: "دیگر الاؤنسز (SAR)",
+                title_ot: "2. اوور ٹائم گھنٹے",
+                ot_normal: "نارمل اوور ٹائم (1.5x)", ot_normal_sub: "1 سے 25 تاریخ (عام کاری دن)",
+                ot_holiday: "چھٹی کا اوور ٹائم (1.5x)", ot_holiday_sub: "جمعہ / کمپنی کی سرکاری تعطیلات",
+                ot_retro_normal: "پچھلا بقایا نارمل اوور ٹائم (1.5x)", ot_retro_normal_sub: "گزشتہ ماہ کی 26 سے آخر تک",
+                ot_retro_holiday: "پچھلا بقایا چھٹی کا اوور ٹائم (1.5x)", ot_retro_holiday_sub: "گزشتہ ماہ کی تعطیلات (26 تا آخر)",
+                ot_bonus: "بونس اوور ٹائم (1.0x)", ot_bonus_sub: "فارمولا: بنیادی تنخواہ ÷ 30 ÷ 8",
+                title_breakdown: "تخمینہ شدہ تنخواہ کی تفصیل",
+                rate_base: "فی گھنٹہ بنیادی شرح (بنیادی ÷ 240):", rate_ot: "اوور ٹائم فی گھنٹہ شرح (بنیادی x 1.5):",
+                out_basic: "بنیادی تنخواہ:", out_allowance: "الاؤنسز:", out_normal_ot: "نارمل + چھٹی کا اوور ٹائم:",
+                out_retro_ot: "پچھلا بقایا (Retro) اوور ٹائم:", out_bonus_ot: "بونس اوور ٹائم:",
+                out_net_label: "تخمینہ شدہ کل تنخواہ", out_net_sub: "(کٹوتیوں سے پہلے)",
+                raise_ticket: "1. شکایت یا سوال درج کریں",
+                lbl_emp_id: "ایمپلائی آئی ڈی (Emp ID) *", lbl_phone: "موبائل نمبر *", lbl_category: "شکایت کی قسم *",
+                lbl_details: "تفصیلات *", btn_submit: "ارسال کریں",
+                check_status: "2. درج کردہ شکایت کا اسٹیٹس دیکھیں", btn_search: "تلاش کریں",
+                lbl_hr_comment: "ایچ آر (HR) ٹیم کا جواب:", msg_not_satisfied: "کیا آپ فراہم کردہ حل سے مطمئن نہیں ہیں؟", btn_reopen: "شکایت دوبارہ کھولیں"
             }
         };
 
+        // Navigation Switch
         function switchTab(tab) {
             document.getElementById('section-calc').classList.toggle('hidden', tab !== 'calc');
             document.getElementById('section-support').classList.toggle('hidden', tab !== 'support');
-            document.getElementById('tab-calc').className = tab === 'calc' ? 'w-1/2 py-3 tab-active flex justify-center items-center gap-2' : 'w-1/2 py-3 text-slate-500 flex justify-center items-center gap-2';
-            document.getElementById('tab-support').className = tab === 'support' ? 'w-1/2 py-3 tab-active flex justify-center items-center gap-2' : 'w-1/2 py-3 text-slate-500 flex justify-center items-center gap-2';
+            document.getElementById('tab-calc').className = tab === 'calc' ? 'w-1/2 py-3.5 tab-active flex justify-center items-center gap-2 text-sm transition-all' : 'w-1/2 py-3.5 tab-inactive flex justify-center items-center gap-2 text-sm transition-all';
+            document.getElementById('tab-support').className = tab === 'support' ? 'w-1/2 py-3.5 tab-active flex justify-center items-center gap-2 text-sm transition-all' : 'w-1/2 py-3.5 tab-inactive flex justify-center items-center gap-2 text-sm transition-all';
         }
 
+        // Multi-language Changer
         function changeLanguage() {
             const lang = document.getElementById('langSelect').value;
             document.querySelectorAll('[data-key]').forEach(elem => {
                 const key = elem.getAttribute('data-key');
-                if (translations[lang][key]) elem.innerText = translations[lang][key];
+                if (translations[lang] && translations[lang][key]) {
+                    elem.innerText = translations[lang][key];
+                }
             });
+            // Adjust RTL for Arabic/Urdu
+            if(lang === 'ar' || lang === 'ur') {
+                document.body.dir = "rtl";
+            } else {
+                document.body.dir = "ltr";
+            }
         }
 
+        // Calculation Engine
         function calculate() {
             const basic = parseFloat(document.getElementById('basicSalary').value) || 0;
             const allowance = parseFloat(document.getElementById('allowance').value) || 0;
             const normalOT = parseFloat(document.getElementById('normalOT').value) || 0;
             const holidayOT = parseFloat(document.getElementById('holidayOT').value) || 0;
-            const retroOT = parseFloat(document.getElementById('retroOT').value) || 0;
+            const retroNormalOT = parseFloat(document.getElementById('retroNormalOT').value) || 0;
+            const retroHolidayOT = parseFloat(document.getElementById('retroHolidayOT').value) || 0;
             const bonusOT = parseFloat(document.getElementById('bonusOT').value) || 0;
 
-            // KAEFER SAP Calculation Rules
-            const baseHourlyRate = (basic / 30) / 8;
+            // KAEFER SAP Calculation Formulas
+            const baseHourlyRate = (basic / 30) / 8; // Basic / 240
             const otHourlyRate = baseHourlyRate * 1.5;
 
-            const normalOTPay = normalOT * otHourlyRate;
-            const holidayOTPay = holidayOT * otHourlyRate;
-            const retroOTPay = retroOT * otHourlyRate;
+            const normalOTPay = (normalOT + holidayOT) * otHourlyRate;
+            const retroOTPay = (retroNormalOT + retroHolidayOT) * otHourlyRate;
             const bonusOTPay = bonusOT * baseHourlyRate;
 
-            const netPay = basic + allowance + normalOTPay + holidayOTPay + retroOTPay + bonusOTPay;
+            const netPay = basic + allowance + normalOTPay + retroOTPay + bonusOTPay;
 
-            // Update UI
+            // Display Results formatted to 2 decimals
             document.getElementById('rateBase').innerText = baseHourlyRate.toFixed(2) + " SAR";
             document.getElementById('rateOT').innerText = otHourlyRate.toFixed(2) + " SAR";
             document.getElementById('outBasic').innerText = basic.toFixed(2) + " SAR";
             document.getElementById('outAllowance').innerText = allowance.toFixed(2) + " SAR";
-            document.getElementById('outNormalOT').innerText = (normalOTPay + holidayOTPay).toFixed(2) + " SAR";
+            document.getElementById('outNormalOT').innerText = normalOTPay.toFixed(2) + " SAR";
             document.getElementById('outRetroOT').innerText = retroOTPay.toFixed(2) + " SAR";
             document.getElementById('outBonusOT').innerText = bonusOTPay.toFixed(2) + " SAR";
             document.getElementById('outNetPay').innerText = netPay.toFixed(2) + " SAR";
         }
 
+        // Create Ticket API Call
         async function submitTicket(e) {
             e.preventDefault();
             const btn = document.getElementById('btnSubmit');
-            btn.innerText = "Submitting...";
+            const originalContent = btn.innerHTML;
+            
+            btn.innerText = "Submitting to HR...";
             btn.disabled = true;
 
             const payload = {
                 action: "CREATE_TICKET",
-                empId: document.getElementById('empId').value,
-                phone: document.getElementById('empPhone').value,
+                empId: document.getElementById('empId').value.trim(),
+                phone: document.getElementById('empPhone').value.trim(),
                 category: document.getElementById('issueCategory').value,
-                details: document.getElementById('issueDetails').value
+                details: document.getElementById('issueDetails').value.trim()
             };
 
             try {
-                const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) });
-                const data = await res.json();
-                alert(`Ticket Submitted Successfully!\nYour Ticket Number is: ${data.ticketId}\nPlease save this ticket number to track status.`);
-                document.getElementById('supportForm').reset();
+                const response = await fetch(SCRIPT_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "text/plain;charset=utf-8" },
+                    body: JSON.stringify(payload)
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    alert(`✅ Support Request Registered!\n\nYour Ticket Number is: ${data.ticketId}\n\nPlease save this number to check status later.`);
+                    document.getElementById('supportForm').reset();
+                } else {
+                    alert("⚠️ Server Warning: " + (data.error || "Could not process request."));
+                }
             } catch (err) {
-                alert("Submitted! Please save your Employee ID to query status.");
+                console.error("Submission Error:", err);
+                alert("⚠️ Request Submitted! Check your Employee ID in status tracking shortly.");
             } finally {
-                btn.innerText = "Submit Ticket";
+                btn.innerHTML = originalContent;
                 btn.disabled = false;
             }
         }
 
+        // Search Ticket API Call
         async function trackTicket() {
             const ticketId = document.getElementById('trackTicketId').value.trim();
-            if(!ticketId) return alert("Enter Ticket Number");
+            if (!ticketId) return alert("Please enter a valid Ticket Number.");
+
+            const btn = document.getElementById('btnTrack');
+            btn.innerText = "Searching...";
+            btn.disabled = true;
 
             const resDiv = document.getElementById('statusResult');
-            resDiv.classList.remove('hidden');
 
             try {
-                const res = await fetch(`${SCRIPT_URL}?action=GET_TICKET&ticketId=${ticketId}`);
-                const data = await res.json();
-                if(data.found) {
+                const response = await fetch(`${SCRIPT_URL}?action=GET_TICKET&ticketId=${encodeURIComponent(ticketId)}`);
+                const data = await response.json();
+
+                if (data.found) {
+                    resDiv.classList.remove('hidden');
                     document.getElementById('resTicketNo').innerText = "Ticket #" + data.ticketId;
-                    document.getElementById('resStatusBadge').innerText = data.status;
-                    document.getElementById('resHRComment').innerText = data.hrComment || "In progress";
+                    
+                    const badge = document.getElementById('resStatusBadge');
+                    badge.innerText = data.status;
+
+                    if(data.status === "RESOLVED") {
+                        badge.className = "px-2.5 py-1 text-xs rounded-full font-bold uppercase bg-green-100 text-green-800";
+                    } else if(data.status === "REOPENED") {
+                        badge.className = "px-2.5 py-1 text-xs rounded-full font-bold uppercase bg-red-100 text-red-800";
+                    } else {
+                        badge.className = "px-2.5 py-1 text-xs rounded-full font-bold uppercase bg-yellow-100 text-yellow-800";
+                    }
+
+                    document.getElementById('resHRComment').innerText = data.hrComment || "Ticket received and under review by HR support team.";
                 } else {
-                    alert("Ticket Not Found");
+                    alert("❌ Ticket ID not found. Please double check your ticket number.");
+                    resDiv.classList.add('hidden');
                 }
-            } catch(e) {
-                alert("Error retrieving ticket status");
+            } catch (err) {
+                console.error("Tracking Error:", err);
+                alert("⚠️ Connection issue while checking status. Please try again.");
+            } finally {
+                btn.innerHTML = '<i class="fa-solid fa-search"></i> <span>Search</span>';
+                btn.disabled = false;
             }
         }
 
+        // Reopen Ticket API Call
         async function reopenTicket() {
             const ticketId = document.getElementById('trackTicketId').value.trim();
             const comment = document.getElementById('reopenComment').value.trim();
-            if(!comment) return alert("Please explain why you want to reopen this issue.");
+            
+            if (!comment) return alert("Please type a reason why you are reopening this issue.");
 
-            const payload = { action: "REOPEN_TICKET", ticketId: ticketId, comment: comment };
-            await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) });
-            alert("Ticket updated and sent back to HR team!");
+            const btn = document.getElementById('btnReopen');
+            btn.innerText = "Updating...";
+            btn.disabled = true;
+
+            const payload = {
+                action: "REOPEN_TICKET",
+                ticketId: ticketId,
+                comment: comment
+            };
+
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "text/plain;charset=utf-8" },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    alert("🔄 Ticket updated and sent back to HR Support!");
+                    document.getElementById('reopenComment').value = "";
+                    trackTicket(); // Refresh status card
+                } else {
+                    alert("Error: " + data.error);
+                }
+            } catch (err) {
+                console.error("Reopen Error:", err);
+                alert("⚠️ Request sent! Your ticket status will update shortly.");
+            } finally {
+                btn.innerHTML = '<i class="fa-solid fa-rotate-left"></i> <span>Re-open & Send Back to HR</span>';
+                btn.disabled = false;
+            }
         }
 
-        // Initialize Calculation on load
+        // Initialize default calculation on load
         calculate();
     </script>
 </body>
