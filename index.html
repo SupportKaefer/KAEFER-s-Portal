@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KAEFER Saudi Arabia - Employee Self-Service & Support Portal</title>
+    <title>Employee Self-Service & Support Portal</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
@@ -20,7 +20,7 @@
     <header class="bg-blue-900 text-white shadow-md">
         <div class="max-w-4xl mx-auto p-4 flex justify-between items-center">
             <div class="flex items-center gap-3">
-                <div class="bg-white text-blue-900 font-black px-3 py-1 rounded text-lg tracking-wider">KAEFER</div>
+                <div class="bg-white text-blue-900 font-black px-3 py-1 rounded text-lg tracking-wider">PORTAL</div>
                 <div>
                     <h1 class="text-base font-bold leading-tight" data-key="header_title">Employee Portal</h1>
                     <p class="text-xs text-blue-200" data-key="header_sub">Payslip Calculator & Support Center</p>
@@ -48,7 +48,7 @@
             </button>
             <button onclick="switchTab('support')" id="tab-support" class="w-1/2 py-3.5 tab-inactive flex justify-center items-center gap-2 text-sm transition-all">
                 <i class="fa-solid fa-headset text-base"></i>
-                <span data-key="nav_support">Support Center</span>
+                <span data-key="nav_support">Support</span>
             </button>
         </div>
     </div>
@@ -79,11 +79,11 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs font-bold text-slate-700 uppercase mb-1" data-key="label_basic">Basic Salary (SAR)</label>
-                        <input type="number" id="basicSalary" value="1200" min="0" oninput="calculate()" class="w-full border border-slate-300 p-2.5 rounded-lg text-sm font-semibold focus:ring-2 focus:ring-blue-600 focus:outline-none">
+                        <input type="number" id="basicSalary" placeholder="e.g. 1200" min="0" oninput="calculate()" class="w-full border border-slate-300 p-2.5 rounded-lg text-sm font-semibold focus:ring-2 focus:ring-blue-600 focus:outline-none">
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-700 uppercase mb-1" data-key="label_allowance">Other Allowances (SAR)</label>
-                        <input type="number" id="allowance" value="200" min="0" oninput="calculate()" class="w-full border border-slate-300 p-2.5 rounded-lg text-sm font-semibold focus:ring-2 focus:ring-blue-600 focus:outline-none">
+                        <input type="number" id="allowance" placeholder="e.g. 200" min="0" oninput="calculate()" class="w-full border border-slate-300 p-2.5 rounded-lg text-sm font-semibold focus:ring-2 focus:ring-blue-600 focus:outline-none">
                     </div>
                 </div>
             </div>
@@ -103,7 +103,7 @@
                             <p class="text-xs text-slate-500" data-key="ot_normal_sub">1st to 25th (Regular Working Days)</p>
                         </div>
                         <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
-                            <input type="number" id="normalOT" value="84" min="0" oninput="calculate()" class="w-28 border border-slate-300 p-2 rounded-lg text-right font-bold text-sm">
+                            <input type="number" id="normalOT" placeholder="e.g. 84" min="0" oninput="calculate()" class="w-28 border border-slate-300 p-2 rounded-lg text-right font-bold text-sm">
                             <span class="text-xs text-slate-500">Hrs</span>
                         </div>
                     </div>
@@ -115,7 +115,7 @@
                             <p class="text-xs text-slate-500" data-key="ot_holiday_sub">Fridays / Official Company Holidays</p>
                         </div>
                         <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
-                            <input type="number" id="holidayOT" value="48" min="0" oninput="calculate()" class="w-28 border border-slate-300 p-2 rounded-lg text-right font-bold text-sm">
+                            <input type="number" id="holidayOT" placeholder="e.g. 48" min="0" oninput="calculate()" class="w-28 border border-slate-300 p-2 rounded-lg text-right font-bold text-sm">
                             <span class="text-xs text-slate-500">Hrs</span>
                         </div>
                     </div>
@@ -127,7 +127,7 @@
                             <p class="text-xs text-slate-500" data-key="ot_retro_normal_sub">26th to End of Previous Month</p>
                         </div>
                         <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
-                            <input type="number" id="retroNormalOT" value="18.32" min="0" oninput="calculate()" class="w-28 border border-slate-300 p-2 rounded-lg text-right font-bold text-sm">
+                            <input type="number" id="retroNormalOT" placeholder="e.g. 18" min="0" oninput="calculate()" class="w-28 border border-slate-300 p-2 rounded-lg text-right font-bold text-sm">
                             <span class="text-xs text-slate-500">Hrs</span>
                         </div>
                     </div>
@@ -139,7 +139,7 @@
                             <p class="text-xs text-slate-500" data-key="ot_retro_holiday_sub">Previous Month Holidays (26th-End)</p>
                         </div>
                         <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
-                            <input type="number" id="retroHolidayOT" value="10.99" min="0" oninput="calculate()" class="w-28 border border-slate-300 p-2 rounded-lg text-right font-bold text-sm">
+                            <input type="number" id="retroHolidayOT" placeholder="e.g. 10" min="0" oninput="calculate()" class="w-28 border border-slate-300 p-2 rounded-lg text-right font-bold text-sm">
                             <span class="text-xs text-slate-500">Hrs</span>
                         </div>
                     </div>
@@ -151,7 +151,7 @@
                             <p class="text-xs text-slate-500" data-key="ot_bonus_sub">Formula: Basic ÷ 30 ÷ 8</p>
                         </div>
                         <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
-                            <input type="number" id="bonusOT" value="0" min="0" oninput="calculate()" class="w-28 border border-slate-300 p-2 rounded-lg text-right font-bold text-sm">
+                            <input type="number" id="bonusOT" placeholder="e.g. 0" min="0" oninput="calculate()" class="w-28 border border-slate-300 p-2 rounded-lg text-right font-bold text-sm">
                             <span class="text-xs text-slate-500">Hrs</span>
                         </div>
                     </div>
@@ -207,7 +207,7 @@
             </div>
         </section>
 
-        <!-- ================= SUPPORT CENTER SECTION ================= -->
+        <!-- ================= SUPPORT SECTION ================= -->
         <section id="section-support" class="hidden space-y-6">
             
             <!-- Raise Ticket Form -->
@@ -275,7 +275,7 @@
                     </div>
 
                     <div class="text-xs space-y-1">
-                        <p class="text-slate-500 font-semibold uppercase" data-key="lbl_hr_comment">HR Support Response:</p>
+                        <p class="text-slate-500 font-semibold uppercase" data-key="lbl_hr_comment">Support Response:</p>
                         <div id="resHRComment" class="p-3 bg-white border rounded-lg text-slate-700 whitespace-pre-wrap font-sans">Under review...</div>
                     </div>
 
@@ -287,7 +287,7 @@
                         <textarea id="reopenComment" rows="2" placeholder="Write reason why issue is not resolved..." class="w-full border border-slate-300 p-2 rounded-lg text-xs focus:ring-2 focus:ring-red-500 focus:outline-none"></textarea>
                         <button onclick="reopenTicket()" id="btnReopen" class="w-full bg-red-600 hover:bg-red-700 text-white text-xs py-2.5 rounded-lg font-bold transition-all flex justify-center items-center gap-1.5">
                             <i class="fa-solid fa-rotate-left"></i>
-                            <span data-key="btn_reopen">Re-open & Send Back to HR</span>
+                            <span data-key="btn_reopen">Re-open & Send Back to Support</span>
                         </button>
                     </div>
                 </div>
@@ -299,8 +299,9 @@
     <!-- Footer -->
     <footer class="bg-slate-800 text-slate-400 text-xs py-4 text-center mt-auto border-t border-slate-700">
         <div class="max-w-4xl mx-auto px-4 space-y-1">
-            <p>KAEFER Saudi Arabia Co. — Internal Employee Assistance Service</p>
+            <p>Internal Employee Assistance Service</p>
             <p class="text-slate-500">Approximations are for reference only. Official figures are subject to SAP payroll processing.</p>
+            <p class="text-blue-400 font-medium pt-1">Designed & Deployed by Jitendra — Admin (KAEFER Saudi Arabia)</p>
         </div>
     </footer>
 
@@ -313,7 +314,7 @@
         const translations = {
             en: {
                 header_title: "Employee Portal", header_sub: "Payslip Calculator & Support Center",
-                nav_calc: "OT & Payslip Calculator", nav_support: "Support Center",
+                nav_calc: "OT & Payslip Calculator", nav_support: "Support",
                 cutoff_title: "Pay Cutoff System (25th Cutoff Rule)",
                 cutoff_desc: "Overtime is calculated from 26th of previous month to 25th of current month. Overtime worked from 26th to month-end appears as Retro OT in your payslip.",
                 title_salary: "1. Salary & Allowances", label_basic: "Basic Salary (SAR)", label_allowance: "Other Allowances (SAR)",
@@ -332,13 +333,13 @@
                 lbl_emp_id: "Employee ID *", lbl_phone: "Mobile Number *", lbl_category: "Category of Issue *",
                 lbl_details: "Details / Explanation *", btn_submit: "Submit Concern",
                 check_status: "2. Track Existing Ticket Status", btn_search: "Search",
-                lbl_hr_comment: "HR Support Response:", msg_not_satisfied: "Not satisfied with the resolution?", btn_reopen: "Re-open & Send Back to HR"
+                lbl_hr_comment: "Support Response:", msg_not_satisfied: "Not satisfied with the resolution?", btn_reopen: "Re-open & Send Back to Support"
             },
             ar: {
                 header_title: "بوابة الموظفين", header_sub: "حاسبة العمل الإضافي ومركز الدعم",
                 cutoff_title: "نظام قطع راتب العمل الإضافي (يوم 25)",
                 cutoff_desc: "يتم حساب العمل الإضافي من 26 من الشهر السابق إلى 25 من الشهر الحالي. العمل الإضافي من 26 إلى نهاية الشهر يظهر كعمل إضافي بأثر رجعي (Retro OT).",
-                nav_calc: "حاسبة الإضافي والراتب", nav_support: "مركز الدعم",
+                nav_calc: "حاسبة الإضافي والراتب", nav_support: "الدعم",
                 title_salary: "1. الراتب الأساسي والبدلات", label_basic: "الراتب الأساسي (ريال)", label_allowance: "البدلات الأخرى (ريال)",
                 title_ot: "2. تفاصيل ساعات العمل الإضافي",
                 ot_normal: "إضافي عادي (1.5x)", ot_normal_sub: "من 1 إلى 25 (أيام العمل العادية)",
@@ -355,13 +356,13 @@
                 lbl_emp_id: "الرقم الوظيفي *", lbl_phone: "رقم الجوال *", lbl_category: "نوع المشكلة *",
                 lbl_details: "التفاصيل / الشرح *", btn_submit: "إرسال الطلب",
                 check_status: "2. متابعة حالة طلب سابق", btn_search: "بحث",
-                lbl_hr_comment: "رد فريق الموارد البشرية:", msg_not_satisfied: "غير راضٍ عن الحل المقدم؟", btn_reopen: "إعادة فتح الطلب وإرساله للحوار"
+                lbl_hr_comment: "رد فريق الدعم:", msg_not_satisfied: "غير راضٍ عن الحل المقدم؟", btn_reopen: "إعادة فتح الطلب وإرساله للدعم"
             },
             hi: {
                 header_title: "कर्मचारी पोर्टल", header_sub: "ओटी कैलकुलेटर और सहायता केंद्र",
                 cutoff_title: "वेतन कटऑफ नियम (25 तारीख नियम)",
                 cutoff_desc: "ओवरटाइम की गणना पिछले महीने की 26 तारीख से वर्तमान महीने की 25 तारीख तक की जाती है। 26 तारीख से महीने के अंत तक किया गया ओटी पेस्लिप में Retro OT के रूप में दिखता है।",
-                nav_calc: "ओटी कैलकुलेटर", nav_support: "सहायता केंद्र",
+                nav_calc: "ओटी कैलकुलेटर", nav_support: "सहायता",
                 title_salary: "1. वेतन और भत्ते", label_basic: "मूल वेतन (SAR)", label_allowance: "अन्य भत्ते (SAR)",
                 title_ot: "2. ओवर-टाइम घंटे",
                 ot_normal: "सामान्य ओटी (1.5x)", ot_normal_sub: "1 से 25 तारीख (सामान्य कार्य दिवस)",
@@ -378,13 +379,13 @@
                 lbl_emp_id: "कर्मचारी आईडी (Emp ID) *", lbl_phone: "मोबाइल नंबर *", lbl_category: "समस्या की श्रेणी *",
                 lbl_details: "विवरण / स्पष्टीकरण *", btn_submit: "सबमिट करें",
                 check_status: "2. दर्ज की गई समस्या की स्थिति देखें", btn_search: "खोजें",
-                lbl_hr_comment: "एचआर (HR) टीम का जवाब:", msg_not_satisfied: "क्या आप समाधान से संतुष्ट नहीं हैं?", btn_reopen: "टिकट फिर से खोलें"
+                lbl_hr_comment: "सहायता टीम का जवाब:", msg_not_satisfied: "क्या आप समाधान से संतुष्ट नहीं हैं?", btn_reopen: "टिकट फिर से खोलें"
             },
             ur: {
                 header_title: "ملازمین پورٹل", header_sub: "اوور ٹائم کیلکولیٹر اور سپورٹ سینٹر",
                 cutoff_title: "تنخواہ کی کٹ آف کا طریقہ (25 تاریخ کا قانون)",
                 cutoff_desc: "اوور ٹائم کی گنتی گزشتہ ماہ کی 26 تاریخ سے موجودہ ماہ کی 25 تاریخ تک کی جاتی ہے۔ 26 تاریخ سے ماہ کے اختتام تک کا اوور ٹائم پے سلپ میں Retro OT کے طور پر دکھایا جاتا ہے۔",
-                nav_calc: "اوور ٹائم کیلکولیٹر", nav_support: "سپورٹ سینٹر",
+                nav_calc: "اوور ٹائم کیلکولیٹر", nav_support: "سپورٹ",
                 title_salary: "1. بنیادی تنخواہ اور الاؤنس", label_basic: "بنیادی تنخواہ (SAR)", label_allowance: "دیگر الاؤنسز (SAR)",
                 title_ot: "2. اوور ٹائم گھنٹے",
                 ot_normal: "نارمل اوور ٹائم (1.5x)", ot_normal_sub: "1 سے 25 تاریخ (عام کاری دن)",
@@ -401,7 +402,7 @@
                 lbl_emp_id: "ایمپلائی آئی ڈی (Emp ID) *", lbl_phone: "موبائل نمبر *", lbl_category: "شکایت کی قسم *",
                 lbl_details: "تفصیلات *", btn_submit: "ارسال کریں",
                 check_status: "2. درج کردہ شکایت کا اسٹیٹس دیکھیں", btn_search: "تلاش کریں",
-                lbl_hr_comment: "ایچ آر (HR) ٹیم کا جواب:", msg_not_satisfied: "کیا آپ فراہم کردہ حل سے مطمئن نہیں ہیں؟", btn_reopen: "شکایت دوبارہ کھولیں"
+                lbl_hr_comment: "سپورٹ ٹیم کا جواب:", msg_not_satisfied: "کیا آپ فراہم کردہ حل سے مطمئن نہیں ہیں؟", btn_reopen: "شکایت دوبارہ کھولیں"
             }
         };
 
@@ -440,7 +441,7 @@
             const retroHolidayOT = parseFloat(document.getElementById('retroHolidayOT').value) || 0;
             const bonusOT = parseFloat(document.getElementById('bonusOT').value) || 0;
 
-            // KAEFER SAP Calculation Formulas
+            // SAP Calculation Formulas
             const baseHourlyRate = (basic / 30) / 8; // Basic / 240
             const otHourlyRate = baseHourlyRate * 1.5;
 
@@ -467,7 +468,7 @@
             const btn = document.getElementById('btnSubmit');
             const originalContent = btn.innerHTML;
             
-            btn.innerText = "Submitting to HR...";
+            btn.innerText = "Submitting to Support...";
             btn.disabled = true;
 
             const payload = {
@@ -531,7 +532,7 @@
                         badge.className = "px-2.5 py-1 text-xs rounded-full font-bold uppercase bg-yellow-100 text-yellow-800";
                     }
 
-                    document.getElementById('resHRComment').innerText = data.hrComment || "Ticket received and under review by HR support team.";
+                    document.getElementById('resHRComment').innerText = data.hrComment || "Ticket received and under review by support team.";
                 } else {
                     alert("❌ Ticket ID not found. Please double check your ticket number.");
                     resDiv.classList.add('hidden');
@@ -571,7 +572,7 @@
 
                 const data = await response.json();
                 if (data.success) {
-                    alert("🔄 Ticket updated and sent back to HR Support!");
+                    alert("🔄 Ticket updated and sent back to Support!");
                     document.getElementById('reopenComment').value = "";
                     trackTicket(); // Refresh status card
                 } else {
@@ -581,7 +582,7 @@
                 console.error("Reopen Error:", err);
                 alert("⚠️ Request sent! Your ticket status will update shortly.");
             } finally {
-                btn.innerHTML = '<i class="fa-solid fa-rotate-left"></i> <span>Re-open & Send Back to HR</span>';
+                btn.innerHTML = '<i class="fa-solid fa-rotate-left"></i> <span>Re-open & Send Back to Support</span>';
                 btn.disabled = false;
             }
         }
