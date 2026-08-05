@@ -319,8 +319,8 @@
 
     <!-- JavaScript Logic -->
     <script>
-        // Exact Deployed Web App URL from your screenshot
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxkN03wP4bw47izNLG7TaPWxItBnHPdhaJMLOUbMmo_szPT_PUU6FW9238oVRYLFNxeQ/exec";
+        // Updated Deployed Web App URL
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwiHSRuxECeTPa888cHDy_pQ30eOJf65Z8mS5tg4ZCqwZxR4HA1IHWd4tl2zuayd5a_Ng/exec";
 
         // Multi-Language Dictionary
         const translations = {
@@ -446,8 +446,9 @@
         async function fetchVisitorCount() {
             const countEl = document.getElementById('visitorCount');
             try {
-                const response = await fetch(`${SCRIPT_URL}?action=VISITOR_COUNT`);
-                const data = await response.json();
+                const response = await fetch(`${SCRIPT_URL}?action=VISITOR_COUNT`, { redirect: "follow" });
+                const text = await response.text();
+                const data = JSON.parse(text);
                 if (data && data.success && typeof data.count !== 'undefined') {
                     countEl.innerText = data.count.toLocaleString();
                 } else {
@@ -508,11 +509,14 @@
             try {
                 const response = await fetch(SCRIPT_URL, {
                     method: "POST",
+                    redirect: "follow",
                     headers: { "Content-Type": "text/plain;charset=utf-8" },
                     body: JSON.stringify(payload)
                 });
                 
-                const data = await response.json();
+                const text = await response.text();
+                const data = JSON.parse(text);
+
                 if (data.success) {
                     alert(`✅ Support Request Registered!\n\nYour Ticket Number is: ${data.ticketId}\n\nPlease save this number to check status later.`);
                     document.getElementById('supportForm').reset();
@@ -540,8 +544,9 @@
             const resDiv = document.getElementById('statusResult');
 
             try {
-                const response = await fetch(`${SCRIPT_URL}?ticketId=${encodeURIComponent(ticketId)}`);
-                const data = await response.json();
+                const response = await fetch(`${SCRIPT_URL}?ticketId=${encodeURIComponent(ticketId)}`, { redirect: "follow" });
+                const text = await response.text();
+                const data = JSON.parse(text);
 
                 if (data.found) {
                     resDiv.classList.remove('hidden');
@@ -592,11 +597,14 @@
             try {
                 const response = await fetch(SCRIPT_URL, {
                     method: "POST",
+                    redirect: "follow",
                     headers: { "Content-Type": "text/plain;charset=utf-8" },
                     body: JSON.stringify(payload)
                 });
 
-                const data = await response.json();
+                const text = await response.text();
+                const data = JSON.parse(text);
+
                 if (data.success) {
                     alert("🔄 Ticket updated and sent back to Support!");
                     document.getElementById('reopenComment').value = "";
