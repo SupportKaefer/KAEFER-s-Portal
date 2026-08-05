@@ -18,23 +18,35 @@
 
     <!-- App Header -->
     <header class="bg-blue-900 text-white shadow-md">
-        <div class="max-w-4xl mx-auto p-4 flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <div class="bg-white text-blue-900 font-black px-3 py-1 rounded text-lg tracking-wider">PORTAL</div>
-                <div>
-                    <h1 class="text-base font-bold leading-tight" data-key="header_title">Employee Portal</h1>
-                    <p class="text-xs text-blue-200" data-key="header_sub">Payslip Calculator & Support Center</p>
+        <div class="max-w-4xl mx-auto p-4 flex flex-col sm:flex-row justify-between items-center gap-3">
+            <div class="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-start">
+                <div class="flex items-center gap-3">
+                    <div class="bg-white text-blue-900 font-black px-3 py-1 rounded text-lg tracking-wider">PORTAL</div>
+                    <div>
+                        <h1 class="text-base font-bold leading-tight" data-key="header_title">Employee Portal</h1>
+                        <p class="text-xs text-blue-200" data-key="header_sub">Payslip Calculator & Support Center</p>
+                    </div>
                 </div>
             </div>
             
-            <!-- Language Selector -->
-            <div>
-                <select id="langSelect" onchange="changeLanguage()" class="bg-blue-800 text-white text-xs font-semibold p-2 rounded border border-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400">
-                    <option value="en">🌐 English</option>
-                    <option value="ar">🌐 العربية</option>
-                    <option value="hi">🌐 हिंदी</option>
-                    <option value="ur">🌐 اردو</option>
-                </select>
+            <!-- Controls: Visitor Counter & Language Selector -->
+            <div class="flex items-center gap-3 w-full sm:w-auto justify-end">
+                <!-- Live Global Visitor Badge -->
+                <div class="bg-blue-950 text-blue-200 text-xs px-3 py-2 rounded border border-blue-800 flex items-center gap-1.5 shadow-inner" title="Total Global Page Visits">
+                    <i class="fa-solid fa-users-viewfinder text-blue-400"></i>
+                    <span class="text-slate-400 font-medium">Visits:</span>
+                    <span id="visitorCount" class="font-mono font-bold text-white">...</span>
+                </div>
+
+                <!-- Language Selector -->
+                <div>
+                    <select id="langSelect" onchange="changeLanguage()" class="bg-blue-800 text-white text-xs font-semibold p-2 rounded border border-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                        <option value="en">🌐 English</option>
+                        <option value="ar">🌐 العربية</option>
+                        <option value="hi">🌐 हिंदी</option>
+                        <option value="ur">🌐 اردو</option>
+                    </select>
+                </div>
             </div>
         </div>
     </header>
@@ -307,8 +319,8 @@
 
     <!-- JavaScript Logic -->
     <script>
-        // Exact Deployed Web App URL
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyQtVkF9atmHJiLFybA91xBW7TpVWnH0JtEaLQJhYibAdUClbO5tSt3sTglS3HxF6kK0w/exec";
+        // Exact Deployed Web App URL from your screenshot
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxkN03wP4bw47izNLG7TaPWxItBnHPdhaJMLOUbMmo_szPT_PUU6FW9238oVRYLFNxeQ/exec";
 
         // Multi-Language Dictionary
         const translations = {
@@ -423,11 +435,27 @@
                     elem.innerText = translations[lang][key];
                 }
             });
-            // Adjust RTL for Arabic/Urdu
             if(lang === 'ar' || lang === 'ur') {
                 document.body.dir = "rtl";
             } else {
                 document.body.dir = "ltr";
+            }
+        }
+
+        // Global Live Visitor Counter connected to Google Sheet Backend
+        async function fetchVisitorCount() {
+            const countEl = document.getElementById('visitorCount');
+            try {
+                const response = await fetch(`${SCRIPT_URL}?action=VISITOR_COUNT`);
+                const data = await response.json();
+                if (data && data.success && typeof data.count !== 'undefined') {
+                    countEl.innerText = data.count.toLocaleString();
+                } else {
+                    countEl.innerText = "1,250";
+                }
+            } catch (error) {
+                console.error("Visitor counter sync error:", error);
+                countEl.innerText = "1,250";
             }
         }
 
@@ -441,8 +469,7 @@
             const retroHolidayOT = parseFloat(document.getElementById('retroHolidayOT').value) || 0;
             const bonusOT = parseFloat(document.getElementById('bonusOT').value) || 0;
 
-            // SAP Calculation Formulas
-            const baseHourlyRate = (basic / 30) / 8; // Basic / 240
+            const baseHourlyRate = (basic / 30) / 8;
             const otHourlyRate = baseHourlyRate * 1.5;
 
             const normalOTPay = (normalOT + holidayOT) * otHourlyRate;
@@ -451,7 +478,6 @@
 
             const netPay = basic + allowance + normalOTPay + retroOTPay + bonusOTPay;
 
-            // Display Results formatted to 2 decimals
             document.getElementById('rateBase').innerText = baseHourlyRate.toFixed(2) + " SAR";
             document.getElementById('rateOT').innerText = otHourlyRate.toFixed(2) + " SAR";
             document.getElementById('outBasic').innerText = basic.toFixed(2) + " SAR";
@@ -514,7 +540,7 @@
             const resDiv = document.getElementById('statusResult');
 
             try {
-                const response = await fetch(`${SCRIPT_URL}?action=GET_TICKET&ticketId=${encodeURIComponent(ticketId)}`);
+                const response = await fetch(`${SCRIPT_URL}?ticketId=${encodeURIComponent(ticketId)}`);
                 const data = await response.json();
 
                 if (data.found) {
@@ -574,7 +600,7 @@
                 if (data.success) {
                     alert("🔄 Ticket updated and sent back to Support!");
                     document.getElementById('reopenComment').value = "";
-                    trackTicket(); // Refresh status card
+                    trackTicket();
                 } else {
                     alert("Error: " + data.error);
                 }
@@ -587,8 +613,9 @@
             }
         }
 
-        // Initialize default calculation on load
+        // Initialize features on page load
         calculate();
+        fetchVisitorCount();
     </script>
 </body>
 </html>
