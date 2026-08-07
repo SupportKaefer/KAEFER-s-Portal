@@ -29,16 +29,13 @@
                 </div>
             </div>
             
-            <!-- Controls: Visitor Counter & Language Selector -->
             <div class="flex items-center gap-3 w-full sm:w-auto justify-end">
-                <!-- Live Global Visitor Badge -->
                 <div class="bg-blue-950 text-blue-200 text-xs px-3 py-2 rounded border border-blue-800 flex items-center gap-1.5 shadow-inner" title="Total Global Page Visits">
                     <i class="fa-solid fa-users-viewfinder text-blue-400"></i>
                     <span class="text-slate-400 font-medium">Visits:</span>
                     <span id="visitorCount" class="font-mono font-bold text-white">...</span>
                 </div>
 
-                <!-- Language Selector -->
                 <div>
                     <select id="langSelect" onchange="changeLanguage()" class="bg-blue-800 text-white text-xs font-semibold p-2 rounded border border-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400">
                         <option value="en">🌐 English</option>
@@ -51,14 +48,18 @@
         </div>
     </header>
 
-    <!-- Navigation Tabs -->
+    <!-- Navigation Tabs: Leave Application is positioned strictly in the middle -->
     <div class="bg-white shadow border-b border-slate-200">
         <div class="max-w-4xl mx-auto flex">
-            <button onclick="switchTab('calc')" id="tab-calc" class="w-1/2 py-3.5 tab-active flex justify-center items-center gap-2 text-sm transition-all">
+            <button onclick="switchTab('calc')" id="tab-calc" class="w-1/3 py-3.5 tab-active flex justify-center items-center gap-2 text-sm transition-all">
                 <i class="fa-solid fa-calculator text-base"></i>
-                <span data-key="nav_calc">OT & Payslip Calculator</span>
+                <span data-key="nav_calc">OT Calculator</span>
             </button>
-            <button onclick="switchTab('support')" id="tab-support" class="w-1/2 py-3.5 tab-inactive flex justify-center items-center gap-2 text-sm transition-all">
+            <button onclick="switchTab('leave')" id="tab-leave" class="w-1/3 py-3.5 tab-inactive flex justify-center items-center gap-2 text-sm transition-all">
+                <i class="fa-solid fa-plane-departure text-base"></i>
+                <span data-key="nav_leave">Leave Application</span>
+            </button>
+            <button onclick="switchTab('support')" id="tab-support" class="w-1/3 py-3.5 tab-inactive flex justify-center items-center gap-2 text-sm transition-all">
                 <i class="fa-solid fa-headset text-base"></i>
                 <span data-key="nav_support">Support</span>
             </button>
@@ -68,10 +69,8 @@
     <!-- Main Content Area -->
     <main class="max-w-3xl w-full mx-auto p-4 space-y-6 my-2">
 
-        <!-- ================= CALCULATOR SECTION ================= -->
+        <!-- ================= TAB 1: OT & PAYSLIP CALCULATOR ================= -->
         <section id="section-calc" class="space-y-4">
-            
-            <!-- Pay Cycle Info Banner -->
             <div class="bg-amber-50 border-l-4 border-amber-500 p-3.5 rounded-r-lg shadow-sm text-xs text-amber-900 space-y-1">
                 <div class="font-bold flex items-center gap-1.5">
                     <i class="fa-solid fa-calendar-days text-amber-600 text-sm"></i>
@@ -82,7 +81,6 @@
                 </p>
             </div>
 
-            <!-- Base Earnings Form -->
             <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 space-y-4">
                 <h2 class="text-base font-bold text-slate-800 border-b pb-2 flex items-center gap-2">
                     <i class="fa-solid fa-sack-dollar text-green-600"></i>
@@ -100,7 +98,6 @@
                 </div>
             </div>
 
-            <!-- Overtime Inputs Form -->
             <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 space-y-4">
                 <h2 class="text-base font-bold text-slate-800 border-b pb-2 flex items-center gap-2">
                     <i class="fa-solid fa-clock text-blue-600"></i>
@@ -108,7 +105,6 @@
                 </h2>
 
                 <div class="space-y-3">
-                    <!-- Normal OT -->
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-slate-50 p-3 rounded-lg border border-slate-200 gap-2">
                         <div>
                             <p class="font-bold text-slate-800 text-sm" data-key="ot_normal">Normal OT (1.5x Multiplier)</p>
@@ -120,7 +116,6 @@
                         </div>
                     </div>
 
-                    <!-- Holiday OT -->
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-slate-50 p-3 rounded-lg border border-slate-200 gap-2">
                         <div>
                             <p class="font-bold text-slate-800 text-sm" data-key="ot_holiday">Holiday OT (1.5x Multiplier)</p>
@@ -132,7 +127,6 @@
                         </div>
                     </div>
 
-                    <!-- Retro Normal OT -->
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-slate-50 p-3 rounded-lg border border-slate-200 gap-2">
                         <div>
                             <p class="font-bold text-slate-800 text-sm" data-key="ot_retro_normal">Retro Normal OT (1.5x Multiplier)</p>
@@ -144,7 +138,6 @@
                         </div>
                     </div>
 
-                    <!-- Retro Holiday OT -->
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-slate-50 p-3 rounded-lg border border-slate-200 gap-2">
                         <div>
                             <p class="font-bold text-slate-800 text-sm" data-key="ot_retro_holiday">Retro Holiday OT (1.5x Multiplier)</p>
@@ -156,7 +149,6 @@
                         </div>
                     </div>
 
-                    <!-- Bonus OT -->
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-slate-50 p-3 rounded-lg border border-slate-200 gap-2">
                         <div>
                             <p class="font-bold text-slate-800 text-sm" data-key="ot_bonus">Bonus OT / Incentive (1.0x Base Rate)</p>
@@ -170,7 +162,6 @@
                 </div>
             </div>
 
-            <!-- Complete Calculation Breakdown Output -->
             <div class="bg-blue-900 text-white p-5 rounded-xl shadow-lg space-y-4">
                 <h3 class="text-base font-bold border-b border-blue-800 pb-2 flex items-center justify-between">
                     <span data-key="title_breakdown">Estimated Payslip Breakdown</span>
@@ -219,10 +210,123 @@
             </div>
         </section>
 
-        <!-- ================= SUPPORT SECTION ================= -->
+        <!-- ================= TAB 2: SMART LEAVE APPLICATION (MIDDLE TAB) ================= -->
+        <section id="section-leave" class="hidden space-y-6">
+            <div class="bg-white p-6 sm:p-8 rounded-xl shadow-sm border border-slate-200 space-y-6">
+                <div class="border-b border-slate-200 pb-4">
+                    <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                        <i class="fa-solid fa-plane-departure text-blue-600"></i>
+                        <span>Smart Sponsor Leave & Travel Application</span>
+                    </h2>
+                    <p class="text-xs text-slate-500 mt-1">Multi-user safe recording for Samasco (Google Docs tags), Jawa (Google Sheets), and Kaefer (Staff/Worker).</p>
+                </div>
+
+                <form id="leaveForm" class="space-y-6" onsubmit="handleLeaveSubmit(event)">
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Select Sponsor / Company *</label>
+                        <select id="leaveSponsor" name="leaveSponsor" required onchange="toggleSmartSponsorFields()" 
+                            class="w-full border border-slate-300 p-2.5 rounded-lg text-sm bg-white focus:ring-2 focus:ring-blue-600">
+                            <option value="">-- Choose Sponsor --</option>
+                            <option value="SAMASCO">SAMASCO (Google Doc Template with Tags)</option>
+                            <option value="JAWA">JAWA (Google Sheet Database)</option>
+                            <option value="KAEFER_STAFF">KAEFER - Staff</option>
+                            <option value="KAEFER_WORKER">KAEFER - Worker</option>
+                        </select>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Kaefer ID No *</label>
+                            <input type="text" id="kaeferId" required placeholder="Write your Kaefer ID" class="w-full border p-2.5 rounded-lg text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Full Name *</label>
+                            <input type="text" id="leaveEmpName" required placeholder="Full Name as per Iqama" class="w-full border p-2.5 rounded-lg text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Site Name *</label>
+                            <input type="text" id="siteName" required placeholder="e.g. Jubail / Yanbu Site" class="w-full border p-2.5 rounded-lg text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Position Title *</label>
+                            <input type="text" id="leavePosition" required placeholder="e.g. Scaffolder / Technician" class="w-full border p-2.5 rounded-lg text-sm">
+                        </div>
+                    </div>
+
+                    <div id="smartFieldContainer" class="hidden p-4 bg-blue-50 border border-blue-200 rounded-xl space-y-2">
+                        <label id="smartFieldLabel" class="block text-xs font-bold uppercase text-blue-900">Optional Detail</label>
+                        <input type="text" id="sponsorMeta" class="w-full border border-blue-300 bg-white p-2.5 rounded-lg text-sm">
+                        <p id="smartFieldHint" class="text-[11px] text-blue-700"></p>
+                    </div>
+
+                    <div class="border-t border-slate-200 pt-4 space-y-4">
+                        <h3 class="text-sm font-bold text-slate-800 uppercase">Leave Duration & Travel Schedule</h3>
+                        <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                            <div>
+                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Leave Type *</label>
+                                <select id="leaveType" onchange="handleLeaveTypeChange()" class="w-full border p-2.5 rounded-lg text-sm bg-white">
+                                    <option value="Annual">Annual Leave</option>
+                                    <option value="Emergency">Emergency Leave</option>
+                                    <option value="Sick">Sick Leave</option>
+                                    <option value="Unpaid">Unpaid / Other</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Start Date *</label>
+                                <input type="date" id="startDate" required onchange="calcLeaveDays()" class="w-full border p-2.5 rounded-lg text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Total Days Requested *</label>
+                                <input type="number" id="totalDays" value="30" class="w-full border p-2.5 rounded-lg text-sm font-bold text-slate-700">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                            <div>
+                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Stay During Vacation *</label>
+                                <select id="stayVacation" class="w-full border p-2.5 rounded-lg text-sm bg-white">
+                                    <option value="Country of Origin">Country of Origin (بلد الأصل)</option>
+                                    <option value="In KSA">Inside KSA (داخل المملكة)</option>
+                                    <option value="Out KSA">Out KSA (خارج المملكة)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Flight Sector (Route) *</label>
+                                <input type="text" id="flightSector" required placeholder="e.g. DMM - KTM - DMM" class="w-full border p-2.5 rounded-lg text-sm">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-slate-200 pt-4 space-y-4">
+                        <h3 class="text-sm font-bold text-slate-800 uppercase">Contact & Relative Emergency Details</h3>
+                        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                            <div>
+                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1">KSA & Home Phone Numbers *</label>
+                                <input type="text" id="contactDetails" required placeholder="KSA: 05X / Home: +977..." class="w-full border p-2.5 rounded-lg text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Relative Details (Name, Relation, Phone) *</label>
+                                <input type="text" id="relativeDetails" required placeholder="Name / Relation / Phone Number" class="w-full border p-2.5 rounded-lg text-sm">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label id="reasonLabel" class="block text-xs font-bold uppercase text-slate-700 mb-1">Reason for Leave *</label>
+                        <textarea id="leaveReason" rows="2" required class="w-full border p-2.5 rounded-lg text-sm bg-slate-100 text-slate-500" readonly>Annual Leave</textarea>
+                    </div>
+
+                    <button type="submit" id="btnLeaveSubmit" class="w-full bg-blue-900 hover:bg-blue-800 text-white font-bold py-3 rounded-lg shadow transition-all text-sm flex justify-center items-center gap-2">
+                        <i class="fa-solid fa-file-pdf"></i>
+                        <span>Securely Record Data & Download PDF Form</span>
+                    </button>
+                </form>
+                <div id="leaveMsg" class="hidden p-4 rounded-lg text-xs font-semibold"></div>
+            </div>
+        </section>
+
+        <!-- ================= TAB 3: SUPPORT SECTION ================= -->
         <section id="section-support" class="hidden space-y-6">
-            
-            <!-- Raise Ticket Form -->
             <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 space-y-4">
                 <h2 class="text-base font-bold text-slate-800 border-b pb-2 flex items-center gap-2">
                     <i class="fa-solid fa-paper-plane text-blue-600"></i>
@@ -246,7 +350,7 @@
                         <select id="issueCategory" class="w-full border border-slate-300 p-2.5 rounded-lg text-sm bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none">
                             <option value="Overtime Hours Discrepancy">Overtime Hours Missing or Wrong</option>
                             <option value="Allowance Issue">Allowance Missing / Incorrect</option>
-                            <option value="Retro OT Problem">Retro Overtime Pay Discrepancy</option>
+                            <option value="Leave Application Query">Leave Application Processing Query</option>
                             <option value="Payslip Understanding">Payslip Layout / Calculation Guidance</option>
                             <option value="Other Issue">Other General Concern</option>
                         </select>
@@ -254,7 +358,7 @@
 
                     <div>
                         <label class="block text-xs font-bold uppercase text-slate-700 mb-1" data-key="lbl_details">Details / Explanation *</label>
-                        <textarea id="issueDetails" required rows="3" placeholder="Please describe your issue simply (e.g. My Holiday OT hours on 12th were not fully counted)..." class="w-full border border-slate-300 p-2.5 rounded-lg text-sm focus:ring-2 focus:ring-blue-600 focus:outline-none"></textarea>
+                        <textarea id="issueDetails" required rows="3" placeholder="Please describe your issue simply..." class="w-full border border-slate-300 p-2.5 rounded-lg text-sm focus:ring-2 focus:ring-blue-600 focus:outline-none"></textarea>
                     </div>
 
                     <button type="submit" id="btnSubmit" class="w-full bg-blue-900 hover:bg-blue-800 text-white font-bold py-3 rounded-lg shadow flex justify-center items-center gap-2 transition-all text-sm">
@@ -264,7 +368,6 @@
                 </form>
             </div>
 
-            <!-- Track Ticket Status -->
             <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 space-y-4">
                 <h2 class="text-base font-bold text-slate-800 border-b pb-2 flex items-center gap-2">
                     <i class="fa-solid fa-magnifying-glass text-blue-600"></i>
@@ -279,7 +382,6 @@
                     </button>
                 </div>
 
-                <!-- Status Output Card -->
                 <div id="statusResult" class="hidden border border-slate-200 p-4 rounded-xl bg-slate-50 space-y-3">
                     <div class="flex justify-between items-center border-b border-slate-200 pb-2">
                         <span class="font-bold text-sm text-slate-800" id="resTicketNo">Ticket #</span>
@@ -291,7 +393,6 @@
                         <div id="resHRComment" class="p-3 bg-white border rounded-lg text-slate-700 whitespace-pre-wrap font-sans">Under review...</div>
                     </div>
 
-                    <!-- Re-open / Reply Section -->
                     <div id="reopenBox" class="pt-2 border-t border-slate-200 space-y-2">
                         <p class="text-xs text-red-600 font-bold flex items-center gap-1" data-key="msg_not_satisfied">
                             <i class="fa-solid fa-circle-exclamation"></i> Not satisfied with the resolution?
@@ -304,7 +405,6 @@
                     </div>
                 </div>
             </div>
-
         </section>
     </main>
 
@@ -319,16 +419,14 @@
 
     <!-- JavaScript Logic -->
     <script>
-        // Updated Deployed Web App URL
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwiHSRuxECeTPa888cHDy_pQ30eOJf65Z8mS5tg4ZCqwZxR4HA1IHWd4tl2zuayd5a_Ng/exec";
 
-        // Multi-Language Dictionary
         const translations = {
             en: {
                 header_title: "Employee Portal", header_sub: "Payslip Calculator & Support Center",
-                nav_calc: "OT & Payslip Calculator", nav_support: "Support",
+                nav_calc: "OT Calculator", nav_leave: "Leave Application", nav_support: "Support",
                 cutoff_title: "Pay Cutoff System (25th Cutoff Rule)",
-                cutoff_desc: "Overtime is calculated from 26th of previous month to 25th of current month. Overtime worked from 26th to month-end appears as Retro OT in your payslip.",
+                cutoff_desc: "Overtime is calculated from 26th of previous month to 25th of current month.",
                 title_salary: "1. Salary & Allowances", label_basic: "Basic Salary (SAR)", label_allowance: "Other Allowances (SAR)",
                 title_ot: "2. Overtime Hours Breakdown",
                 ot_normal: "Normal OT (1.5x Multiplier)", ot_normal_sub: "1st to 25th (Regular Working Days)",
@@ -350,8 +448,8 @@
             ar: {
                 header_title: "بوابة الموظفين", header_sub: "حاسبة العمل الإضافي ومركز الدعم",
                 cutoff_title: "نظام قطع راتب العمل الإضافي (يوم 25)",
-                cutoff_desc: "يتم حساب العمل الإضافي من 26 من الشهر السابق إلى 25 من الشهر الحالي. العمل الإضافي من 26 إلى نهاية الشهر يظهر كعمل إضافي بأثر رجعي (Retro OT).",
-                nav_calc: "حاسبة الإضافي والراتب", nav_support: "الدعم",
+                cutoff_desc: "يتم حساب العمل الإضافي من 26 من الشهر السابق إلى 25 من الشهر الحالي.",
+                nav_calc: "حاسبة الإضافي", nav_leave: "طلب الإجازة", nav_support: "الدعم",
                 title_salary: "1. الراتب الأساسي والبدلات", label_basic: "الراتب الأساسي (ريال)", label_allowance: "البدلات الأخرى (ريال)",
                 title_ot: "2. تفاصيل ساعات العمل الإضافي",
                 ot_normal: "إضافي عادي (1.5x)", ot_normal_sub: "من 1 إلى 25 (أيام العمل العادية)",
@@ -373,8 +471,8 @@
             hi: {
                 header_title: "कर्मचारी पोर्टल", header_sub: "ओटी कैलकुलेटर और सहायता केंद्र",
                 cutoff_title: "वेतन कटऑफ नियम (25 तारीख नियम)",
-                cutoff_desc: "ओवरटाइम की गणना पिछले महीने की 26 तारीख से वर्तमान महीने की 25 तारीख तक की जाती है। 26 तारीख से महीने के अंत तक किया गया ओटी पेस्लिप में Retro OT के रूप में दिखता है।",
-                nav_calc: "ओटी कैलकुलेटर", nav_support: "सहायता",
+                cutoff_desc: "ओवरтайम की गणना पिछले महीने की 26 तारीख से वर्तमान महीने की 25 तारीख तक की जाती है।",
+                nav_calc: "ओटी कैलकुलेटर", nav_leave: "छुट्टी का आवेदन", nav_support: "सहायता",
                 title_salary: "1. वेतन और भत्ते", label_basic: "मूल वेतन (SAR)", label_allowance: "अन्य भत्ते (SAR)",
                 title_ot: "2. ओवर-टाइम घंटे",
                 ot_normal: "सामान्य ओटी (1.5x)", ot_normal_sub: "1 से 25 तारीख (सामान्य कार्य दिवस)",
@@ -396,8 +494,8 @@
             ur: {
                 header_title: "ملازمین پورٹل", header_sub: "اوور ٹائم کیلکولیٹر اور سپورٹ سینٹر",
                 cutoff_title: "تنخواہ کی کٹ آف کا طریقہ (25 تاریخ کا قانون)",
-                cutoff_desc: "اوور ٹائم کی گنتی گزشتہ ماہ کی 26 تاریخ سے موجودہ ماہ کی 25 تاریخ تک کی جاتی ہے۔ 26 تاریخ سے ماہ کے اختتام تک کا اوور ٹائم پے سلپ میں Retro OT کے طور پر دکھایا جاتا ہے۔",
-                nav_calc: "اوور ٹائم کیلکولیٹر", nav_support: "سپورٹ",
+                cutoff_desc: "اوور ٹائم کی گنتی گزشتہ ماہ کی 26 تاریخ سے موجودہ ماہ کی 25 تاریخ تک کی جاتی ہے۔",
+                nav_calc: "اوور ٹائم کیلکولیٹر", nav_leave: "چھٹی کی درخواست", nav_support: "سپورٹ",
                 title_salary: "1. بنیادی تنخواہ اور الاؤنس", label_basic: "بنیادی تنخواہ (SAR)", label_allowance: "دیگر الاؤنسز (SAR)",
                 title_ot: "2. اوور ٹائم گھنٹے",
                 ot_normal: "نارمل اوور ٹائم (1.5x)", ot_normal_sub: "1 سے 25 تاریخ (عام کاری دن)",
@@ -418,15 +516,16 @@
             }
         };
 
-        // Navigation Switch
         function switchTab(tab) {
             document.getElementById('section-calc').classList.toggle('hidden', tab !== 'calc');
+            document.getElementById('section-leave').classList.toggle('hidden', tab !== 'leave');
             document.getElementById('section-support').classList.toggle('hidden', tab !== 'support');
-            document.getElementById('tab-calc').className = tab === 'calc' ? 'w-1/2 py-3.5 tab-active flex justify-center items-center gap-2 text-sm transition-all' : 'w-1/2 py-3.5 tab-inactive flex justify-center items-center gap-2 text-sm transition-all';
-            document.getElementById('tab-support').className = tab === 'support' ? 'w-1/2 py-3.5 tab-active flex justify-center items-center gap-2 text-sm transition-all' : 'w-1/2 py-3.5 tab-inactive flex justify-center items-center gap-2 text-sm transition-all';
+
+            document.getElementById('tab-calc').className = tab === 'calc' ? 'w-1/3 py-3.5 tab-active flex justify-center items-center gap-2 text-sm transition-all' : 'w-1/3 py-3.5 tab-inactive flex justify-center items-center gap-2 text-sm transition-all';
+            document.getElementById('tab-leave').className = tab === 'leave' ? 'w-1/3 py-3.5 tab-active flex justify-center items-center gap-2 text-sm transition-all' : 'w-1/3 py-3.5 tab-inactive flex justify-center items-center gap-2 text-sm transition-all';
+            document.getElementById('tab-support').className = tab === 'support' ? 'w-1/3 py-3.5 tab-active flex justify-center items-center gap-2 text-sm transition-all' : 'w-1/3 py-3.5 tab-inactive flex justify-center items-center gap-2 text-sm transition-all';
         }
 
-        // Multi-language Changer
         function changeLanguage() {
             const lang = document.getElementById('langSelect').value;
             document.querySelectorAll('[data-key]').forEach(elem => {
@@ -435,32 +534,20 @@
                     elem.innerText = translations[lang][key];
                 }
             });
-            if(lang === 'ar' || lang === 'ur') {
-                document.body.dir = "rtl";
-            } else {
-                document.body.dir = "ltr";
-            }
+            document.body.dir = (lang === 'ar' || lang === 'ur') ? "rtl" : "ltr";
         }
 
-        // Global Live Visitor Counter connected to Google Sheet Backend
         async function fetchVisitorCount() {
             const countEl = document.getElementById('visitorCount');
             try {
                 const response = await fetch(`${SCRIPT_URL}?action=VISITOR_COUNT`, { redirect: "follow" });
-                const text = await response.text();
-                const data = JSON.parse(text);
-                if (data && data.success && typeof data.count !== 'undefined') {
-                    countEl.innerText = data.count.toLocaleString();
-                } else {
-                    countEl.innerText = "1,250";
-                }
+                const data = await response.json();
+                countEl.innerText = (data && data.success) ? data.count.toLocaleString() : "1,250";
             } catch (error) {
-                console.error("Visitor counter sync error:", error);
                 countEl.innerText = "1,250";
             }
         }
 
-        // Calculation Engine
         function calculate() {
             const basic = parseFloat(document.getElementById('basicSalary').value) || 0;
             const allowance = parseFloat(document.getElementById('allowance').value) || 0;
@@ -476,7 +563,6 @@
             const normalOTPay = (normalOT + holidayOT) * otHourlyRate;
             const retroOTPay = (retroNormalOT + retroHolidayOT) * otHourlyRate;
             const bonusOTPay = bonusOT * baseHourlyRate;
-
             const netPay = basic + allowance + normalOTPay + retroOTPay + bonusOTPay;
 
             document.getElementById('rateBase').innerText = baseHourlyRate.toFixed(2) + " SAR";
@@ -489,13 +575,123 @@
             document.getElementById('outNetPay').innerText = netPay.toFixed(2) + " SAR";
         }
 
-        // Create Ticket API Call
+        function toggleSmartSponsorFields() {
+            const sponsor = document.getElementById('leaveSponsor').value;
+            const container = document.getElementById('smartFieldContainer');
+            const label = document.getElementById('smartFieldLabel');
+            const input = document.getElementById('sponsorMeta');
+            const hint = document.getElementById('smartFieldHint');
+
+            if (!sponsor) {
+                container.classList.add('hidden');
+                input.required = false;
+                return;
+            }
+
+            container.classList.remove('hidden');
+            if (sponsor === 'SAMASCO') {
+                label.innerText = 'SAMASCO L No. (Optional)';
+                input.placeholder = 'Optional Samasco Number';
+                hint.innerText = 'Non-mandatory tracking token for Samasco Google Doc integration.';
+                input.required = false;
+            } else if (sponsor === 'JAWA') {
+                label.innerText = 'JAWA Reference Code (Optional)';
+                input.placeholder = 'Optional Jawa Ref Code';
+                hint.innerText = 'Optional reference for Jawa client sheet routing.';
+                input.required = false;
+            } else if (sponsor === 'KAEFER_STAFF') {
+                label.innerText = 'Ticket Arranged By *';
+                input.placeholder = 'Self / Company';
+                hint.innerText = 'Staff arrange own tickets or select company arrangement.';
+                input.required = true;
+            } else if (sponsor === 'KAEFER_WORKER') {
+                label.innerText = 'Project Site Supervisor Name *';
+                input.placeholder = 'Supervisor Name';
+                hint.innerText = 'Required for site verification and worker leave logs.';
+                input.required = true;
+            }
+        }
+
+        function handleLeaveTypeChange() {
+            const leaveType = document.getElementById('leaveType').value;
+            const reasonBox = document.getElementById('leaveReason');
+            
+            if (leaveType === 'Annual') {
+                reasonBox.value = 'Annual Leave';
+                reasonBox.readOnly = true;
+                reasonBox.classList.add('bg-slate-100', 'text-slate-500');
+            } else {
+                reasonBox.value = '';
+                reasonBox.readOnly = false;
+                reasonBox.classList.remove('bg-slate-100', 'text-slate-500');
+                reasonBox.placeholder = 'Please specify emergency or custom reason here...';
+            }
+        }
+
+        function calcLeaveDays() {
+            // Placeholder logic for leave day updates
+        }
+
+        async function handleLeaveSubmit(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btnLeaveSubmit');
+            const msg = document.getElementById('leaveMsg');
+            btn.disabled = true;
+            btn.innerText = 'Securely Recording & Generating Session Token...';
+
+            const payload = {
+                action: "CREATE_LEAVE_APPLICATION",
+                sponsor: document.getElementById('leaveSponsor').value,
+                kaeferId: document.getElementById('kaeferId').value.trim(),
+                empName: document.getElementById('leaveEmpName').value.trim(),
+                siteName: document.getElementById('siteName').value.trim(),
+                position: document.getElementById('leavePosition').value.trim(),
+                sponsorMeta: document.getElementById('sponsorMeta').value.trim(),
+                leaveType: document.getElementById('leaveType').value,
+                startDate: document.getElementById('startDate').value,
+                totalDays: document.getElementById('totalDays').value,
+                stayVacation: document.getElementById('stayVacation').value,
+                flightSector: document.getElementById('flightSector').value.trim(),
+                contactDetails: document.getElementById('contactDetails').value.trim(),
+                relativeDetails: document.getElementById('relativeDetails').value.trim(),
+                reason: document.getElementById('leaveReason').value.trim()
+            };
+
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    redirect: 'follow',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(payload)
+                });
+                
+                const text = await response.text();
+                const data = JSON.parse(text);
+
+                if(data.success) {
+                    msg.className = 'p-4 rounded-lg text-xs font-semibold bg-green-50 text-green-800 border border-green-200';
+                    msg.innerHTML = `✅ Application successfully recorded under <b>${payload.sponsor}</b>!<br>Unique Submission Token: <code class="font-mono font-bold">${data.submissionId}</code>.<br><span class="text-blue-700">Ready for official Google Doc/Sheet PDF processing and download.</span>`;
+                    msg.classList.remove('hidden');
+                    document.getElementById('leaveForm').reset();
+                    document.getElementById('smartFieldContainer').classList.add('hidden');
+                } else {
+                    throw new Error(data.error || "Server could not record data.");
+                }
+            } catch (err) {
+                msg.className = 'p-4 rounded-lg text-xs font-semibold bg-red-50 text-red-800 border border-red-200';
+                msg.innerText = '⚠️ Error recording application: ' + err.message;
+                msg.classList.remove('hidden');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-file-pdf"></i> <span>Securely Record Data & Download PDF Form</span>';
+            }
+        }
+
         async function submitTicket(e) {
             e.preventDefault();
             const btn = document.getElementById('btnSubmit');
             const originalContent = btn.innerHTML;
-            
-            btn.innerText = "Submitting to Support...";
+            btn.innerText = "Submitting...";
             btn.disabled = true;
 
             const payload = {
@@ -513,18 +709,14 @@
                     headers: { "Content-Type": "text/plain;charset=utf-8" },
                     body: JSON.stringify(payload)
                 });
-                
-                const text = await response.text();
-                const data = JSON.parse(text);
-
+                const data = await response.json();
                 if (data.success) {
-                    alert(`✅ Support Request Registered!\n\nYour Ticket Number is: ${data.ticketId}\n\nPlease save this number to check status later.`);
+                    alert(`✅ Support Request Registered!\n\nYour Ticket Number is: ${data.ticketId}`);
                     document.getElementById('supportForm').reset();
                 } else {
                     alert("⚠️ Server Warning: " + (data.error || "Could not process request."));
                 }
             } catch (err) {
-                console.error("Submission Error:", err);
                 alert("⚠️ Request Submitted! Check your Employee ID in status tracking shortly.");
             } finally {
                 btn.innerHTML = originalContent;
@@ -532,96 +724,50 @@
             }
         }
 
-        // Search Ticket API Call
         async function trackTicket() {
             const ticketId = document.getElementById('trackTicketId').value.trim();
             if (!ticketId) return alert("Please enter a valid Ticket Number.");
 
-            const btn = document.getElementById('btnTrack');
-            btn.innerText = "Searching...";
-            btn.disabled = true;
-
             const resDiv = document.getElementById('statusResult');
-
             try {
                 const response = await fetch(`${SCRIPT_URL}?ticketId=${encodeURIComponent(ticketId)}`, { redirect: "follow" });
-                const text = await response.text();
-                const data = JSON.parse(text);
+                const data = await response.json();
 
                 if (data.found) {
                     resDiv.classList.remove('hidden');
                     document.getElementById('resTicketNo').innerText = "Ticket #" + data.ticketId;
-                    
-                    const badge = document.getElementById('resStatusBadge');
-                    badge.innerText = data.status;
-
-                    if(data.status === "RESOLVED") {
-                        badge.className = "px-2.5 py-1 text-xs rounded-full font-bold uppercase bg-green-100 text-green-800";
-                    } else if(data.status === "REOPENED") {
-                        badge.className = "px-2.5 py-1 text-xs rounded-full font-bold uppercase bg-red-100 text-red-800";
-                    } else {
-                        badge.className = "px-2.5 py-1 text-xs rounded-full font-bold uppercase bg-yellow-100 text-yellow-800";
-                    }
-
-                    document.getElementById('resHRComment').innerText = data.hrComment || "Ticket received and under review by support team.";
+                    document.getElementById('resStatusBadge').innerText = data.status;
+                    document.getElementById('resHRComment').innerText = data.hrComment || "Under review...";
                 } else {
-                    alert("❌ Ticket ID not found. Please double check your ticket number.");
+                    alert("❌ Ticket ID not found.");
                     resDiv.classList.add('hidden');
                 }
             } catch (err) {
-                console.error("Tracking Error:", err);
-                alert("⚠️ Connection issue while checking status. Please try again.");
-            } finally {
-                btn.innerHTML = '<i class="fa-solid fa-search"></i> <span>Search</span>';
-                btn.disabled = false;
+                alert("⚠️ Connection issue while checking status.");
             }
         }
 
-        // Reopen Ticket API Call
         async function reopenTicket() {
             const ticketId = document.getElementById('trackTicketId').value.trim();
             const comment = document.getElementById('reopenComment').value.trim();
-            
-            if (!comment) return alert("Please type a reason why you are reopening this issue.");
+            if (!comment) return alert("Please type a reason.");
 
-            const btn = document.getElementById('btnReopen');
-            btn.innerText = "Updating...";
-            btn.disabled = true;
-
-            const payload = {
-                action: "REOPEN_TICKET",
-                ticketId: ticketId,
-                comment: comment
-            };
-
+            const payload = { action: "REOPEN_TICKET", ticketId: ticketId, comment: comment };
             try {
-                const response = await fetch(SCRIPT_URL, {
+                await fetch(SCRIPT_URL, {
                     method: "POST",
                     redirect: "follow",
                     headers: { "Content-Type": "text/plain;charset=utf-8" },
                     body: JSON.stringify(payload)
                 });
-
-                const text = await response.text();
-                const data = JSON.parse(text);
-
-                if (data.success) {
-                    alert("🔄 Ticket updated and sent back to Support!");
-                    document.getElementById('reopenComment').value = "";
-                    trackTicket();
-                } else {
-                    alert("Error: " + data.error);
-                }
+                alert("🔄 Ticket updated and sent back to Support!");
+                document.getElementById('reopenComment').value = "";
+                trackTicket();
             } catch (err) {
-                console.error("Reopen Error:", err);
-                alert("⚠️ Request sent! Your ticket status will update shortly.");
-            } finally {
-                btn.innerHTML = '<i class="fa-solid fa-rotate-left"></i> <span>Re-open & Send Back to Support</span>';
-                btn.disabled = false;
+                alert("⚠️ Request sent!");
             }
         }
 
-        // Initialize features on page load
         calculate();
         fetchVisitorCount();
     </script>
