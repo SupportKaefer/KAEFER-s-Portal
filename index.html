@@ -517,13 +517,14 @@
         };
 
         function switchTab(tab) {
+            if (tab === 'leave') return; // Guard clause to keep it hidden
+
             document.getElementById('section-calc').classList.toggle('hidden', tab !== 'calc');
-            document.getElementById('section-leave').classList.toggle('hidden', tab !== 'leave');
+            document.getElementById('section-leave').classList.add('hidden'); // Forces section to stay hidden
             document.getElementById('section-support').classList.toggle('hidden', tab !== 'support');
 
-            document.getElementById('tab-calc').className = tab === 'calc' ? 'w-1/3 py-3.5 tab-active flex justify-center items-center gap-2 text-sm transition-all' : 'w-1/3 py-3.5 tab-inactive flex justify-center items-center gap-2 text-sm transition-all';
-            document.getElementById('tab-leave').className = tab === 'leave' ? 'w-1/3 py-3.5 tab-active flex justify-center items-center gap-2 text-sm transition-all' : 'w-1/3 py-3.5 tab-inactive flex justify-center items-center gap-2 text-sm transition-all';
-            document.getElementById('tab-support').className = tab === 'support' ? 'w-1/3 py-3.5 tab-active flex justify-center items-center gap-2 text-sm transition-all' : 'w-1/3 py-3.5 tab-inactive flex justify-center items-center gap-2 text-sm transition-all';
+            document.getElementById('tab-calc').className = tab === 'calc' ? 'w-1/2 py-3.5 tab-active flex justify-center items-center gap-2 text-sm transition-all' : 'w-1/2 py-3.5 tab-inactive flex justify-center items-center gap-2 text-sm transition-all';
+            document.getElementById('tab-support').className = tab === 'support' ? 'w-1/2 py-3.5 tab-active flex justify-center items-center gap-2 text-sm transition-all' : 'w-1/2 py-3.5 tab-inactive flex justify-center items-center gap-2 text-sm transition-all';
         }
 
         function changeLanguage() {
