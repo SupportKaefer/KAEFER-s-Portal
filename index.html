@@ -670,20 +670,17 @@
 
                 if(data.success) {
                     const sheetId = "1dNAyTAQ02oCbYMXwIBqX22Bf5kb8udcSbT1hJNUEUGI";
+                    // Using gid=0 or targeting the specific tab export
                     const pdfExportUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?exportFormat=pdf&format=pdf&size=A4&portrait=true&fitw=true&gridlines=false`;
 
                     msg.className = 'p-4 rounded-lg text-xs font-semibold bg-green-50 text-green-800 border border-green-200 space-y-2';
                     msg.innerHTML = `
                         <div>✅ Application successfully recorded under <b>${payload.sponsor}</b>!</div>
                         <div>Unique Submission Token: <code class="font-mono font-bold">${data.submissionId}</code></div>
-                        <div class="pt-2 flex flex-wrap gap-2">
+                        <div class="pt-2">
                             <a href="${pdfExportUrl}" target="_blank" 
                                class="inline-flex items-center gap-1.5 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-bold shadow transition-all">
                                 <i class="fa-solid fa-file-pdf"></i> Download Leave Form PDF
-                            </a>
-                            <a href="https://docs.google.com/spreadsheets/d/${sheetId}/edit" target="_blank" 
-                               class="inline-flex items-center gap-1.5 bg-green-700 hover:bg-green-800 text-white px-4 py-2 rounded-lg font-bold shadow transition-all">
-                                <i class="fa-solid fa-table"></i> View Master Sheet
                             </a>
                         </div>`;
                     msg.classList.remove('hidden');
