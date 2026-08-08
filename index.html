@@ -729,20 +729,22 @@ async function submitTicket(e) {
         if (data.success) {
             alert(`✅ Support Request Registered!\n\nYour Ticket Number is: ${data.ticketId}`);
             document.getElementById('supportForm').reset();
-        } else if (data.action === "DUPLICATE_EXACT" || data.action === "DUPLICATE_DIFFERENT") {
-            // Cleanly handle duplicate or recommendation notices
-            alert(`📌 Active Ticket Notice:\n\n${data.error}`);
+        } else if (data.action === "DUPLICATE_EXACT") {
+            const msg = data.error || `Your request is already registered with Ticket #${data.ticketId}. Please track its status using this number.`;
+            alert(`📌 Active Ticket Notice:\n\n${msg}`);
+        } else if (data.action === "DUPLICATE_DIFFERENT") {
+            const msg = data.error || `We found an existing active ticket (#${data.ticketId}) for your account. You can add your new request or update notes directly to that existing ticket instead of creating a separate one.`;
+            alert(`📌 Active Ticket Notice:\n\n${msg}`);
         } else {
             alert("⚠️ Server Warning: " + (data.error || "Could not process request."));
         }
     } catch (err) {
-        alert("⚠️ Connection error or request processing issue. Please check status tracking shortly.");
+        alert("⚠️ Connection error or request processing issue.");
     } finally {
         btn.innerHTML = originalContent;
         btn.disabled = false;
     }
 }
-
         async function trackTicket() {
             const ticketId = document.getElementById('trackTicketId').value.trim();
             if (!ticketId) return alert("Please enter a valid Ticket Number.");
