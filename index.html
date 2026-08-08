@@ -327,6 +327,30 @@
 
         <!-- ================= TAB 3: SUPPORT SECTION ================= -->
         <section id="section-support" class="hidden space-y-6">
+            
+            <!-- Official SAP SuccessFactors Mobile App Download Box -->
+            <div class="bg-gradient-to-r from-blue-900 to-slate-900 text-white p-5 rounded-xl shadow-sm border border-blue-800 space-y-3">
+                <div class="flex items-center gap-2.5">
+                    <div class="bg-blue-800 p-2 rounded-lg text-blue-300">
+                        <i class="fa-solid fa-mobile-screen-button text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-bold uppercase tracking-wide">Official SAP SuccessFactors App</h3>
+                        <p class="text-xs text-blue-200">Download the official mobile app to view payslips and HR records directly on your phone:</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                    <a href="https://play.google.com/store/apps/details?id=com.successfactors.successfactors&pcampaignid=web_share" target="_blank" 
+                       class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white text-xs px-4 py-2.5 rounded-lg font-semibold flex items-center justify-center gap-2.5 transition-all shadow">
+                        <i class="fa-brands fa-google-play text-green-400 text-base"></i> Google Play (Android)
+                    </a>
+                    <a href="https://apps.apple.com/us/app/sap-successfactors-mobile/id426562526" target="_blank" 
+                       class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white text-xs px-4 py-2.5 rounded-lg font-semibold flex items-center justify-center gap-2.5 transition-all shadow">
+                        <i class="fa-brands fa-app-store text-blue-400 text-base"></i> App Store (iOS)
+                    </a>
+                </div>
+            </div>
+
             <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 space-y-4">
                 <h2 class="text-base font-bold text-slate-800 border-b pb-2 flex items-center gap-2">
                     <i class="fa-solid fa-paper-plane text-blue-600"></i>
@@ -673,7 +697,6 @@
 
                 if(data.success) {
                     const sheetId = "1dNAyTAQ02oCbYMXwIBqX22Bf5kb8udcSbT1hJNUEUGI";
-                    // Using gid=0 or targeting the specific tab export
                     const pdfExportUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?exportFormat=pdf&format=pdf&size=A4&portrait=true&fitw=true&gridlines=false`;
 
                     msg.className = 'p-4 rounded-lg text-xs font-semibold bg-green-50 text-green-800 border border-green-200 space-y-2';
@@ -702,49 +725,50 @@
             }
         }
 
-async function submitTicket(e) {
-    e.preventDefault();
-    const btn = document.getElementById('btnSubmit');
-    const originalContent = btn.innerHTML;
-    btn.innerText = "Submitting...";
-    btn.disabled = true;
+        async function submitTicket(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btnSubmit');
+            const originalContent = btn.innerHTML;
+            btn.innerText = "Submitting...";
+            btn.disabled = true;
 
-    const payload = {
-        action: "CREATE_TICKET",
-        empId: document.getElementById('empId').value.trim(),
-        phone: document.getElementById('empPhone').value.trim(),
-        category: document.getElementById('issueCategory').value,
-        details: document.getElementById('issueDetails').value.trim()
-    };
+            const payload = {
+                action: "CREATE_TICKET",
+                empId: document.getElementById('empId').value.trim(),
+                phone: document.getElementById('empPhone').value.trim(),
+                category: document.getElementById('issueCategory').value,
+                details: document.getElementById('issueDetails').value.trim()
+            };
 
-    try {
-        const response = await fetch(SCRIPT_URL, {
-            method: "POST",
-            redirect: "follow",
-            headers: { "Content-Type": "text/plain;charset=utf-8" },
-            body: JSON.stringify(payload)
-        });
-        const data = await response.json();
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: "POST",
+                    redirect: "follow",
+                    headers: { "Content-Type": "text/plain;charset=utf-8" },
+                    body: JSON.stringify(payload)
+                });
+                const data = await response.json();
 
-        if (data.success) {
-            alert(`✅ Support Request Registered!\n\nYour Ticket Number is: ${data.ticketId}`);
-            document.getElementById('supportForm').reset();
-        } else if (data.action === "DUPLICATE_EXACT") {
-            const msg = data.error || `Your request is already registered with Ticket #${data.ticketId}. Please track its status using this number.`;
-            alert(`📌 Active Ticket Notice:\n\n${msg}`);
-        } else if (data.action === "DUPLICATE_DIFFERENT") {
-            const msg = data.error || `We found an existing active ticket (#${data.ticketId}) for your account. You can add your new request or update notes directly to that existing ticket instead of creating a separate one.`;
-            alert(`📌 Active Ticket Notice:\n\n${msg}`);
-        } else {
-            alert("⚠️ Server Warning: " + (data.error || "Could not process request."));
+                if (data.success) {
+                    alert(`✅ Support Request Registered!\n\nYour Ticket Number is: ${data.ticketId}`);
+                    document.getElementById('supportForm').reset();
+                } else if (data.action === "DUPLICATE_EXACT") {
+                    const msg = data.error || `Your request is already registered with Ticket #${data.ticketId}. Please track its status using this number.`;
+                    alert(`📌 Active Ticket Notice:\n\n${msg}`);
+                } else if (data.action === "DUPLICATE_DIFFERENT") {
+                    const msg = data.error || `We found an existing active ticket (#${data.ticketId}) for your account. You can add your new request or update notes directly to that existing ticket instead of creating a separate one.`;
+                    alert(`📌 Active Ticket Notice:\n\n${msg}`);
+                } else {
+                    alert("⚠️ Server Warning: " + (data.error || "Could not process request."));
+                }
+            } catch (err) {
+                alert("⚠️ Connection error or request processing issue.");
+            } finally {
+                btn.innerHTML = originalContent;
+                btn.disabled = false;
+            }
         }
-    } catch (err) {
-        alert("⚠️ Connection error or request processing issue.");
-    } finally {
-        btn.innerHTML = originalContent;
-        btn.disabled = false;
-    }
-}
+
         async function trackTicket() {
             const ticketId = document.getElementById('trackTicketId').value.trim();
             if (!ticketId) return alert("Please enter a valid Ticket Number.");
