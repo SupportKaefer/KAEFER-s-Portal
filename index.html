@@ -702,42 +702,46 @@
             }
         }
 
-        async function submitTicket(e) {
-            e.preventDefault();
-            const btn = document.getElementById('btnSubmit');
-            const originalContent = btn.innerHTML;
-            btn.innerText = "Submitting...";
-            btn.disabled = true;
+async function submitTicket(e) {
+    e.preventDefault();
+    const btn = document.getElementById('btnSubmit');
+    const originalContent = btn.innerHTML;
+    btn.innerText = "Submitting...";
+    btn.disabled = true;
 
-            const payload = {
-                action: "CREATE_TICKET",
-                empId: document.getElementById('empId').value.trim(),
-                phone: document.getElementById('empPhone').value.trim(),
-                category: document.getElementById('issueCategory').value,
-                details: document.getElementById('issueDetails').value.trim()
-            };
+    const payload = {
+        action: "CREATE_TICKET",
+        empId: document.getElementById('empId').value.trim(),
+        phone: document.getElementById('empPhone').value.trim(),
+        category: document.getElementById('issueCategory').value,
+        details: document.getElementById('issueDetails').value.trim()
+    };
 
-            try {
-                const response = await fetch(SCRIPT_URL, {
-                    method: "POST",
-                    redirect: "follow",
-                    headers: { "Content-Type": "text/plain;charset=utf-8" },
-                    body: JSON.stringify(payload)
-                });
-                const data = await response.json();
-                if (data.success) {
-                    alert(`✅ Support Request Registered!\n\nYour Ticket Number is: ${data.ticketId}`);
-                    document.getElementById('supportForm').reset();
-                } else {
-                    alert("⚠️ Server Warning: " + (data.error || "Could not process request."));
-                }
-            } catch (err) {
-                alert("⚠️ Request Submitted! Check your Employee ID in status tracking shortly.");
-            } finally {
-                btn.innerHTML = originalContent;
-                btn.disabled = false;
-            }
+    try {
+        const response = await fetch(SCRIPT_URL, {
+            method: "POST",
+            redirect: "follow",
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify(payload)
+        });
+        const data = await response.json();
+
+        if (data.success) {
+            alert(`✅ Support Request Registered!\n\nYour Ticket Number is: ${data.ticketId}`);
+            document.getElementById('supportForm').reset();
+        } else if (data.action === "DUPLICATE_EXACT" || data.action === "DUPLICATE_DIFFERENT") {
+            // Cleanly handle duplicate or recommendation notices
+            alert(`📌 Active Ticket Notice:\n\n${data.error}`);
+        } else {
+            alert("⚠️ Server Warning: " + (data.error || "Could not process request."));
         }
+    } catch (err) {
+        alert("⚠️ Connection error or request processing issue. Please check status tracking shortly.");
+    } finally {
+        btn.innerHTML = originalContent;
+        btn.disabled = false;
+    }
+}
 
         async function trackTicket() {
             const ticketId = document.getElementById('trackTicketId').value.trim();
