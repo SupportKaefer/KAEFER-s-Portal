@@ -697,23 +697,40 @@
             text = cleanText(text);
             if (!text) return;
             const finalSize = fitTextSize(font, text, maxWidth, size, 7);
+            if (font.widthOfTextAtSize(text, finalSize) > maxWidth) {
+                return drawWrapped(page, font, text, x, y, maxWidth, 8.5, 2);
+            }
             page.drawText(text, { x, y, size: finalSize, font });
         }
 
         function splitTextToLines(font, text, maxWidth, size) {
-            const words = cleanText(text).split(" ");
             const lines = [];
             let current = "";
-            for (const word of words) {
+            for (const word of cleanText(text).split(" ")) {
                 const candidate = current ? `${current} ${word}` : word;
-                if (font.widthOfTextAtSize(candidate, size) <= maxWidth) current = candidate;
-                else {
-                    if (current) lines.push(current);
-                    current = word;
+                if (font.widthOfTextAtSize(candidate, size) <= maxWidth) {
+                    current = candidate;
+                    continue;
+                }
+                if (current) lines.push(current);
+                current = "";
+                for (const character of word) {
+                    if (font.widthOfTextAtSize(current + character, size) > maxWidth) {
+                        if (current) lines.push(current);
+                        current = "";
+                    }
+                    current += character;
                 }
             }
             if (current) lines.push(current);
             return lines;
+        }
+
+        function drawShare(page, font, share, y) {
+            const text = String(share);
+            const size = fitTextSize(font, text, 45.72, 10, 7);
+            const x = 313.8 + (45.72 - font.widthOfTextAtSize(text, size)) / 2;
+            page.drawText(text, { x, y, size, font });
         }
 
         function drawWrapped(page, font, text, x, y, maxWidth = 190, size = 8.5, maxLines = 2) {
@@ -725,7 +742,10 @@
                 finalSize -= 0.25;
                 lines = splitTextToLines(font, text, maxWidth, finalSize);
             }
-            lines.slice(0, maxLines).forEach((line, i) => {
+            if (lines.length > maxLines || lines.some(line => font.widthOfTextAtSize(line, finalSize) > maxWidth)) {
+                throw new Error(`This entry is too long for the official PDF field: "${text.slice(0, 45)}...". Please shorten it and try again.`);
+            }
+            lines.forEach((line, i) => {
                 page.drawText(line, { x, y: y - (i * (finalSize + 2)), size: finalSize, font });
             });
         }
@@ -743,7 +763,7 @@
 
             const p1 = pages[0];
             const p2 = pages[1];
-            const X = 282, W = 190;
+            const X = 314, W = 218;
 
             drawSingleLine(p1, font, data.declarant.fullName,    X, 551, W);
             drawSingleLine(p1, font, data.declarant.employeeId,  X, 515, W);
@@ -757,7 +777,7 @@
             drawSingleLine(p1, font, data.nominee1.nationality,   X, 230, W);
             drawSingleLine(p1, font, data.nominee1.contact,       X, 194, W);
             drawWrapped   (p1, font, data.nominee1.address,       X, 162, W, 8.5, 2);
-            drawSingleLine(p1, font, String(data.nominee1.share), 286, 122, 38, 10);
+            drawShare(p1, font, data.nominee1.share, 125.64);
 
             drawSingleLine(p2, font, data.nominee2.fullName,      X, 644, W);
             drawSingleLine(p2, font, data.nominee2.relationship,  X, 608, W);
@@ -765,7 +785,7 @@
             drawSingleLine(p2, font, data.nominee2.idPassport,    X, 536, W);
             drawSingleLine(p2, font, data.nominee2.contact,       X, 500, W);
             drawWrapped   (p2, font, data.nominee2.address,       X, 468, W, 8.5, 2);
-            drawSingleLine(p2, font, String(data.nominee2.share), 286, 428, 38, 10);
+            drawShare(p2, font, data.nominee2.share, 430.80);
 
             // Section 4 is intentionally untouched for handwritten signature/witness completion.
             pdfDoc.setTitle(`Next of Kin Declaration - ${submissionId}`);
@@ -808,6 +828,7 @@
             try {
                 const data = collectNokData();
                 validateNokData(data);
+                await generateNextOfKinPdf(data, "Layout validation");
 
                 const response = await fetch(SCRIPT_URL, {
                     method: "POST",
