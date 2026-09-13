@@ -839,13 +839,20 @@
 
                 const result = await response.json();
                 if (!result.success) throw new Error(result.error || "The application could not be recorded.");
+                if (typeof result.submissionId !== "string" || !/^NOK-\d{8}-\d+$/.test(result.submissionId)) {
+                    throw new Error("The server did not return a valid Next-of-Kin reference. The record may already have been saved; check NEXT_OF_KIN_APPLICATIONS before submitting again. Update the existing Apps Script deployment to the matching backend version.");
+                }
 
                 btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i><span>Preparing official PDF...</span>';
                 const pdfBytes = await generateNextOfKinPdf(data, result.submissionId);
 
                 const safeEmp = data.declarant.employeeId.replace(/[^a-zA-Z0-9_-]/g, "_");
                 const safeName = data.declarant.fullName.replace(/[^a-zA-Z0-9_-]+/g, "_").replace(/^_+|_+$/g, "");
-                const fileName = `${result.submissionId}_${safeEmp}_${safeName || "EMPLOYEE"}.pdf`;
+                const fallbackFileName = `${result.submissionId}_${safeEmp}_${safeName || "EMPLOYEE"}.pdf`;
+                const fileName = typeof result.pdfFileName === "string"
+                    && result.pdfFileName.startsWith(result.submissionId + "_")
+                    && /^[a-zA-Z0-9_-]+\.pdf$/.test(result.pdfFileName)
+                    ? result.pdfFileName : fallbackFileName;
 
                 downloadPdfBytes(pdfBytes, fileName);
                 markNokPdfGenerated(result.submissionId);
