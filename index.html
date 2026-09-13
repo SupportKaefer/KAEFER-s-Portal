@@ -6,6 +6,7 @@
     <title>Employee Self-Service & Support Portal</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -48,18 +49,18 @@
         </div>
     </header>
 
-    <!-- Navigation Tabs: Leave Application is positioned strictly in the middle -->
+    <!-- Navigation Tabs -->
     <div class="bg-white shadow border-b border-slate-200">
         <div class="max-w-4xl mx-auto flex">
-            <button onclick="switchTab('calc')" id="tab-calc" class="w-1/2 py-3.5 tab-active flex justify-center items-center gap-2 text-sm transition-all">
+            <button onclick="switchTab('calc')" id="tab-calc" class="w-1/3 py-3.5 tab-active flex justify-center items-center gap-2 text-sm transition-all">
                 <i class="fa-solid fa-calculator text-base"></i>
                 <span data-key="nav_calc">OT Calculator</span>
             </button>
-            <button onclick="switchTab('leave')" id="tab-leave" class="hidden w-1/3 py-3.5 tab-inactive flex justify-center items-center gap-2 text-sm transition-all">
-                <i class="fa-solid fa-plane-departure text-base"></i>
-                <span data-key="nav_leave">Leave Application</span>
+            <button onclick="switchTab('forms')" id="tab-forms" class="w-1/3 py-3.5 tab-inactive flex justify-center items-center gap-2 text-sm transition-all">
+                <i class="fa-solid fa-file-signature text-base"></i>
+                <span data-key="nav_leave">Forms</span>
             </button>
-            <button onclick="switchTab('support')" id="tab-support" class="w-1/2 py-3.5 tab-inactive flex justify-center items-center gap-2 text-sm transition-all">
+            <button onclick="switchTab('support')" id="tab-support" class="w-1/3 py-3.5 tab-inactive flex justify-center items-center gap-2 text-sm transition-all">
                 <i class="fa-solid fa-headset text-base"></i>
                 <span data-key="nav_support">Support</span>
             </button>
@@ -210,118 +211,144 @@
             </div>
         </section>
 
-        <!-- ================= TAB 2: SMART LEAVE APPLICATION (MIDDLE TAB) ================= -->
-        <section id="section-leave" class="hidden space-y-6">
+        <!-- ================= TAB 2: HR FORMS ================= -->
+        <section id="section-forms" class="hidden space-y-6">
             <div class="bg-white p-6 sm:p-8 rounded-xl shadow-sm border border-slate-200 space-y-6">
                 <div class="border-b border-slate-200 pb-4">
                     <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
-                        <i class="fa-solid fa-plane-departure text-blue-600"></i>
-                        <span>Smart Sponsor Leave & Travel Application</span>
+                        <i class="fa-solid fa-people-roof text-blue-600"></i>
+                        <span>Next of Kin & Nomination Declaration</span>
                     </h2>
-                    <p class="text-xs text-slate-500 mt-1">Multi-user safe recording for Samasco (Google Docs tags), Jawa (Google Sheets), and Kaefer (Staff/Worker).</p>
+                    <p class="text-xs text-slate-500 mt-1">
+                        Enter only the declarant and nominee details. The downloaded PDF keeps the official form unchanged.
+                        Declarant signature, witness signature, names and dates must be completed manually after printing.
+                    </p>
                 </div>
 
-                <form id="leaveForm" class="space-y-6" onsubmit="handleLeaveSubmit(event)">
-                    <div>
-                        <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Select Sponsor / Company *</label>
-                        <select id="leaveSponsor" name="leaveSponsor" required onchange="toggleSmartSponsorFields()" 
-                            class="w-full border border-slate-300 p-2.5 rounded-lg text-sm bg-white focus:ring-2 focus:ring-blue-600">
-                            <option value="">-- Choose Sponsor --</option>
-                            <option value="SAMASCO">SAMASCO (Google Doc Template with Tags)</option>
-                            <option value="JAWA">JAWA (Google Sheet Database)</option>
-                            <option value="KAEFER_STAFF">KAEFER - Staff</option>
-                            <option value="KAEFER_WORKER">KAEFER - Worker</option>
-                        </select>
+                <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 text-xs text-amber-900">
+                    <div class="font-bold flex items-center gap-2 mb-1">
+                        <i class="fa-solid fa-pen-nib"></i> Manual signature requirement
                     </div>
+                    <p>No electronic signature or witness information is collected here. Print the generated PDF and complete Section 4 by hand.</p>
+                </div>
 
-                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                        <div>
-                            <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Kaefer ID No *</label>
-                            <input type="text" id="kaeferId" required placeholder="Write your Kaefer ID" class="w-full border p-2.5 rounded-lg text-sm">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Full Name *</label>
-                            <input type="text" id="leaveEmpName" required placeholder="Full Name as per Iqama" class="w-full border p-2.5 rounded-lg text-sm">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Site Name *</label>
-                            <input type="text" id="siteName" required placeholder="e.g. Jubail / Yanbu Site" class="w-full border p-2.5 rounded-lg text-sm">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Position Title *</label>
-                            <input type="text" id="leavePosition" required placeholder="e.g. Scaffolder / Technician" class="w-full border p-2.5 rounded-lg text-sm">
-                        </div>
-                    </div>
-
-                    <div id="smartFieldContainer" class="hidden p-4 bg-blue-50 border border-blue-200 rounded-xl space-y-2">
-                        <label id="smartFieldLabel" class="block text-xs font-bold uppercase text-blue-900">Optional Detail</label>
-                        <input type="text" id="sponsorMeta" class="w-full border border-blue-300 bg-white p-2.5 rounded-lg text-sm">
-                        <p id="smartFieldHint" class="text-[11px] text-blue-700"></p>
-                    </div>
-
-                    <div class="border-t border-slate-200 pt-4 space-y-4">
-                        <h3 class="text-sm font-bold text-slate-800 uppercase">Leave Duration & Travel Schedule</h3>
-                        <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
-                            <div>
-                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Leave Type *</label>
-                                <select id="leaveType" onchange="handleLeaveTypeChange()" class="w-full border p-2.5 rounded-lg text-sm bg-white">
-                                    <option value="Annual">Annual Leave</option>
-                                    <option value="Emergency">Emergency Leave</option>
-                                    <option value="Sick">Sick Leave</option>
-                                    <option value="Unpaid">Unpaid / Other</option>
-                                </select>
+                <form id="nokForm" class="space-y-6" onsubmit="handleNextOfKinSubmit(event)">
+                    <div class="space-y-4">
+                        <h3 class="text-sm font-bold text-blue-900 uppercase border-b pb-2">1. Declarant Details</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="sm:col-span-2">
+                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Full Legal Name *</label>
+                                <input type="text" id="nokDeclarantName" required maxlength="80" placeholder="As per official ID / passport" class="w-full border p-2.5 rounded-lg text-sm">
                             </div>
                             <div>
-                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Start Date *</label>
-                                <input type="date" id="startDate" required onchange="calcLeaveDays()" class="w-full border p-2.5 rounded-lg text-sm">
+                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Employee / ID Number *</label>
+                                <input type="text" id="nokEmployeeId" required maxlength="40" class="w-full border p-2.5 rounded-lg text-sm">
                             </div>
                             <div>
-                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Total Days Requested *</label>
-                                <input type="number" id="totalDays" value="30" class="w-full border p-2.5 rounded-lg text-sm font-bold text-slate-700">
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                            <div>
-                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Stay During Vacation *</label>
-                                <select id="stayVacation" class="w-full border p-2.5 rounded-lg text-sm bg-white">
-                                    <option value="Country of Origin">Country of Origin (بلد الأصل)</option>
-                                    <option value="In KSA">Inside KSA (داخل المملكة)</option>
-                                    <option value="Out KSA">Out KSA (خارج المملكة)</option>
-                                </select>
+                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Nationality *</label>
+                                <input type="text" id="nokDeclarantNationality" required maxlength="50" class="w-full border p-2.5 rounded-lg text-sm">
                             </div>
                             <div>
-                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Flight Sector (Route) *</label>
-                                <input type="text" id="flightSector" required placeholder="e.g. DMM - KTM - DMM" class="w-full border p-2.5 rounded-lg text-sm">
+                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Contact Number *</label>
+                                <input type="tel" id="nokDeclarantContact" required maxlength="30" class="w-full border p-2.5 rounded-lg text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Email Address *</label>
+                                <input type="email" id="nokDeclarantEmail" required maxlength="100" class="w-full border p-2.5 rounded-lg text-sm">
                             </div>
                         </div>
                     </div>
 
-                    <div class="border-t border-slate-200 pt-4 space-y-4">
-                        <h3 class="text-sm font-bold text-slate-800 uppercase">Contact & Relative Emergency Details</h3>
-                        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                            <div>
-                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1">KSA & Home Phone Numbers *</label>
-                                <input type="text" id="contactDetails" required placeholder="KSA: 05X / Home: +977..." class="w-full border p-2.5 rounded-lg text-sm">
+                    <div class="space-y-4">
+                        <h3 class="text-sm font-bold text-blue-900 uppercase border-b pb-2">2. First Nominee (Primary Next of Kin)</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="sm:col-span-2">
+                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Full Legal Name *</label>
+                                <input type="text" id="nokN1Name" required maxlength="80" class="w-full border p-2.5 rounded-lg text-sm">
                             </div>
                             <div>
-                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Relative Details (Name, Relation, Phone) *</label>
-                                <input type="text" id="relativeDetails" required placeholder="Name / Relation / Phone Number" class="w-full border p-2.5 rounded-lg text-sm">
+                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Relationship with Declarant *</label>
+                                <input type="text" id="nokN1Relationship" required maxlength="50" class="w-full border p-2.5 rounded-lg text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1">ID / Passport Number *</label>
+                                <input type="text" id="nokN1Id" required maxlength="50" class="w-full border p-2.5 rounded-lg text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Nationality *</label>
+                                <input type="text" id="nokN1Nationality" required maxlength="50" class="w-full border p-2.5 rounded-lg text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Contact Number *</label>
+                                <input type="tel" id="nokN1Contact" required maxlength="30" class="w-full border p-2.5 rounded-lg text-sm">
+                            </div>
+                            <div class="sm:col-span-2">
+                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Residential Address *</label>
+                                <textarea id="nokN1Address" required maxlength="180" rows="2" class="w-full border p-2.5 rounded-lg text-sm"></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Share of Distribution (%) *</label>
+                                <input type="number" id="nokN1Share" required min="0" max="100" step="1" oninput="updateNokShare()" class="w-full border p-2.5 rounded-lg text-sm font-bold">
                             </div>
                         </div>
                     </div>
 
-                    <div>
-                        <label id="reasonLabel" class="block text-xs font-bold uppercase text-slate-700 mb-1">Reason for Leave *</label>
-                        <textarea id="leaveReason" rows="2" required class="w-full border p-2.5 rounded-lg text-sm bg-slate-100 text-slate-500" readonly>Annual Leave</textarea>
+                    <div class="space-y-4">
+                        <h3 class="text-sm font-bold text-blue-900 uppercase border-b pb-2">3. Second Nominee (Secondary Next of Kin)</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="sm:col-span-2">
+                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Full Legal Name *</label>
+                                <input type="text" id="nokN2Name" required maxlength="80" class="w-full border p-2.5 rounded-lg text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Relationship with Declarant *</label>
+                                <input type="text" id="nokN2Relationship" required maxlength="50" class="w-full border p-2.5 rounded-lg text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1">ID / Passport Number *</label>
+                                <input type="text" id="nokN2Id" required maxlength="50" class="w-full border p-2.5 rounded-lg text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Nationality *</label>
+                                <input type="text" id="nokN2Nationality" required maxlength="50" class="w-full border p-2.5 rounded-lg text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Contact Number *</label>
+                                <input type="tel" id="nokN2Contact" required maxlength="30" class="w-full border p-2.5 rounded-lg text-sm">
+                            </div>
+                            <div class="sm:col-span-2">
+                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Residential Address *</label>
+                                <textarea id="nokN2Address" required maxlength="180" rows="2" class="w-full border p-2.5 rounded-lg text-sm"></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Share of Distribution (%) *</label>
+                                <input type="number" id="nokN2Share" required min="0" max="100" step="1" oninput="updateNokShare()" class="w-full border p-2.5 rounded-lg text-sm font-bold">
+                            </div>
+                            <div class="flex items-end">
+                                <div id="nokShareStatus" class="w-full p-2.5 rounded-lg bg-slate-100 border text-xs font-bold text-slate-600">
+                                    Combined share: 0%
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <button type="submit" id="btnLeaveSubmit" class="w-full bg-blue-900 hover:bg-blue-800 text-white font-bold py-3 rounded-lg shadow transition-all text-sm flex justify-center items-center gap-2">
-                        <i class="fa-solid fa-file-pdf"></i>
-                        <span>Securely Record Data & Download PDF Form</span>
+                    <div class="bg-slate-50 border rounded-xl p-4">
+                        <label class="flex items-start gap-3 text-xs text-slate-700">
+                            <input type="checkbox" id="nokConfirm" required class="mt-0.5 h-4 w-4">
+                            <span>
+                                I confirm that the declarant and nominee information entered above is accurate.
+                                I understand that signatures, witness details and dates must be completed manually on the printed official form.
+                            </span>
+                        </label>
+                    </div>
+
+                    <button type="submit" id="btnNokSubmit" class="w-full bg-blue-900 hover:bg-blue-800 text-white font-bold py-3 rounded-lg shadow transition-all text-sm flex justify-center items-center gap-2">
+                        <i class="fa-solid fa-file-arrow-down"></i>
+                        <span>Save Data & Download Official PDF</span>
                     </button>
                 </form>
-                <div id="leaveMsg" class="hidden p-4 rounded-lg text-xs font-semibold"></div>
+
+                <div id="nokMsg" class="hidden p-4 rounded-lg text-xs font-semibold"></div>
             </div>
         </section>
 
@@ -450,7 +477,7 @@
         const translations = {
             en: {
                 header_title: "Employee Portal", header_sub: "Payslip Calculator & Support Center",
-                nav_calc: "OT Calculator", nav_leave: "Leave Application", nav_support: "Support",
+                nav_calc: "OT Calculator", nav_leave: "Forms", nav_support: "Support",
                 cutoff_title: "Pay Cutoff System (25th Cutoff Rule)",
                 cutoff_desc: "Overtime is calculated from 26th of previous month to 25th of current month.",
                 title_salary: "1. Salary & Allowances", label_basic: "Basic Salary (SAR)", label_allowance: "Other Allowances (SAR)",
@@ -475,7 +502,7 @@
                 header_title: "بوابة الموظفين", header_sub: "حاسبة العمل الإضافي ومركز الدعم",
                 cutoff_title: "نظام قطع راتب العمل الإضافي (يوم 25)",
                 cutoff_desc: "يتم حساب العمل الإضافي من 26 من الشهر السابق إلى 25 من الشهر الحالي.",
-                nav_calc: "حاسبة الإضافي", nav_leave: "طلب الإجازة", nav_support: "الدعم",
+                nav_calc: "حاسبة الإضافي", nav_leave: "النماذج", nav_support: "الدعم",
                 title_salary: "1. الراتب الأساسي والبدلات", label_basic: "الراتب الأساسي (ريال)", label_allowance: "البدلات الأخرى (ريال)",
                 title_ot: "2. تفاصيل ساعات العمل الإضافي",
                 ot_normal: "إضافي عادي (1.5x)", ot_normal_sub: "من 1 إلى 25 (أيام العمل العادية)",
@@ -498,7 +525,7 @@
                 header_title: "कर्मचारी पोर्टल", header_sub: "ओटी कैलकुलेटर और सहायता केंद्र",
                 cutoff_title: "वेतन कटऑफ नियम (25 तारीख नियम)",
                 cutoff_desc: "ओवरтайम की गणना पिछले महीने की 26 तारीख से वर्तमान महीने की 25 तारीख तक की जाती है।",
-                nav_calc: "ओटी कैलकुलेटर", nav_leave: "छुट्टी का आवेदन", nav_support: "सहायता",
+                nav_calc: "ओटी कैलकुलेटर", nav_leave: "फॉर्म", nav_support: "सहायता",
                 title_salary: "1. वेतन और भत्ते", label_basic: "मूल वेतन (SAR)", label_allowance: "अन्य भत्ते (SAR)",
                 title_ot: "2. ओवर-टाइम घंटे",
                 ot_normal: "सामान्य ओटी (1.5x)", ot_normal_sub: "1 से 25 तारीख (सामान्य कार्य दिवस)",
@@ -521,7 +548,7 @@
                 header_title: "ملازمین پورٹل", header_sub: "اوور ٹائم کیلکولیٹر اور سپورٹ سینٹر",
                 cutoff_title: "تنخواہ کی کٹ آف کا طریقہ (25 تاریخ کا قانون)",
                 cutoff_desc: "اوور ٹائم کی گنتی گزشتہ ماہ کی 26 تاریخ سے موجودہ ماہ کی 25 تاریخ تک کی جاتی ہے۔",
-                nav_calc: "اوور ٹائم کیلکولیٹر", nav_leave: "چھٹی کی درخواست", nav_support: "سپورٹ",
+                nav_calc: "اوور ٹائم کیلکولیٹر", nav_leave: "فارمز", nav_support: "سپورٹ",
                 title_salary: "1. بنیادی تنخواہ اور الاؤنس", label_basic: "بنیادی تنخواہ (SAR)", label_allowance: "دیگر الاؤنسز (SAR)",
                 title_ot: "2. اوور ٹائم گھنٹے",
                 ot_normal: "نارمل اوور ٹائم (1.5x)", ot_normal_sub: "1 سے 25 تاریخ (عام کاری دن)",
@@ -543,14 +570,18 @@
         };
 
         function switchTab(tab) {
-            if (tab === 'leave') return; // Guard clause to keep it hidden
+            const validTabs = ['calc', 'forms', 'support'];
+            if (!validTabs.includes(tab)) tab = 'calc';
 
             document.getElementById('section-calc').classList.toggle('hidden', tab !== 'calc');
-            document.getElementById('section-leave').classList.add('hidden'); // Forces section to stay hidden
+            document.getElementById('section-forms').classList.toggle('hidden', tab !== 'forms');
             document.getElementById('section-support').classList.toggle('hidden', tab !== 'support');
 
-            document.getElementById('tab-calc').className = tab === 'calc' ? 'w-1/2 py-3.5 tab-active flex justify-center items-center gap-2 text-sm transition-all' : 'w-1/2 py-3.5 tab-inactive flex justify-center items-center gap-2 text-sm transition-all';
-            document.getElementById('tab-support').className = tab === 'support' ? 'w-1/2 py-3.5 tab-active flex justify-center items-center gap-2 text-sm transition-all' : 'w-1/2 py-3.5 tab-inactive flex justify-center items-center gap-2 text-sm transition-all';
+            ['calc', 'forms', 'support'].forEach(name => {
+                const el = document.getElementById('tab-' + name);
+                const active = name === tab;
+                el.className = `w-1/3 py-3.5 ${active ? 'tab-active' : 'tab-inactive'} flex justify-center items-center gap-2 text-sm transition-all`;
+            });
         }
 
         function changeLanguage() {
@@ -602,126 +633,217 @@
             document.getElementById('outNetPay').innerText = netPay.toFixed(2) + " SAR";
         }
 
-        function toggleSmartSponsorFields() {
-            const sponsor = document.getElementById('leaveSponsor').value;
-            const container = document.getElementById('smartFieldContainer');
-            const label = document.getElementById('smartFieldLabel');
-            const input = document.getElementById('sponsorMeta');
-            const hint = document.getElementById('smartFieldHint');
+        // ================= NEXT OF KIN FORM =================
+        const NOK_PDF_TEMPLATE_URL = "./next-of-kin-declaration-form.pdf";
 
-            if (!sponsor) {
-                container.classList.add('hidden');
-                input.required = false;
-                return;
-            }
-
-            container.classList.remove('hidden');
-            if (sponsor === 'SAMASCO') {
-                label.innerText = 'SAMASCO L No. (Optional)';
-                input.placeholder = 'Optional Samasco Number';
-                hint.innerText = 'Non-mandatory tracking token for Samasco Google Doc integration.';
-                input.required = false;
-            } else if (sponsor === 'JAWA') {
-                label.innerText = 'JAWA Reference Code (Optional)';
-                input.placeholder = 'Optional Jawa Ref Code';
-                hint.innerText = 'Optional reference for Jawa client sheet routing.';
-                input.required = false;
-            } else if (sponsor === 'KAEFER_STAFF') {
-                label.innerText = 'Ticket Arranged By *';
-                input.placeholder = 'Self / Company';
-                hint.innerText = 'Staff arrange own tickets or select company arrangement.';
-                input.required = true;
-            } else if (sponsor === 'KAEFER_WORKER') {
-                label.innerText = 'Project Site Supervisor Name *';
-                input.placeholder = 'Supervisor Name';
-                hint.innerText = 'Required for site verification and worker leave logs.';
-                input.required = true;
-            }
+        function cleanText(value) {
+            return String(value || "").replace(/\s+/g, " ").trim();
         }
 
-        function handleLeaveTypeChange() {
-            const leaveType = document.getElementById('leaveType').value;
-            const reasonBox = document.getElementById('leaveReason');
-            
-            if (leaveType === 'Annual') {
-                reasonBox.value = 'Annual Leave';
-                reasonBox.readOnly = true;
-                reasonBox.classList.add('bg-slate-100', 'text-slate-500');
-            } else {
-                reasonBox.value = '';
-                reasonBox.readOnly = false;
-                reasonBox.classList.remove('bg-slate-100', 'text-slate-500');
-                reasonBox.placeholder = 'Please specify emergency or custom reason here...';
-            }
+        function updateNokShare() {
+            const s1 = Number(document.getElementById('nokN1Share').value || 0);
+            const s2 = Number(document.getElementById('nokN2Share').value || 0);
+            const total = s1 + s2;
+            const box = document.getElementById('nokShareStatus');
+            box.textContent = `Combined share: ${total}%`;
+            box.className = total === 100
+                ? "w-full p-2.5 rounded-lg bg-green-50 border border-green-200 text-xs font-bold text-green-800"
+                : "w-full p-2.5 rounded-lg bg-red-50 border border-red-200 text-xs font-bold text-red-700";
         }
 
-        function calcLeaveDays() {
-            // Placeholder logic for leave day updates
-        }
-
-        async function handleLeaveSubmit(e) {
-            e.preventDefault();
-            const btn = document.getElementById('btnLeaveSubmit');
-            const msg = document.getElementById('leaveMsg');
-            btn.disabled = true;
-            btn.innerText = 'Securely Recording & Generating Session Token...';
-
-            const payload = {
-                action: "CREATE_LEAVE_APPLICATION",
-                sponsor: document.getElementById('leaveSponsor').value,
-                kaeferId: document.getElementById('kaeferId').value.trim(),
-                empName: document.getElementById('leaveEmpName').value.trim(),
-                siteName: document.getElementById('siteName').value.trim(),
-                position: document.getElementById('leavePosition').value.trim(),
-                sponsorMeta: document.getElementById('sponsorMeta').value.trim(),
-                leaveType: document.getElementById('leaveType').value,
-                startDate: document.getElementById('startDate').value,
-                totalDays: document.getElementById('totalDays').value,
-                stayVacation: document.getElementById('stayVacation').value,
-                flightSector: document.getElementById('flightSector').value.trim(),
-                contactDetails: document.getElementById('contactDetails').value.trim(),
-                relativeDetails: document.getElementById('relativeDetails').value.trim(),
-                reason: document.getElementById('leaveReason').value.trim()
+        function collectNokData() {
+            return {
+                declarant: {
+                    fullName: cleanText(document.getElementById('nokDeclarantName').value),
+                    employeeId: cleanText(document.getElementById('nokEmployeeId').value),
+                    nationality: cleanText(document.getElementById('nokDeclarantNationality').value),
+                    contact: cleanText(document.getElementById('nokDeclarantContact').value),
+                    email: cleanText(document.getElementById('nokDeclarantEmail').value)
+                },
+                nominee1: {
+                    fullName: cleanText(document.getElementById('nokN1Name').value),
+                    relationship: cleanText(document.getElementById('nokN1Relationship').value),
+                    idPassport: cleanText(document.getElementById('nokN1Id').value),
+                    nationality: cleanText(document.getElementById('nokN1Nationality').value),
+                    contact: cleanText(document.getElementById('nokN1Contact').value),
+                    address: cleanText(document.getElementById('nokN1Address').value),
+                    share: Number(document.getElementById('nokN1Share').value)
+                },
+                nominee2: {
+                    fullName: cleanText(document.getElementById('nokN2Name').value),
+                    relationship: cleanText(document.getElementById('nokN2Relationship').value),
+                    idPassport: cleanText(document.getElementById('nokN2Id').value),
+                    nationality: cleanText(document.getElementById('nokN2Nationality').value),
+                    contact: cleanText(document.getElementById('nokN2Contact').value),
+                    address: cleanText(document.getElementById('nokN2Address').value),
+                    share: Number(document.getElementById('nokN2Share').value)
+                }
             };
+        }
+
+        function validateNokData(data) {
+            if ((data.nominee1.share + data.nominee2.share) !== 100) {
+                throw new Error("The combined Share of Distribution for both nominees must equal exactly 100%.");
+            }
+        }
+
+        function fitTextSize(font, text, maxWidth, preferredSize = 10, minSize = 7) {
+            let size = preferredSize;
+            while (size > minSize && font.widthOfTextAtSize(text, size) > maxWidth) size -= 0.25;
+            return size;
+        }
+
+        function drawSingleLine(page, font, text, x, y, maxWidth = 190, size = 10) {
+            text = cleanText(text);
+            if (!text) return;
+            const finalSize = fitTextSize(font, text, maxWidth, size, 7);
+            page.drawText(text, { x, y, size: finalSize, font });
+        }
+
+        function splitTextToLines(font, text, maxWidth, size) {
+            const words = cleanText(text).split(" ");
+            const lines = [];
+            let current = "";
+            for (const word of words) {
+                const candidate = current ? `${current} ${word}` : word;
+                if (font.widthOfTextAtSize(candidate, size) <= maxWidth) current = candidate;
+                else {
+                    if (current) lines.push(current);
+                    current = word;
+                }
+            }
+            if (current) lines.push(current);
+            return lines;
+        }
+
+        function drawWrapped(page, font, text, x, y, maxWidth = 190, size = 8.5, maxLines = 2) {
+            text = cleanText(text);
+            if (!text) return;
+            let finalSize = size;
+            let lines = splitTextToLines(font, text, maxWidth, finalSize);
+            while (lines.length > maxLines && finalSize > 7) {
+                finalSize -= 0.25;
+                lines = splitTextToLines(font, text, maxWidth, finalSize);
+            }
+            lines.slice(0, maxLines).forEach((line, i) => {
+                page.drawText(line, { x, y: y - (i * (finalSize + 2)), size: finalSize, font });
+            });
+        }
+
+        async function generateNextOfKinPdf(data, submissionId) {
+            const templateResponse = await fetch(NOK_PDF_TEMPLATE_URL, { cache: "no-store" });
+            if (!templateResponse.ok) throw new Error("Official PDF template could not be loaded. Check the GitHub PDF filename/path.");
+
+            const templateBytes = await templateResponse.arrayBuffer();
+            const pdfDoc = await PDFLib.PDFDocument.load(templateBytes);
+            const font = await pdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
+            const pages = pdfDoc.getPages();
+
+            if (pages.length < 2) throw new Error("The official template must contain two pages.");
+
+            const p1 = pages[0];
+            const p2 = pages[1];
+            const X = 282, W = 190;
+
+            drawSingleLine(p1, font, data.declarant.fullName,    X, 551, W);
+            drawSingleLine(p1, font, data.declarant.employeeId,  X, 515, W);
+            drawSingleLine(p1, font, data.declarant.nationality, X, 479, W);
+            drawSingleLine(p1, font, data.declarant.contact,     X, 443, W);
+            drawSingleLine(p1, font, data.declarant.email,       X, 407, W);
+
+            drawSingleLine(p1, font, data.nominee1.fullName,      X, 338, W);
+            drawSingleLine(p1, font, data.nominee1.relationship,  X, 302, W);
+            drawSingleLine(p1, font, data.nominee1.idPassport,    X, 266, W);
+            drawSingleLine(p1, font, data.nominee1.nationality,   X, 230, W);
+            drawSingleLine(p1, font, data.nominee1.contact,       X, 194, W);
+            drawWrapped   (p1, font, data.nominee1.address,       X, 162, W, 8.5, 2);
+            drawSingleLine(p1, font, String(data.nominee1.share), 286, 122, 38, 10);
+
+            drawSingleLine(p2, font, data.nominee2.fullName,      X, 644, W);
+            drawSingleLine(p2, font, data.nominee2.relationship,  X, 608, W);
+            drawSingleLine(p2, font, data.nominee2.nationality,   X, 572, W);
+            drawSingleLine(p2, font, data.nominee2.idPassport,    X, 536, W);
+            drawSingleLine(p2, font, data.nominee2.contact,       X, 500, W);
+            drawWrapped   (p2, font, data.nominee2.address,       X, 468, W, 8.5, 2);
+            drawSingleLine(p2, font, String(data.nominee2.share), 286, 428, 38, 10);
+
+            // Section 4 is intentionally untouched for handwritten signature/witness completion.
+            pdfDoc.setTitle(`Next of Kin Declaration - ${submissionId}`);
+            return await pdfDoc.save();
+        }
+
+        function downloadPdfBytes(bytes, filename) {
+            const blob = new Blob([bytes], { type: "application/pdf" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            setTimeout(() => URL.revokeObjectURL(url), 3000);
+        }
+
+        async function markNokPdfGenerated(submissionId) {
+            try {
+                await fetch(SCRIPT_URL, {
+                    method: "POST",
+                    redirect: "follow",
+                    headers: { "Content-Type": "text/plain;charset=utf-8" },
+                    body: JSON.stringify({ action: "UPDATE_NOK_STATUS", submissionId, status: "PDF GENERATED" })
+                });
+            } catch (_) {}
+        }
+
+        async function handleNextOfKinSubmit(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btnNokSubmit');
+            const msg = document.getElementById('nokMsg');
+            const original = btn.innerHTML;
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i><span>Saving data...</span>';
+            msg.classList.add('hidden');
 
             try {
+                const data = collectNokData();
+                validateNokData(data);
+
                 const response = await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    redirect: 'follow',
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    body: JSON.stringify(payload)
+                    method: "POST",
+                    redirect: "follow",
+                    headers: { "Content-Type": "text/plain;charset=utf-8" },
+                    body: JSON.stringify({ action: "CREATE_NEXT_OF_KIN", ...data })
                 });
-                
-                const text = await response.text();
-                const data = JSON.parse(text);
 
-                if(data.success) {
-                    const sheetId = "1dNAyTAQ02oCbYMXwIBqX22Bf5kb8udcSbT1hJNUEUGI";
-                    const pdfExportUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?exportFormat=pdf&format=pdf&size=A4&portrait=true&fitw=true&gridlines=false`;
+                const result = await response.json();
+                if (!result.success) throw new Error(result.error || "The application could not be recorded.");
 
-                    msg.className = 'p-4 rounded-lg text-xs font-semibold bg-green-50 text-green-800 border border-green-200 space-y-2';
-                    msg.innerHTML = `
-                        <div>✅ Application successfully recorded under <b>${payload.sponsor}</b>!</div>
-                        <div>Unique Submission Token: <code class="font-mono font-bold">${data.submissionId}</code></div>
-                        <div class="pt-2">
-                            <a href="${pdfExportUrl}" target="_blank" 
-                               class="inline-flex items-center gap-1.5 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-bold shadow transition-all">
-                                <i class="fa-solid fa-file-pdf"></i> Download Leave Form PDF
-                            </a>
-                        </div>`;
-                    msg.classList.remove('hidden');
-                    document.getElementById('leaveForm').reset();
-                    document.getElementById('smartFieldContainer').classList.add('hidden');
-                } else {
-                    throw new Error(data.error || "Server could not record data.");
-                }
+                btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i><span>Preparing official PDF...</span>';
+                const pdfBytes = await generateNextOfKinPdf(data, result.submissionId);
+
+                const safeEmp = data.declarant.employeeId.replace(/[^a-zA-Z0-9_-]/g, "_");
+                const safeName = data.declarant.fullName.replace(/[^a-zA-Z0-9_-]+/g, "_").replace(/^_+|_+$/g, "");
+                const fileName = `${result.submissionId}_${safeEmp}_${safeName || "EMPLOYEE"}.pdf`;
+
+                downloadPdfBytes(pdfBytes, fileName);
+                markNokPdfGenerated(result.submissionId);
+
+                msg.className = 'p-4 rounded-lg text-xs font-semibold bg-green-50 text-green-800 border border-green-200 space-y-1';
+                msg.innerHTML = `<div>✅ Data saved successfully.</div>
+                                 <div>Reference: <code class="font-mono font-bold">${result.submissionId}</code></div>
+                                 <div>The PDF download has started. Print it and complete Section 4 manually.</div>`;
+                msg.classList.remove('hidden');
+
+                document.getElementById('nokForm').reset();
+                updateNokShare();
             } catch (err) {
                 msg.className = 'p-4 rounded-lg text-xs font-semibold bg-red-50 text-red-800 border border-red-200';
-                msg.innerText = '⚠️ Error recording application: ' + err.message;
+                msg.textContent = '⚠️ ' + err.message;
                 msg.classList.remove('hidden');
             } finally {
                 btn.disabled = false;
-                btn.innerHTML = '<i class="fa-solid fa-file-pdf"></i> <span>Securely Record Data & Download PDF Form</span>';
+                btn.innerHTML = original;
             }
         }
 
@@ -814,6 +936,7 @@
         }
 
         calculate();
+        updateNokShare();
         fetchVisitorCount();
     </script>
 </body>
