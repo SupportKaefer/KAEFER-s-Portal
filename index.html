@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="referrer" content="no-referrer">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Employee Self-Service & Support Portal</title>
     <!-- Tailwind CSS CDN -->
@@ -288,12 +289,13 @@
                             </div>
                             <div>
                                 <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Share of Distribution (%) *</label>
-                                <input type="number" id="nokN1Share" required min="0" max="100" step="1" oninput="updateNokShare()" class="w-full border p-2.5 rounded-lg text-sm font-bold">
+                                <input type="number" id="nokN1Share" value="100" required min="1" max="100" step="1" oninput="updateNokShare()" class="w-full border p-2.5 rounded-lg text-sm font-bold">
                             </div>
                         </div>
                     </div>
 
-                    <div class="space-y-4">
+                    <label class="block text-sm font-bold"><input type="checkbox" id="nokUseSecond" onchange="toggleSecondNominee()"> Add second nominee (optional)</label>
+                    <div id="nokSecondSection" class="space-y-4" hidden>
                         <h3 class="text-sm font-bold text-blue-900 uppercase border-b pb-2">3. Second Nominee (Secondary Next of Kin)</h3>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div class="sm:col-span-2">
@@ -322,7 +324,7 @@
                             </div>
                             <div>
                                 <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Share of Distribution (%) *</label>
-                                <input type="number" id="nokN2Share" required min="0" max="100" step="1" oninput="updateNokShare()" class="w-full border p-2.5 rounded-lg text-sm font-bold">
+                                <input type="number" id="nokN2Share" required min="1" max="100" step="1" oninput="updateNokShare()" class="w-full border p-2.5 rounded-lg text-sm font-bold">
                             </div>
                             <div class="flex items-end">
                                 <div id="nokShareStatus" class="w-full p-2.5 rounded-lg bg-slate-100 border text-xs font-bold text-slate-600">
@@ -640,6 +642,20 @@
             return String(value || "").replace(/\s+/g, " ").trim();
         }
 
+        function toggleSecondNominee() {
+            const enabled = document.getElementById('nokUseSecond').checked;
+            document.getElementById('nokSecondSection').hidden = !enabled;
+            document.querySelectorAll('#nokSecondSection input, #nokSecondSection textarea').forEach(el => {
+                el.disabled = !enabled;
+                el.required = enabled;
+                if (!enabled) el.value = '';
+            });
+            const firstShare = document.getElementById('nokN1Share');
+            firstShare.readOnly = !enabled;
+            if (!enabled) firstShare.value = '100';
+            updateNokShare();
+        }
+
         function updateNokShare() {
             const s1 = Number(document.getElementById('nokN1Share').value || 0);
             const s2 = Number(document.getElementById('nokN2Share').value || 0);
@@ -682,7 +698,10 @@
         }
 
         function validateNokData(data) {
-            if ((data.nominee1.share + data.nominee2.share) !== 100) {
+            if (!document.getElementById('nokUseSecond').checked) {
+                data.nominee2 = {fullName:'', relationship:'', idPassport:'', nationality:'', contact:'', address:'', share:''};
+            }
+            if ((data.nominee1.share + Number(data.nominee2.share)) !== 100) {
                 throw new Error("The combined Share of Distribution for both nominees must equal exactly 100%.");
             }
         }
@@ -785,7 +804,7 @@
             drawSingleLine(p2, font, data.nominee2.idPassport,    X, 536, W);
             drawSingleLine(p2, font, data.nominee2.contact,       X, 500, W);
             drawWrapped   (p2, font, data.nominee2.address,       X, 468, W, 8.5, 2);
-            drawShare(p2, font, data.nominee2.share, 430.80);
+            if (data.nominee2.fullName) drawShare(p2, font, data.nominee2.share, 430.80);
 
             // Section 4 is intentionally untouched for handwritten signature/witness completion.
             pdfDoc.setTitle(`Next of Kin Declaration - ${submissionId}`);
@@ -804,13 +823,13 @@
             setTimeout(() => URL.revokeObjectURL(url), 3000);
         }
 
-        async function markNokPdfGenerated(submissionId) {
+        async function markNokPdfGenerated(submissionId, accessToken) {
             try {
                 await fetch(SCRIPT_URL, {
                     method: "POST",
                     redirect: "follow",
                     headers: { "Content-Type": "text/plain;charset=utf-8" },
-                    body: JSON.stringify({ action: "UPDATE_NOK_STATUS", submissionId, status: "PDF GENERATED" })
+                    body: JSON.stringify({ action: "UPDATE_NOK_STATUS", submissionId, accessToken, status: "PDF GENERATED" })
                 });
             } catch (_) {}
         }
@@ -855,7 +874,7 @@
                     ? result.pdfFileName : fallbackFileName;
 
                 downloadPdfBytes(pdfBytes, fileName);
-                markNokPdfGenerated(result.submissionId);
+                markNokPdfGenerated(result.submissionId, result.accessToken);
 
                 msg.className = 'p-4 rounded-lg text-xs font-semibold bg-green-50 text-green-800 border border-green-200 space-y-1';
                 msg.innerHTML = `<div>✅ Data saved successfully.</div>
@@ -864,7 +883,7 @@
                 msg.classList.remove('hidden');
 
                 document.getElementById('nokForm').reset();
-                updateNokShare();
+                toggleSecondNominee();
             } catch (err) {
                 msg.className = 'p-4 rounded-lg text-xs font-semibold bg-red-50 text-red-800 border border-red-200';
                 msg.textContent = '⚠️ ' + err.message;
@@ -900,7 +919,7 @@
                 const data = await response.json();
 
                 if (data.success) {
-                    alert(`✅ Support Request Registered!\n\nYour Ticket Number is: ${data.ticketId}`);
+                    alert(`✅ Support Request Registered!\n\nYour Ticket Number is: ${data.ticketId}\n\nPrivate access code: ${data.accessToken}\nSave both; the code is required to track or reopen your ticket.`);
                     document.getElementById('supportForm').reset();
                 } else if (data.action === "DUPLICATE_EXACT") {
                     const msg = data.error || `Your request is already registered with Ticket #${data.ticketId}. Please track its status using this number.`;
@@ -925,7 +944,9 @@
 
             const resDiv = document.getElementById('statusResult');
             try {
-                const response = await fetch(`${SCRIPT_URL}?ticketId=${encodeURIComponent(ticketId)}`, { redirect: "follow" });
+                const accessToken = prompt('Enter your private ticket access code:');
+                if (!accessToken) return;
+                const response = await fetch(SCRIPT_URL, {method:'POST', redirect:'follow', headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify({action:'TRACK_TICKET', ticketId, accessToken})});
                 const data = await response.json();
 
                 if (data.found) {
@@ -947,24 +968,28 @@
             const comment = document.getElementById('reopenComment').value.trim();
             if (!comment) return alert("Please type a reason.");
 
-            const payload = { action: "REOPEN_TICKET", ticketId: ticketId, comment: comment };
+            const accessToken = prompt('Enter your private ticket access code:');
+            if (!accessToken) return;
+            const payload = { action: 'REOPEN_TICKET', ticketId, comment, accessToken };
             try {
-                await fetch(SCRIPT_URL, {
+                const response = await fetch(SCRIPT_URL, {
                     method: "POST",
                     redirect: "follow",
                     headers: { "Content-Type": "text/plain;charset=utf-8" },
                     body: JSON.stringify(payload)
                 });
+                const result = await response.json();
+                if (!result.success) throw new Error(result.error || "Update failed.");
                 alert("🔄 Ticket updated and sent back to Support!");
                 document.getElementById('reopenComment').value = "";
                 trackTicket();
             } catch (err) {
-                alert("⚠️ Request sent!");
+                alert("Ticket update failed. Please check your access code and connection.");
             }
         }
 
         calculate();
-        updateNokShare();
+        toggleSecondNominee();
         fetchVisitorCount();
     </script>
 </body>
