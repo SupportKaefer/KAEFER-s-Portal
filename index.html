@@ -14,7 +14,48 @@
         .tab-active { border-bottom: 4px solid #1e3a8a; color: #1e3a8a; font-weight: 700; background-color: #f8fafc; }
         .tab-inactive { color: #64748b; font-weight: 500; }
         .tab-inactive:hover { color: #1e3a8a; }
-    </style>
+    
+        :root { color-scheme: light; }
+        * { box-sizing: border-box; }
+        [hidden] { display: none !important; }
+        html { scroll-behavior: smooth; scroll-padding-top: 90px; }
+        body { margin:0; line-height:1.65; background:linear-gradient(160deg,#eff6ff 0%,#f8fafc 50%,#eef2ff 100%); }
+        main, section, form, .grid > *, .flex > * { min-width:0; }
+        main { max-width:960px !important; }
+        header { background:linear-gradient(120deg,#172554,#1e40af); }
+        header + div { position:sticky; top:0; z-index:20; backdrop-filter:blur(14px); background:rgba(255,255,255,.96); }
+        main > section > .bg-white { box-shadow:0 8px 30px rgba(30,58,138,.06); border-radius:18px; }
+        button, select, a[class] { min-height:44px; touch-action:manipulation; }
+        button { white-space:normal; }
+        input:not([type=checkbox]), select, textarea { min-height:46px; max-width:100%; font-size:16px !important; }
+        input, textarea { transition:border-color .15s,box-shadow .15s; }
+        input:focus-visible, textarea:focus-visible, select:focus-visible, button:focus-visible, a:focus-visible, summary:focus-visible { outline:3px solid #60a5fa; outline-offset:3px; }
+        input[type=checkbox] { width:20px; height:20px; flex-shrink:0; accent-color:#1e3a8a; }
+        label { text-transform:none !important; }
+        #langSelect { min-width:130px; }
+        #privateTrackingLink, #trackTicketId, #legacyTicketCode, #resTicketNo { direction:ltr; overflow-wrap:anywhere; }
+        #resHRComment { overflow-wrap:anywhere; }
+        #statusResult > div:first-child { flex-wrap:wrap; gap:8px; }
+        .tab-active,.tab-inactive { line-height:1.4; padding-inline:8px; }
+        @media (max-width:639px) {
+            main { padding:12px !important; }
+            main > section > .bg-white { padding:18px !important; }
+            header .max-w-4xl { padding:14px; }
+            [id^="tab-"] { flex-direction:column; gap:5px; font-size:13px; padding-block:12px; }
+            #section-calc .space-y-3 input[type=number] { width:100%; }
+            #section-calc .space-y-3 .justify-end { justify-content:flex-start; }
+            #section-calc .justify-between { gap:12px; }
+            #section-calc .justify-between > span:last-child { flex-shrink:0; }
+            #section-calc .bg-blue-900 > .flex { flex-wrap:wrap; }
+            .text-xs { font-size:13px; }
+            #btnTrack { width:100%; }
+        }
+        @media (prefers-reduced-motion:reduce) {
+            html { scroll-behavior:auto; }
+            *,*::before,*::after { transition:none !important; animation:none !important; }
+        }
+
+</style>
 </head>
 <body class="bg-slate-100 font-sans text-slate-800 min-h-screen flex flex-col justify-between">
 
@@ -34,16 +75,17 @@
             <div class="flex items-center gap-3 w-full sm:w-auto justify-end">
                 <div class="bg-blue-950 text-blue-200 text-xs px-3 py-2 rounded border border-blue-800 flex items-center gap-1.5 shadow-inner" title="Total Global Page Visits">
                     <i class="fa-solid fa-users-viewfinder text-blue-400"></i>
-                    <span class="text-slate-400 font-medium">Visits:</span>
+                    <span class="text-slate-400 font-medium"><span data-ne="भ्रमण:">Visits:</span></span>
                     <span id="visitorCount" class="font-mono font-bold text-white">...</span>
                 </div>
 
                 <div>
-                    <select id="langSelect" onchange="changeLanguage()" class="bg-blue-800 text-white text-xs font-semibold p-2 rounded border border-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                    <select aria-label="Choose language" id="langSelect" onchange="changeLanguage()" class="bg-blue-800 text-white text-xs font-semibold p-2 rounded border border-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400">
                         <option value="en">🌐 English</option>
                         <option value="ar">🌐 العربية</option>
                         <option value="hi">🌐 हिंदी</option>
                         <option value="ur">🌐 اردو</option>
+                        <option value="ne">🌐 नेपाली</option>
                     </select>
                 </div>
             </div>
@@ -114,7 +156,7 @@
                         </div>
                         <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
                             <input type="number" id="normalOT" placeholder="e.g. 84" min="0" oninput="calculate()" class="w-28 border border-slate-300 p-2 rounded-lg text-right font-bold text-sm">
-                            <span class="text-xs text-slate-500">Hrs</span>
+                            <span class="text-xs text-slate-500"><span data-ne="घण्टा">Hrs</span></span>
                         </div>
                     </div>
 
@@ -125,7 +167,7 @@
                         </div>
                         <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
                             <input type="number" id="holidayOT" placeholder="e.g. 48" min="0" oninput="calculate()" class="w-28 border border-slate-300 p-2 rounded-lg text-right font-bold text-sm">
-                            <span class="text-xs text-slate-500">Hrs</span>
+                            <span class="text-xs text-slate-500"><span data-ne="घण्टा">Hrs</span></span>
                         </div>
                     </div>
 
@@ -136,7 +178,7 @@
                         </div>
                         <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
                             <input type="number" id="retroNormalOT" placeholder="e.g. 18" min="0" oninput="calculate()" class="w-28 border border-slate-300 p-2 rounded-lg text-right font-bold text-sm">
-                            <span class="text-xs text-slate-500">Hrs</span>
+                            <span class="text-xs text-slate-500"><span data-ne="घण्टा">Hrs</span></span>
                         </div>
                     </div>
 
@@ -147,7 +189,7 @@
                         </div>
                         <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
                             <input type="number" id="retroHolidayOT" placeholder="e.g. 10" min="0" oninput="calculate()" class="w-28 border border-slate-300 p-2 rounded-lg text-right font-bold text-sm">
-                            <span class="text-xs text-slate-500">Hrs</span>
+                            <span class="text-xs text-slate-500"><span data-ne="घण्टा">Hrs</span></span>
                         </div>
                     </div>
 
@@ -158,7 +200,7 @@
                         </div>
                         <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
                             <input type="number" id="bonusOT" placeholder="e.g. 0" min="0" oninput="calculate()" class="w-28 border border-slate-300 p-2 rounded-lg text-right font-bold text-sm">
-                            <span class="text-xs text-slate-500">Hrs</span>
+                            <span class="text-xs text-slate-500"><span data-ne="घण्टा">Hrs</span></span>
                         </div>
                     </div>
                 </div>
@@ -218,112 +260,112 @@
                 <div class="border-b border-slate-200 pb-4">
                     <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
                         <i class="fa-solid fa-people-roof text-blue-600"></i>
-                        <span>Next of Kin & Nomination Declaration</span>
+                        <span><span data-ne="नजिकको आफन्त र हकवालाको घोषणा">Next of Kin & Nomination Declaration</span></span>
                     </h2>
-                    <p class="text-xs text-slate-500 mt-1">
+                    <p class="text-xs text-slate-500 mt-1"><span data-ne="आफ्नो र हकवालाको विवरण भर्नुहोस्। आधिकारिक PDF फारामको ढाँचा उही रहन्छ। प्रिन्ट गरेपछि हस्ताक्षर, साक्षीको विवरण र मिति हातले भर्नुपर्छ।">
                         Enter only the declarant and nominee details. The downloaded PDF keeps the official form unchanged.
                         Declarant signature, witness signature, names and dates must be completed manually after printing.
-                    </p>
+                    </span></p>
                 </div>
 
                 <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 text-xs text-amber-900">
                     <div class="font-bold flex items-center gap-2 mb-1">
-                        <i class="fa-solid fa-pen-nib"></i> Manual signature requirement
-                    </div>
-                    <p>No electronic signature or witness information is collected here. Print the generated PDF and complete Section 4 by hand.</p>
+                        <i class="fa-solid fa-pen-nib"></i><span data-ne="हातले हस्ताक्षर गर्नुपर्ने"> Manual signature requirement
+                    </span></div>
+                    <p><span data-ne="यहाँ विद्युतीय हस्ताक्षर वा साक्षीको विवरण लिइँदैन। PDF प्रिन्ट गरी खण्ड ४ हातले भर्नुहोस्।">No electronic signature or witness information is collected here. Print the generated PDF and complete Section 4 by hand.</span></p>
                 </div>
 
                 <form id="nokForm" class="space-y-6" onsubmit="handleNextOfKinSubmit(event)">
                     <div class="space-y-4">
-                        <h3 class="text-sm font-bold text-blue-900 uppercase border-b pb-2">1. Declarant Details</h3>
+                        <h3 class="text-sm font-bold text-blue-900 uppercase border-b pb-2"><span data-ne="१. घोषणा गर्ने कर्मचारीको विवरण">1. Declarant Details</span></h3>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div class="sm:col-span-2">
-                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Full Legal Name *</label>
-                                <input type="text" id="nokDeclarantName" required maxlength="80" placeholder="As per official ID / passport" class="w-full border p-2.5 rounded-lg text-sm">
+                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1"><span data-ne="पूरा नाम *">Full Legal Name *</span></label>
+                                <input type="text" id="nokDeclarantName" required maxlength="80" placeholder="As per official ID / passport" data-ne-placeholder="परिचयपत्र / राहदानीअनुसार" class="w-full border p-2.5 rounded-lg text-sm">
                             </div>
                             <div>
-                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Employee / ID Number *</label>
+                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1"><span data-ne="कर्मचारी / परिचय नम्बर *">Employee / ID Number *</span></label>
                                 <input type="text" id="nokEmployeeId" required maxlength="40" class="w-full border p-2.5 rounded-lg text-sm">
                             </div>
                             <div>
-                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Nationality *</label>
+                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1"><span data-ne="राष्ट्रियता *">Nationality *</span></label>
                                 <input type="text" id="nokDeclarantNationality" required maxlength="50" class="w-full border p-2.5 rounded-lg text-sm">
                             </div>
                             <div>
-                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Contact Number *</label>
+                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1"><span data-ne="सम्पर्क नम्बर *">Contact Number *</span></label>
                                 <input type="tel" id="nokDeclarantContact" required maxlength="30" class="w-full border p-2.5 rounded-lg text-sm">
                             </div>
                             <div>
-                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Email Address *</label>
+                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1"><span data-ne="इमेल ठेगाना *">Email Address *</span></label>
                                 <input type="email" id="nokDeclarantEmail" required maxlength="100" class="w-full border p-2.5 rounded-lg text-sm">
                             </div>
                         </div>
                     </div>
 
                     <div class="space-y-4">
-                        <h3 class="text-sm font-bold text-blue-900 uppercase border-b pb-2">2. First Nominee (Primary Next of Kin)</h3>
+                        <h3 class="text-sm font-bold text-blue-900 uppercase border-b pb-2"><span data-ne="२. पहिलो हकवाला (मुख्य नजिकको आफन्त)">2. First Nominee (Primary Next of Kin)</span></h3>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div class="sm:col-span-2">
-                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Full Legal Name *</label>
+                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1"><span data-ne="पूरा नाम *">Full Legal Name *</span></label>
                                 <input type="text" id="nokN1Name" required maxlength="80" class="w-full border p-2.5 rounded-lg text-sm">
                             </div>
                             <div>
-                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Relationship with Declarant *</label>
+                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1"><span data-ne="कर्मचारीसँगको नाता *">Relationship with Declarant *</span></label>
                                 <input type="text" id="nokN1Relationship" required maxlength="50" class="w-full border p-2.5 rounded-lg text-sm">
                             </div>
                             <div>
-                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1">ID / Passport Number *</label>
+                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1"><span data-ne="परिचयपत्र / राहदानी नम्बर *">ID / Passport Number *</span></label>
                                 <input type="text" id="nokN1Id" required maxlength="50" class="w-full border p-2.5 rounded-lg text-sm">
                             </div>
                             <div>
-                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Nationality *</label>
+                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1"><span data-ne="राष्ट्रियता *">Nationality *</span></label>
                                 <input type="text" id="nokN1Nationality" required maxlength="50" class="w-full border p-2.5 rounded-lg text-sm">
                             </div>
                             <div>
-                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Contact Number *</label>
+                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1"><span data-ne="सम्पर्क नम्बर *">Contact Number *</span></label>
                                 <input type="tel" id="nokN1Contact" required maxlength="30" class="w-full border p-2.5 rounded-lg text-sm">
                             </div>
                             <div class="sm:col-span-2">
-                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Residential Address *</label>
+                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1"><span data-ne="बसोबासको ठेगाना *">Residential Address *</span></label>
                                 <textarea id="nokN1Address" required maxlength="180" rows="2" class="w-full border p-2.5 rounded-lg text-sm"></textarea>
                             </div>
                             <div>
-                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Share of Distribution (%) *</label>
+                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1"><span data-ne="हिस्सा (%) *">Share of Distribution (%) *</span></label>
                                 <input type="number" id="nokN1Share" value="100" required min="1" max="100" step="1" oninput="updateNokShare()" class="w-full border p-2.5 rounded-lg text-sm font-bold">
                             </div>
                         </div>
                     </div>
 
-                    <label class="block text-sm font-bold"><input type="checkbox" id="nokUseSecond" onchange="toggleSecondNominee()"> Add second nominee (optional)</label>
+                    <label class="block text-sm font-bold"><input type="checkbox" id="nokUseSecond" onchange="toggleSecondNominee()"><span data-ne="दोस्रो हकवाला थप्नुहोस् (ऐच्छिक)"> Add second nominee (optional)</span></label>
                     <div id="nokSecondSection" class="space-y-4" hidden>
-                        <h3 class="text-sm font-bold text-blue-900 uppercase border-b pb-2">3. Second Nominee (Secondary Next of Kin)</h3>
+                        <h3 class="text-sm font-bold text-blue-900 uppercase border-b pb-2"><span data-ne="३. दोस्रो हकवाला (अर्को नजिकको आफन्त)">3. Second Nominee (Secondary Next of Kin)</span></h3>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div class="sm:col-span-2">
-                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Full Legal Name *</label>
+                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1"><span data-ne="पूरा नाम *">Full Legal Name *</span></label>
                                 <input type="text" id="nokN2Name" required maxlength="80" class="w-full border p-2.5 rounded-lg text-sm">
                             </div>
                             <div>
-                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Relationship with Declarant *</label>
+                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1"><span data-ne="कर्मचारीसँगको नाता *">Relationship with Declarant *</span></label>
                                 <input type="text" id="nokN2Relationship" required maxlength="50" class="w-full border p-2.5 rounded-lg text-sm">
                             </div>
                             <div>
-                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1">ID / Passport Number *</label>
+                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1"><span data-ne="परिचयपत्र / राहदानी नम्बर *">ID / Passport Number *</span></label>
                                 <input type="text" id="nokN2Id" required maxlength="50" class="w-full border p-2.5 rounded-lg text-sm">
                             </div>
                             <div>
-                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Nationality *</label>
+                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1"><span data-ne="राष्ट्रियता *">Nationality *</span></label>
                                 <input type="text" id="nokN2Nationality" required maxlength="50" class="w-full border p-2.5 rounded-lg text-sm">
                             </div>
                             <div>
-                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Contact Number *</label>
+                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1"><span data-ne="सम्पर्क नम्बर *">Contact Number *</span></label>
                                 <input type="tel" id="nokN2Contact" required maxlength="30" class="w-full border p-2.5 rounded-lg text-sm">
                             </div>
                             <div class="sm:col-span-2">
-                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Residential Address *</label>
+                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1"><span data-ne="बसोबासको ठेगाना *">Residential Address *</span></label>
                                 <textarea id="nokN2Address" required maxlength="180" rows="2" class="w-full border p-2.5 rounded-lg text-sm"></textarea>
                             </div>
                             <div>
-                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Share of Distribution (%) *</label>
+                                <label class="block text-xs font-bold uppercase text-slate-700 mb-1"><span data-ne="हिस्सा (%) *">Share of Distribution (%) *</span></label>
                                 <input type="number" id="nokN2Share" required min="1" max="100" step="1" oninput="updateNokShare()" class="w-full border p-2.5 rounded-lg text-sm font-bold">
                             </div>
                             <div class="flex items-end">
@@ -337,16 +379,16 @@
                     <div class="bg-slate-50 border rounded-xl p-4">
                         <label class="flex items-start gap-3 text-xs text-slate-700">
                             <input type="checkbox" id="nokConfirm" required class="mt-0.5 h-4 w-4">
-                            <span>
+                            <span><span data-ne="माथि भरिएको कर्मचारी र हकवालाको विवरण सही छ भनी पुष्टि गर्छु। प्रिन्ट गरिएको आधिकारिक फाराममा हस्ताक्षर, साक्षीको विवरण र मिति हातले भर्नुपर्छ भन्ने बुझेको छु।">
                                 I confirm that the declarant and nominee information entered above is accurate.
                                 I understand that signatures, witness details and dates must be completed manually on the printed official form.
-                            </span>
+                            </span></span>
                         </label>
                     </div>
 
                     <button type="submit" id="btnNokSubmit" class="w-full bg-blue-900 hover:bg-blue-800 text-white font-bold py-3 rounded-lg shadow transition-all text-sm flex justify-center items-center gap-2">
                         <i class="fa-solid fa-file-arrow-down"></i>
-                        <span>Save Data & Download Official PDF</span>
+                        <span data-ne="विवरण सुरक्षित गर्नुहोस् र आधिकारिक PDF डाउनलोड गर्नुहोस्">Save Data & Download Official PDF</span>
                     </button>
                 </form>
 
@@ -364,8 +406,8 @@
                         <i class="fa-solid fa-mobile-screen-button text-lg"></i>
                     </div>
                     <div>
-                        <h3 class="text-sm font-bold uppercase tracking-wide">Official SAP SuccessFactors App</h3>
-                        <p class="text-xs text-blue-200">Download the official mobile app to view payslips and HR records directly on your phone:</p>
+                        <h3 class="text-sm font-bold uppercase tracking-wide"><span data-ne="आधिकारिक SAP SuccessFactors एप">Official SAP SuccessFactors App</span></h3>
+                        <p class="text-xs text-blue-200"><span data-ne="फोनमै तलब पर्चा र HR विवरण हेर्न आधिकारिक मोबाइल एप डाउनलोड गर्नुहोस्:">Download the official mobile app to view payslips and HR records directly on your phone:</span></p>
                     </div>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
@@ -407,13 +449,13 @@
                             <option value="Payslip Understanding">Payslip Layout / Calculation Guidance</option>
                             <option value="Payslip Understanding">Unable to View Payslip in SAP App</option>
                             <option value="Payslip Understanding">Mobile Device Not Supported for SAP App</option>
-                            <option value="Other Issue">Other General Concern</option>
+                            <option value="Other Issue" data-ne="अन्य समस्या">Other General Concern</option>
                         </select>
                     </div>
 
                     <div>
                         <label class="block text-xs font-bold uppercase text-slate-700 mb-1" data-key="lbl_details">Details / Explanation *</label>
-                        <textarea id="issueDetails" required rows="3" placeholder="Please describe your issue simply..." class="w-full border border-slate-300 p-2.5 rounded-lg text-sm focus:ring-2 focus:ring-blue-600 focus:outline-none"></textarea>
+                        <textarea id="issueDetails" required rows="3" placeholder="Please describe your issue simply..." data-ne-placeholder="आफ्नो समस्या सरल भाषामा लेख्नुहोस्..." class="w-full border border-slate-300 p-2.5 rounded-lg text-sm focus:ring-2 focus:ring-blue-600 focus:outline-none"></textarea>
                     </div>
 
                     <button type="submit" id="btnSubmit" class="w-full bg-blue-900 hover:bg-blue-800 text-white font-bold py-3 rounded-lg shadow flex justify-center items-center gap-2 transition-all text-sm">
@@ -421,6 +463,15 @@
                         <span data-key="btn_submit">Submit Concern</span>
                     </button>
                 </form>
+                <div id="ticketSuccess" hidden class="mt-4 p-4 rounded-xl border border-green-200 bg-green-50 space-y-3" role="status">
+                    <p class="font-bold text-green-900"><span data-ne="तपाईंको अनुरोध दर्ता भएको छ।">Your request is registered.</span></p>
+                    <p id="savedTicketNumber" class="text-sm break-all"></p>
+                    <button type="button" onclick="checkSavedTicket()" class="w-full bg-blue-900 text-white rounded-lg p-3 font-bold"><span data-ne="मेरो अनुरोध हेर्नुहोस्">Check My Request</span></button>
+                    <button type="button" onclick="copyTrackingLink()" class="w-full bg-white border border-blue-900 text-blue-900 rounded-lg p-3 font-bold"><span data-ne="अनुरोध हेर्ने लिङ्क कपी गर्नुहोस्">Copy Tracking Link</span></button>
+                    <p class="text-sm"><span data-ne="यो निजी लिङ्क सुरक्षित राख्नुहोस्, जस्तै WhatsApp मा आफैँलाई पठाउनुहोस्। लिङ्क भएको व्यक्तिले तपाईंको अनुरोध हेर्न सक्छ। अरूलाई नदिनुहोस्।">Save this private link, for example in WhatsApp Message Yourself. Anyone with this link can access your request. Do not share it with others.</span></p>
+                    <textarea id="privateTrackingLink" readonly aria-label="Private tracking link" class="w-full border rounded p-2 text-xs" rows="3"></textarea>
+                    <p id="trackingCopyMessage" class="text-sm"></p>
+                </div>
             </div>
 
             <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 space-y-4">
@@ -430,13 +481,27 @@
                 </h2>
 
                 <div class="flex flex-col sm:flex-row gap-2">
-                    <input type="text" id="trackTicketId" placeholder="Enter Ticket # (e.g. T-582910)" class="w-full border border-slate-300 p-2.5 rounded-lg text-sm font-semibold uppercase focus:ring-2 focus:ring-blue-600 focus:outline-none">
-                    <button onclick="trackTicket()" id="btnTrack" class="bg-slate-800 hover:bg-slate-900 text-white px-6 py-2.5 rounded-lg font-bold text-sm transition-all flex items-center justify-center gap-2">
+                    <input type="text" id="trackTicketId" placeholder="Paste your private tracking link or enter Ticket #" data-ne-placeholder="निजी लिङ्क टाँस्नुहोस् वा टिकट नम्बर लेख्नुहोस्" class="w-full border border-slate-300 p-2.5 rounded-lg text-sm font-semibold uppercase focus:ring-2 focus:ring-blue-600 focus:outline-none">
+                    <button onclick="trackTicket(true)" id="btnTrack" class="bg-slate-800 hover:bg-slate-900 text-white px-6 py-2.5 rounded-lg font-bold text-sm transition-all flex items-center justify-center gap-2">
                         <i class="fa-solid fa-search"></i>
                         <span data-key="btn_search">Search</span>
                     </button>
                 </div>
 
+                <p class="text-sm text-slate-600"><span data-ne="आफ्नो अनुरोध हेर्न सुरक्षित राखेको निजी लिङ्क खोल्नुहोस्। हराएको छ भने टिकट नम्बर दिएर सहायता टोलीलाई सम्पर्क गर्नुहोस्।">Open your saved private link to check your request automatically. If you lost it, contact support with your ticket number.</span></p>
+                <details class="text-sm border rounded-lg p-3">
+                    <summary class="cursor-pointer font-semibold"><span data-ne="पहिलेको पहुँच कोड छ?">Already have an old access code?</span></summary>
+                    <p class="my-2"><span data-ne="माथि टिकट नम्बर लेख्नुहोस् र तल सुरक्षित राखेको कोड टाँस्नुहोस्। त्यसपछि खोज्नुहोस् थिच्नुहोस्। अनुरोध भेटिएपछि निजी लिङ्क कपी गर्न सक्नुहुन्छ।">Enter your ticket number above and paste your saved code below once. Then press Search. You can copy a private link after the request is found.</span></p>
+                    <input id="legacyTicketCode" type="password" autocomplete="off" aria-label="Previously issued ticket access code" class="w-full border rounded p-2" placeholder="Paste your previously saved code" data-ne-placeholder="पहिले सुरक्षित राखेको कोड टाँस्नुहोस्">
+                </details>
+                <div id="ticketPhoneBox" hidden class="border border-blue-200 bg-blue-50 p-4 rounded-xl space-y-2">
+                    <label for="trackPhone" class="block font-bold text-sm" data-key="track_phone_label">Registered mobile number</label>
+                    <p class="text-sm" data-key="track_phone_help">Enter the same mobile number used when submitting this request, including the country code if you entered it then.</p>
+                    <input id="trackPhone" type="tel" inputmode="tel" autocomplete="off" maxlength="40" class="w-full border rounded-lg p-3" aria-describedby="trackPhoneHelp">
+                    <button type="button" id="btnVerifyPhone" onclick="trackTicket()" class="w-full bg-blue-900 hover:bg-blue-800 text-white rounded-lg p-3 font-bold" data-key="track_verify_submit">Submit</button>
+                    <span id="trackPhoneHelp" class="text-xs" data-key="track_phone_action">Press Submit to verify your mobile number and view the status.</span>
+                </div>
+                <p id="trackProgress" role="status" aria-live="polite" class="text-sm font-semibold text-blue-900"></p>
                 <div id="statusResult" class="hidden border border-slate-200 p-4 rounded-xl bg-slate-50 space-y-3">
                     <div class="flex justify-between items-center border-b border-slate-200 pb-2">
                         <span class="font-bold text-sm text-slate-800" id="resTicketNo">Ticket #</span>
@@ -452,7 +517,7 @@
                         <p class="text-xs text-red-600 font-bold flex items-center gap-1" data-key="msg_not_satisfied">
                             <i class="fa-solid fa-circle-exclamation"></i> Not satisfied with the resolution?
                         </p>
-                        <textarea id="reopenComment" rows="2" placeholder="Write reason why issue is not resolved..." class="w-full border border-slate-300 p-2 rounded-lg text-xs focus:ring-2 focus:ring-red-500 focus:outline-none"></textarea>
+                        <textarea id="reopenComment" rows="2" placeholder="Write reason why issue is not resolved..." data-ne-placeholder="समस्या समाधान नभएको कारण लेख्नुहोस्..." class="w-full border border-slate-300 p-2 rounded-lg text-xs focus:ring-2 focus:ring-red-500 focus:outline-none"></textarea>
                         <button onclick="reopenTicket()" id="btnReopen" class="w-full bg-red-600 hover:bg-red-700 text-white text-xs py-2.5 rounded-lg font-bold transition-all flex justify-center items-center gap-1.5">
                             <i class="fa-solid fa-rotate-left"></i>
                             <span data-key="btn_reopen">Re-open & Send Back to Support</span>
@@ -466,8 +531,8 @@
     <!-- Footer -->
     <footer class="bg-slate-800 text-slate-400 text-xs py-4 text-center mt-auto border-t border-slate-700">
         <div class="max-w-4xl mx-auto px-4 space-y-1">
-            <p>Internal Employee Assistance Service</p>
-            <p class="text-slate-500">Approximations are for reference only. Official figures are subject to SAP payroll processing.</p>
+            <p><span data-ne="कर्मचारी सहायता सेवा">Internal Employee Assistance Service</span></p>
+            <p class="text-slate-500"><span data-ne="अनुमानित रकम जानकारीका लागि मात्र हो। आधिकारिक रकम SAP तलब प्रक्रियाअनुसार हुन्छ।">Approximations are for reference only. Official figures are subject to SAP payroll processing.</span></p>
             <p class="text-blue-400 font-medium pt-1">Designed & Deployed by Jitendra — Admin (KAEFER Saudi Arabia)</p>
         </div>
     </footer>
@@ -571,6 +636,17 @@
             }
         };
 
+        translations.ne = {"header_title": "कर्मचारी पोर्टल", "header_sub": "तलब गणना र सहायता केन्द्र", "nav_calc": "ओटी गणना", "nav_leave": "फारामहरू", "nav_support": "सहायता", "cutoff_title": "तलबको कटअफ नियम (२५ गते)", "cutoff_desc": "ओभरटाइम अघिल्लो महिनाको २६ गतेदेखि चालु महिनाको २५ गतेसम्म गणना हुन्छ। महिनाको २६ गतेपछि गरिएको ओटी अर्को तलबमा बक्यौता ओटीका रूपमा देखिन्छ।", "title_salary": "१. तलब र भत्ताहरू", "label_basic": "आधारभूत तलब (SAR)", "label_allowance": "अन्य भत्ताहरू (SAR)", "title_ot": "२. ओभरटाइम घण्टाको विवरण", "ot_normal": "सामान्य ओटी (१.५ गुणा)", "ot_normal_sub": "१ देखि २५ गतेसम्म (नियमित कार्यदिन)", "ot_holiday": "बिदाको ओटी (१.५ गुणा)", "ot_holiday_sub": "शुक्रबार / कम्पनीका आधिकारिक बिदाहरू", "ot_retro_normal": "बक्यौता सामान्य ओटी (१.५ गुणा)", "ot_retro_normal_sub": "अघिल्लो महिनाको २६ गतेदेखि अन्त्यसम्म", "ot_retro_holiday": "बक्यौता बिदाको ओटी (१.५ गुणा)", "ot_retro_holiday_sub": "अघिल्लो महिनाको २६ गतेपछिका बिदाहरू", "ot_bonus": "बोनस ओटी / प्रोत्साहन (आधार दरको १ गुणा)", "ot_bonus_sub": "सूत्र: आधारभूत तलब ÷ ३० ÷ ८", "title_breakdown": "अनुमानित तलब विवरण", "rate_base": "आधार प्रतिघण्टा दर (आधारभूत तलब ÷ २४०):", "rate_ot": "ओटी प्रतिघण्टा दर (आधार दर × १.५):", "out_basic": "आधारभूत तलब:", "out_allowance": "भत्ताहरू:", "out_normal_ot": "सामान्य र बिदाको ओटी रकम:", "out_retro_ot": "बक्यौता ओटी रकम:", "out_bonus_ot": "बोनस ओटी रकम:", "out_net_label": "अनुमानित कुल तलब", "out_net_sub": "(कटौती गर्नुअघि)", "raise_ticket": "१. तलबसम्बन्धी प्रश्न वा सहायता अनुरोध", "lbl_emp_id": "कर्मचारी नम्बर *", "lbl_phone": "मोबाइल नम्बर *", "lbl_category": "समस्याको प्रकार *", "lbl_details": "विवरण / स्पष्टीकरण *", "btn_submit": "अनुरोध पठाउनुहोस्", "check_status": "२. आफ्नो अनुरोधको स्थिति हेर्नुहोस्", "btn_search": "खोज्नुहोस्", "lbl_hr_comment": "सहायता टोलीको जवाफ:", "msg_not_satisfied": "समाधानसँग सन्तुष्ट हुनुहुन्न?", "btn_reopen": "पुनः खोल्नुहोस् र सहायतामा पठाउनुहोस्"};
+
+        Object.entries({"en": {"track_phone_label": "Registered mobile number", "track_phone_help": "Enter the same mobile number used when submitting this request, including the country code if you entered it then.", "track_phone_action": "Press Submit to verify your mobile number and view the status.", "track_invalid": "Enter a valid ticket number or private tracking link.", "track_phone_required": "Enter your registered mobile number.", "track_loading": "Checking…", "track_wait": "Checking your details. Please wait; do not press Search again.", "track_limited": "Too many attempts. Try again in 15 minutes or contact support.", "track_mismatch": "Ticket number or mobile number does not match. Check both and try again.", "track_verified": "Mobile number matched. Latest status is shown below.", "track_connection": "Connection timed out or failed. Please try again."}, "ne": {"track_phone_label": "दर्ता गरिएको मोबाइल नम्बर", "track_phone_help": "अनुरोध पठाउँदा प्रयोग गरेको मोबाइल नम्बर लेख्नुहोस्। त्यतिबेला देशको कोड राख्नुभएको थियो भने अहिले पनि राख्नुहोस्।", "track_phone_action": "नम्बर जाँच गरी स्थिति हेर्न फेरि खोज्नुहोस् थिच्नुहोस्।", "track_invalid": "सही टिकट नम्बर वा निजी लिङ्क लेख्नुहोस्।", "track_phone_required": "दर्ता गरिएको मोबाइल नम्बर लेख्नुहोस्।", "track_loading": "जाँच हुँदैछ…", "track_wait": "विवरण जाँच हुँदैछ। पर्खनुहोस्; खोज्नुहोस् फेरि नथिच्नुहोस्।", "track_limited": "धेरै प्रयास भयो। १५ मिनेटपछि प्रयास गर्नुहोस् वा सहायता टोलीलाई सम्पर्क गर्नुहोस्।", "track_mismatch": "टिकट वा मोबाइल नम्बर मिलेन। दुवै जाँच गरी फेरि प्रयास गर्नुहोस्।", "track_verified": "मोबाइल नम्बर मिल्यो। पछिल्लो स्थिति तल देखाइएको छ।", "track_connection": "सम्पर्क हुन सकेन वा समय सकियो। फेरि प्रयास गर्नुहोस्।"}, "hi": {"track_phone_label": "पंजीकृत मोबाइल नंबर", "track_phone_help": "अनुरोध दर्ज करते समय दिया गया मोबाइल नंबर दर्ज करें। उस समय देश का कोड दिया था तो उसे भी शामिल करें।", "track_phone_action": "सत्यापन और स्थिति देखने के लिए फिर से खोजें दबाएं।", "track_invalid": "सही टिकट नंबर या निजी लिंक दर्ज करें।", "track_phone_required": "पंजीकृत मोबाइल नंबर दर्ज करें।", "track_loading": "जाँच हो रही है…", "track_wait": "विवरण की जाँच हो रही है। कृपया प्रतीक्षा करें; दोबारा खोजें न दबाएं।", "track_limited": "बहुत अधिक प्रयास। 15 मिनट बाद प्रयास करें या सहायता से संपर्क करें।", "track_mismatch": "टिकट या मोबाइल नंबर मेल नहीं खाता। दोनों जाँचें और फिर प्रयास करें।", "track_verified": "मोबाइल नंबर मेल खाता है। नवीनतम स्थिति नीचे है।", "track_connection": "कनेक्शन विफल या समय समाप्त। फिर प्रयास करें।"}, "ar": {"track_phone_label": "رقم الجوال المسجل", "track_phone_help": "أدخل رقم الجوال المستخدم عند تقديم الطلب، مع رمز الدولة إذا أدخلته سابقاً.", "track_phone_action": "اضغط بحث مرة أخرى للتحقق وعرض الحالة.", "track_invalid": "أدخل رقم طلب صحيحاً أو الرابط الخاص.", "track_phone_required": "أدخل رقم الجوال المسجل.", "track_loading": "جارٍ التحقق…", "track_wait": "جارٍ التحقق من بياناتك. انتظر ولا تضغط بحث مرة أخرى.", "track_limited": "محاولات كثيرة. حاول بعد 15 دقيقة أو تواصل مع الدعم.", "track_mismatch": "رقم الطلب أو الجوال غير مطابق. تحقق منهما وحاول مجدداً.", "track_verified": "تمت مطابقة رقم الجوال. الحالة الأحدث أدناه.", "track_connection": "فشل الاتصال أو انتهت المهلة. حاول مجدداً."}, "ur": {"track_phone_label": "رجسٹرڈ موبائل نمبر", "track_phone_help": "درخواست جمع کرتے وقت دیا گیا موبائل نمبر درج کریں۔ اگر ملک کا کوڈ دیا تھا تو اسے بھی شامل کریں۔", "track_phone_action": "تصدیق اور اسٹیٹس دیکھنے کے لیے دوبارہ تلاش کریں دبائیں۔", "track_invalid": "درست ٹکٹ نمبر یا نجی لنک درج کریں۔", "track_phone_required": "رجسٹرڈ موبائل نمبر درج کریں۔", "track_loading": "جانچ جاری ہے…", "track_wait": "آپ کی تفصیلات چیک ہو رہی ہیں۔ انتظار کریں؛ دوبارہ تلاش نہ دبائیں۔", "track_limited": "بہت زیادہ کوششیں۔ 15 منٹ بعد کوشش کریں یا سپورٹ سے رابطہ کریں۔", "track_mismatch": "ٹکٹ یا موبائل نمبر نہیں ملتا۔ دونوں چیک کریں اور دوبارہ کوشش کریں۔", "track_verified": "موبائل نمبر مل گیا۔ تازہ اسٹیٹس نیچے ہے۔", "track_connection": "کنکشن ناکام یا وقت ختم۔ دوبارہ کوشش کریں۔"}}).forEach(([lang, values]) => Object.assign(translations[lang], values));
+        Object.entries({
+            en:{track_verify_submit:'Submit',track_phone_action:'Press Submit to verify your mobile number and view the status.'},
+            ne:{track_verify_submit:'पेश गर्नुहोस्',track_phone_action:'मोबाइल नम्बर जाँच गरी स्थिति हेर्न पेश गर्नुहोस् थिच्नुहोस्।'},
+            hi:{track_verify_submit:'जमा करें',track_phone_action:'मोबाइल नंबर सत्यापित करके स्थिति देखने के लिए जमा करें दबाएं।'},
+            ar:{track_verify_submit:'إرسال',track_phone_action:'اضغط إرسال للتحقق من رقم الجوال وعرض الحالة.'},
+            ur:{track_verify_submit:'جمع کریں',track_phone_action:'موبائل نمبر کی تصدیق اور اسٹیٹس دیکھنے کے لیے جمع کریں دبائیں۔'}
+        }).forEach(([lang, values]) => Object.assign(translations[lang], values));
+
         function switchTab(tab) {
             const validTabs = ['calc', 'forms', 'support'];
             if (!validTabs.includes(tab)) tab = 'calc';
@@ -586,15 +662,37 @@
             });
         }
 
+        const nepaliMessages = {"Link copied. Save it in a private place.": "लिङ्क कपी भयो। सुरक्षित स्थानमा राख्नुहोस्।", "Select and copy the link above, then save it in a private place.": "माथिको लिङ्क छानेर कपी गर्नुहोस् र सुरक्षित राख्नुहोस्।", "Your request was sent back to support.": "तपाईंको अनुरोध सहायता टोलीमा पुनः पठाइयो।", "Please type a reason.": "कृपया कारण लेख्नुहोस्।", "Check your request using its private link first.": "पहिले निजी लिङ्कबाट अनुरोध हेर्नुहोस्।", "Under review...": "समीक्षा हुँदैछ...", "Ticket update failed. Please try again or contact support.": "अनुरोध अद्यावधिक भएन। फेरि प्रयास गर्नुहोस् वा सहायता टोलीलाई सम्पर्क गर्नुहोस्।", "Please open or paste your saved private tracking link. If you saved an old code, use the old access code option. Otherwise contact support with your ticket number.": "सुरक्षित राखेको निजी लिङ्क खोल्नुहोस् वा टाँस्नुहोस्। पुरानो कोड छ भने त्यसको विकल्प प्रयोग गर्नुहोस्। अन्यथा टिकट नम्बर दिएर सहायता टोलीलाई सम्पर्क गर्नुहोस्।"};
+        Object.assign(nepaliMessages, {
+            'Submitting...':'पठाइँदैछ...',
+            'Saving data...':'विवरण सुरक्षित हुँदैछ...',
+            'Preparing official PDF...':'आधिकारिक PDF तयार हुँदैछ...',
+            'Unable to check your request. Try again later.':'अनुरोध हेर्न सकिएन। पछि फेरि प्रयास गर्नुहोस्।',
+            'This tracking link is invalid. Contact support.':'यो लिङ्क सही छैन। सहायता टोलीलाई सम्पर्क गर्नुहोस्।',
+            'Request not found. Check your private link or contact support.':'अनुरोध भेटिएन। निजी लिङ्क जाँच गर्नुहोस् वा सहायतामा सम्पर्क गर्नुहोस्।'
+        });
+        const originalUiText = new WeakMap();
+        function uiText(english) {
+            return document.getElementById('langSelect').value === 'ne' && nepaliMessages[english] ? nepaliMessages[english] : english;
+        }
         function changeLanguage() {
             const lang = document.getElementById('langSelect').value;
-            document.querySelectorAll('[data-key]').forEach(elem => {
+            document.querySelectorAll('[data-key], [data-ne]').forEach(elem => {
+                if (!originalUiText.has(elem)) originalUiText.set(elem, elem.textContent);
                 const key = elem.getAttribute('data-key');
-                if (translations[lang] && translations[lang][key]) {
-                    elem.innerText = translations[lang][key];
-                }
+                elem.textContent = (translations[lang] && translations[lang][key]) || (lang === 'ne' ? elem.getAttribute('data-ne') : null) || originalUiText.get(elem);
             });
-            document.body.dir = (lang === 'ar' || lang === 'ur') ? "rtl" : "ltr";
+            document.querySelectorAll('[data-ne-placeholder]').forEach(elem => {
+                if (!elem.dataset.originalPlaceholder) elem.dataset.originalPlaceholder = elem.placeholder;
+                elem.placeholder = lang === 'ne' ? elem.dataset.nePlaceholder : elem.dataset.originalPlaceholder;
+            });
+            document.documentElement.lang = lang;
+            document.body.dir = (lang === 'ar' || lang === 'ur') ? 'rtl' : 'ltr';
+            try { localStorage.setItem('portalLanguage', lang); } catch (_) {}
+            if (!document.getElementById('ticketSuccess').hidden) {
+                document.getElementById('trackingCopyMessage').textContent = '';
+            }
+            updateNokShare();
         }
 
         async function fetchVisitorCount() {
@@ -661,7 +759,7 @@
             const s2 = Number(document.getElementById('nokN2Share').value || 0);
             const total = s1 + s2;
             const box = document.getElementById('nokShareStatus');
-            box.textContent = `Combined share: ${total}%`;
+            box.textContent = document.getElementById('langSelect').value === 'ne' ? `कुल हिस्सा: ${total}%` : `Combined share: ${total}%`;
             box.className = total === 100
                 ? "w-full p-2.5 rounded-lg bg-green-50 border border-green-200 text-xs font-bold text-green-800"
                 : "w-full p-2.5 rounded-lg bg-red-50 border border-red-200 text-xs font-bold text-red-700";
@@ -841,7 +939,7 @@
             const original = btn.innerHTML;
 
             btn.disabled = true;
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i><span>Saving data...</span>';
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i><span>' + uiText('Saving data...') + '</span>';
             msg.classList.add('hidden');
 
             try {
@@ -862,7 +960,7 @@
                     throw new Error("The server did not return a valid Next-of-Kin reference. The record may already have been saved; check NEXT_OF_KIN_APPLICATIONS before submitting again. Update the existing Apps Script deployment to the matching backend version.");
                 }
 
-                btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i><span>Preparing official PDF...</span>';
+                btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i><span>' + uiText('Preparing official PDF...') + '</span>';
                 const pdfBytes = await generateNextOfKinPdf(data, result.submissionId);
 
                 const safeEmp = data.declarant.employeeId.replace(/[^a-zA-Z0-9_-]/g, "_");
@@ -898,7 +996,7 @@
             e.preventDefault();
             const btn = document.getElementById('btnSubmit');
             const originalContent = btn.innerHTML;
-            btn.innerText = "Submitting...";
+            btn.innerText = uiText('Submitting...');
             btn.disabled = true;
 
             const payload = {
@@ -919,7 +1017,7 @@
                 const data = await response.json();
 
                 if (data.success) {
-                    alert(`✅ Support Request Registered!\n\nYour Ticket Number is: ${data.ticketId}\n\nPrivate access code: ${data.accessToken}\nSave both; the code is required to track or reopen your ticket.`);
+                    showTrackingReceipt(data.ticketId, data.accessToken);
                     document.getElementById('supportForm').reset();
                 } else if (data.action === "DUPLICATE_EXACT") {
                     const msg = data.error || `Your request is already registered with Ticket #${data.ticketId}. Please track its status using this number.`;
@@ -938,59 +1036,183 @@
             }
         }
 
-        async function trackTicket() {
-            const ticketId = document.getElementById('trackTicketId').value.trim();
-            if (!ticketId) return alert("Please enter a valid Ticket Number.");
+        const PORTAL_PUBLIC_URL = 'https://supportkaefer.github.io/KAEFER-s-Portal/';
+        const ticketAccess = new Map(); // Memory only: cleared when this page closes.
+        let latestTracking = null;
+        let verifiedTicketId = null;
 
-            const resDiv = document.getElementById('statusResult');
+        function validTicketAccess(ticketId, accessToken) {
+            return /^T-(?:[A-F0-9]{32}|[0-9]{6,12})$/.test(ticketId)
+                && /^[a-f0-9-]{72}$/i.test(accessToken);
+        }
+
+        function makeTrackingLink(ticketId, accessToken) {
+            if (!validTicketAccess(ticketId, accessToken)) throw new Error('The server returned invalid tracking details. Contact support; do not submit again.');
+            return PORTAL_PUBLIC_URL + '#' + new URLSearchParams({ticket:ticketId, key:accessToken}).toString();
+        }
+
+        function parseTrackingLink(value) {
             try {
-                const accessToken = prompt('Enter your private ticket access code:');
-                if (!accessToken) return;
-                const response = await fetch(SCRIPT_URL, {method:'POST', redirect:'follow', headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify({action:'TRACK_TICKET', ticketId, accessToken})});
-                const data = await response.json();
+                const url = new URL(value);
+                if (url.origin !== new URL(PORTAL_PUBLIC_URL).origin || url.pathname !== new URL(PORTAL_PUBLIC_URL).pathname) return null;
+                const parts = new URLSearchParams(url.hash.slice(1));
+                const ticketId = (parts.get('ticket') || '').toUpperCase();
+                const accessToken = parts.get('key') || '';
+                return validTicketAccess(ticketId, accessToken) ? {ticketId, accessToken} : null;
+            } catch (_) { return null; }
+        }
 
-                if (data.found) {
-                    resDiv.classList.remove('hidden');
-                    document.getElementById('resTicketNo').innerText = "Ticket #" + data.ticketId;
-                    document.getElementById('resStatusBadge').innerText = data.status;
-                    document.getElementById('resHRComment').innerText = data.hrComment || "Under review...";
-                } else {
-                    alert("❌ Ticket ID not found.");
-                    resDiv.classList.add('hidden');
+        function showTrackingReceipt(ticketId, accessToken) {
+            const link = makeTrackingLink(ticketId, accessToken);
+            ticketAccess.set(ticketId, accessToken);
+            latestTracking = {ticketId, accessToken};
+            document.getElementById('savedTicketNumber').textContent = (document.getElementById('langSelect').value === 'ne' ? 'टिकट: ' : 'Ticket: ') + ticketId;
+            document.getElementById('privateTrackingLink').value = link;
+            document.getElementById('trackingCopyMessage').textContent = '';
+            document.getElementById('ticketSuccess').hidden = false;
+        }
+
+        async function copyTrackingLink() {
+            const input = document.getElementById('privateTrackingLink');
+            const message = document.getElementById('trackingCopyMessage');
+            try {
+                await navigator.clipboard.writeText(input.value);
+                message.textContent = uiText('Link copied. Save it in a private place.');
+            } catch (_) {
+                input.focus(); input.select();
+                message.textContent = uiText('Select and copy the link above, then save it in a private place.');
+            }
+        }
+
+        function checkSavedTicket() {
+            if (!latestTracking) return;
+            document.getElementById('trackTicketId').value = latestTracking.ticketId;
+            trackTicket();
+        }
+
+        let trackingBusy = false;
+        let trackingPhoneForTicket = '';
+        function trackMessage(key) {
+            const lang = document.getElementById('langSelect').value;
+            return (translations[lang] && translations[lang][key]) || translations.en[key];
+        }
+        async function trackTicket(showPhoneOnly = false) {
+            if (trackingBusy) return;
+            const button = document.getElementById('btnVerifyPhone');
+            const searchButton = document.getElementById('btnTrack');
+            const input = document.getElementById('trackTicketId');
+            const phoneInput = document.getElementById('trackPhone');
+            const phoneBox = document.getElementById('ticketPhoneBox');
+            const progress = document.getElementById('trackProgress');
+            const pasted = parseTrackingLink(input.value.trim());
+            const ticketId = pasted ? pasted.ticketId : input.value.trim().toUpperCase();
+            const accessToken = pasted ? pasted.accessToken : ticketAccess.get(ticketId) || document.getElementById('legacyTicketCode').value.trim();
+            const resDiv = document.getElementById('statusResult');
+            resDiv.classList.add('hidden'); verifiedTicketId = null;
+            if (!/^T-(?:[A-F0-9]{32}|[0-9]{6,12})$/.test(ticketId)) {
+                progress.textContent = trackMessage('track_invalid'); input.focus(); return;
+            }
+            if (showPhoneOnly || trackingPhoneForTicket !== ticketId || phoneBox.hidden) {
+                trackingPhoneForTicket = ticketId;
+                phoneInput.value = ''; phoneBox.hidden = false;
+                progress.textContent = trackMessage('track_phone_action');
+                phoneInput.focus(); phoneBox.scrollIntoView({behavior:'smooth', block:'nearest'});
+                return;
+            }
+            const phone = phoneInput.value.trim();
+            if (!/^[+\d\s().-]+$/.test(phone) || phone.replace(/\D/g,'').length < 7 || phone.replace(/\D/g,'').length > 15) {
+                progress.textContent = trackMessage('track_phone_required'); phoneInput.focus(); return;
+            }
+            trackingBusy = true;
+            const originalButton = button.innerHTML;
+            button.disabled = true; searchButton.disabled = true; input.disabled = true; phoneInput.disabled = true;
+            button.setAttribute('aria-busy', 'true');
+            button.textContent = trackMessage('track_loading');
+            progress.textContent = trackMessage('track_wait');
+            const controller = new AbortController();
+            const timeout = setTimeout(() => controller.abort(), 25000);
+            try {
+                const response = await fetch(SCRIPT_URL, {method:'POST', redirect:'follow', signal:controller.signal, headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify({action:'TRACK_TICKET', ticketId, phone, ...(accessToken ? {accessToken} : {})})});
+                if (!response.ok) throw new Error('CONNECTION');
+                const data = await response.json();
+                if (!data.found) {
+                    progress.textContent = (data.error || '').includes('Too many attempts') ? trackMessage('track_limited') : trackMessage('track_mismatch');
+                    return;
                 }
-            } catch (err) {
-                alert("⚠️ Connection issue while checking status.");
+                const token = data.accessToken || accessToken;
+                if (!validTicketAccess(ticketId, token)) throw new Error('CONNECTION');
+                verifiedTicketId = ticketId; input.value = ticketId;
+                document.getElementById('legacyTicketCode').value = '';
+                showTrackingReceipt(ticketId, token);
+                resDiv.classList.remove('hidden');
+                document.getElementById('resTicketNo').textContent = 'Ticket #' + ticketId;
+                document.getElementById('resStatusBadge').textContent = data.status;
+                document.getElementById('resHRComment').textContent = data.hrComment || uiText('Under review...');
+                progress.textContent = trackMessage('track_verified');
+                resDiv.scrollIntoView({behavior:'smooth', block:'nearest'});
+            } catch (_) {
+                progress.textContent = trackMessage('track_connection');
+            } finally {
+                clearTimeout(timeout); trackingBusy = false;
+                button.disabled = false; searchButton.disabled = false; input.disabled = false; phoneInput.disabled = false;
+                button.removeAttribute('aria-busy'); button.innerHTML = originalButton;
             }
         }
 
         async function reopenTicket() {
-            const ticketId = document.getElementById('trackTicketId').value.trim();
+            const ticketId = verifiedTicketId;
             const comment = document.getElementById('reopenComment').value.trim();
-            if (!comment) return alert("Please type a reason.");
-
-            const accessToken = prompt('Enter your private ticket access code:');
-            if (!accessToken) return;
-            const payload = { action: 'REOPEN_TICKET', ticketId, comment, accessToken };
+            if (!ticketId || !ticketAccess.has(ticketId)) return alert(uiText('Check your request using its private link first.'));
+            if (!comment) return alert(uiText('Please type a reason.'));
+            const button = document.getElementById('btnReopen');
+            if (button.disabled) return;
+            button.disabled = true;
             try {
-                const response = await fetch(SCRIPT_URL, {
-                    method: "POST",
-                    redirect: "follow",
-                    headers: { "Content-Type": "text/plain;charset=utf-8" },
-                    body: JSON.stringify(payload)
-                });
+                const response = await fetch(SCRIPT_URL, {method:'POST', redirect:'follow', headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify({action:'REOPEN_TICKET', ticketId, comment, accessToken:ticketAccess.get(ticketId)})});
                 const result = await response.json();
-                if (!result.success) throw new Error(result.error || "Update failed.");
-                alert("🔄 Ticket updated and sent back to Support!");
-                document.getElementById('reopenComment').value = "";
-                trackTicket();
-            } catch (err) {
-                alert("Ticket update failed. Please check your access code and connection.");
-            }
+                if (!result.success) throw new Error(result.error || 'Update failed.');
+                alert(uiText('Your request was sent back to support.'));
+                document.getElementById('reopenComment').value = '';
+                await trackTicket();
+            } catch (_) { alert(uiText('Ticket update failed. Please try again or contact support.')); }
+            finally { button.disabled = false; }
         }
 
+        function loadPrivateTrackingLink() {
+            if (!location.hash.startsWith('#ticket=')) return;
+            const access = parseTrackingLink(location.href);
+            // Remove the private fragment from the visible address; retain it in memory only.
+            history.replaceState(null, '', location.pathname + location.search);
+            if (!access) { alert(uiText('This tracking link is invalid. Contact support.')); return; }
+            ticketAccess.set(access.ticketId, access.accessToken);
+            document.getElementById('trackTicketId').value = access.ticketId;
+            switchTab('support');
+            trackTicket();
+        }
+
+        document.getElementById('trackTicketId').addEventListener('input', () => {
+            verifiedTicketId = null;
+            document.getElementById('statusResult').classList.add('hidden');
+            document.getElementById('trackProgress').textContent = '';
+            document.getElementById('ticketPhoneBox').hidden = true;
+            document.getElementById('trackPhone').value = '';
+        });
+        document.getElementById('trackPhone').addEventListener('input', () => {
+            verifiedTicketId = null;
+            document.getElementById('statusResult').classList.add('hidden');
+        });
+        document.getElementById('trackPhone').addEventListener('keydown', event => {
+            if (event.key === 'Enter') { event.preventDefault(); trackTicket(); }
+        });
+        try {
+            const savedLanguage = localStorage.getItem('portalLanguage');
+            if (translations[savedLanguage]) document.getElementById('langSelect').value = savedLanguage;
+        } catch (_) {}
+        changeLanguage();
         calculate();
         toggleSecondNominee();
         fetchVisitorCount();
+        loadPrivateTrackingLink();
     </script>
 </body>
 </html>
