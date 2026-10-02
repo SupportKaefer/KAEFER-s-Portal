@@ -63,6 +63,53 @@
             *,*::before,*::after { transition:none !important; animation:none !important; }
         }
 
+
+        .portal-nav { position:sticky;top:0;z-index:30;background:#fff;border-bottom:1px solid #dbe3ee;box-shadow:0 4px 18px #17255408; }
+        .portal-nav-inner { display:grid;grid-template-columns:repeat(5,minmax(0,1fr));max-width:1040px;margin:auto; }
+        .portal-tab { display:flex;align-items:center;justify-content:center;gap:9px;padding:18px 10px;border-bottom:3px solid transparent;background:transparent;font-weight:600;font-size:14px;color:#64748b;line-height:1.4; }
+        .portal-tab-active { color:#1e3a8a;border-color:#2563eb;background:#eff6ff; }
+        .home-hero { padding:38px;border-radius:22px;background:linear-gradient(120deg,#172554,#1e3a8a);color:white;position:relative;overflow:hidden; }
+        .home-hero h2 { font-size:clamp(26px,4vw,40px);line-height:1.2;max-width:650px;font-weight:750;margin:10px 0 14px;letter-spacing:-.6px; }
+        .home-hero > p:last-of-type { font-size:16px;color:#dbeafe;max-width:650px; }
+        .eyebrow { font-size:11px;letter-spacing:1.4px;font-weight:750;color:#64748b;text-transform:uppercase; }
+        .home-hero .eyebrow { color:#bfdbfe; }
+        .hero-note { margin-top:25px;padding-top:16px;border-top:1px solid #ffffff26;color:#bfdbfe;font-size:12px; }
+        .service-shortcuts { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px; }
+        .service-shortcuts button { text-align:start;border:1px solid #dbe3ee;border-radius:16px;background:white;padding:21px;display:flex;flex-direction:column;gap:8px;box-shadow:0 4px 14px #17255405; }
+        .service-shortcuts i { color:#2563eb;font-size:19px; }.service-shortcuts strong { color:#172554;font-size:15px; }.service-shortcuts span { color:#64748b;font-size:13px; }
+        .notice-board { background:white;border:1px solid #dbe3ee;border-radius:20px;padding:28px; }
+        .board-heading { display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:22px; }
+        .board-heading h2 { font-size:23px;font-weight:750;color:#172554; }.secondary-action { border:1px solid #cbd5e1;border-radius:9px;padding:10px 16px;background:white;color:#334155;font-size:13px;font-weight:650;display:inline-flex;gap:8px;align-items:center;justify-content:center; }
+        .notice-list { display:grid;gap:16px; }.notice-card { border:1px solid #e2e8f0;border-inline-start:4px solid #94a3b8;border-radius:12px;padding:22px;background:#fff; }.notice-card[data-priority=URGENT] { border-inline-start-color:#b91c1c;background:#fffafa; }.notice-card[data-priority=IMPORTANT] { border-inline-start-color:#2563eb; }
+        .notice-meta { display:flex;align-items:center;gap:10px;flex-wrap:wrap;color:#64748b;font-size:12px;margin-bottom:12px; }.notice-card h3 { color:#172554;font-size:19px;line-height:1.4;font-weight:700;overflow-wrap:anywhere;margin-bottom:10px; }.notice-body { white-space:pre-wrap;font-size:14px;color:#475569;overflow-wrap:anywhere;line-height:1.8; }.notice-card a { margin-top:16px; }
+        .service-heading { padding:10px 2px; }.service-heading h2 { font-size:30px;font-weight:750;letter-spacing:-.5px;color:#172554;margin:8px 0; }.service-heading > p:last-child { color:#64748b;font-size:15px; }
+        .request-workspace { background:white;border:1px solid #cbd5e1;border-radius:16px;padding:24px;box-shadow:0 8px 28px #17255408; }.request-workspace #resTicketNo { color:#172554;font-size:21px; }.request-facts { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;border-bottom:1px solid #e2e8f0;padding:12px 0 22px; }.request-facts span { display:block;font-size:11px;color:#64748b;margin-bottom:5px; }.request-facts strong { display:block;font-size:13px;font-weight:600;color:#334155;overflow-wrap:anywhere; }.response-panel { padding:18px;border-radius:12px;background:#f8fafc; }.response-panel #resHRComment { border:0;background:transparent;padding:14px 0 0;font-size:15px; }.tracking-tools { display:flex;align-items:center;gap:12px;flex-wrap:wrap; }#reopenBox { border-top:1px solid #e2e8f0;padding-top:20px; }#btnReopen { background:#334155; }#trackProgress:not(:empty) { border-inline-start:3px solid #2563eb;background:#eff6ff;padding:13px;border-radius:6px; }
+        @media(max-width:639px) {
+            body { padding-bottom:85px; }.portal-nav { position:fixed;top:auto;bottom:0;left:0;right:0;border-top:1px solid #dbe3ee;border-bottom:0;padding-bottom:env(safe-area-inset-bottom); }.portal-tab { flex-direction:column;font-size:10px;padding:11px 3px;gap:5px;border-bottom:0;border-top:3px solid transparent;min-height:64px; }.portal-tab-active { border-top-color:#2563eb; }.portal-tab i { font-size:17px; }.home-hero { padding:26px 22px; }.home-hero h2 { font-size:30px; }.service-shortcuts { grid-template-columns:1fr;gap:10px; }.service-shortcuts button { padding:16px;display:grid;grid-template-columns:28px 1fr;column-gap:10px;row-gap:2px; }.service-shortcuts i { grid-row:span 2;align-self:center; }.notice-board { padding:20px 16px; }.board-heading h2 { font-size:19px; }.notice-card { padding:18px 16px; }.notice-card h3 { font-size:18px; }.request-facts { grid-template-columns:1fr;gap:12px; }.request-facts div { display:flex;justify-content:space-between;gap:15px; }.request-facts span { margin:0; }.service-heading h2 { font-size:26px; }.request-workspace { padding:18px; }
+        }
+
+
+        h1,h2,h3,p,label,button,summary { overflow-wrap:break-word; }
+        h2.flex { align-items:flex-start;line-height:1.5; }
+        h2.flex > i,button > i { flex-shrink:0; }
+        h2.flex > span { flex:1;min-width:0; }
+        .board-heading { flex-wrap:wrap;align-items:flex-start; }
+        .board-heading > * { min-width:0; }
+        .board-heading button { flex-shrink:0; }
+        .service-heading h2 { line-height:1.4; }
+        input,select,textarea { font-size:16px !important;max-width:100%; }
+        #ticketPin,#ticketPinConfirm,#trackPin { direction:ltr;letter-spacing:.25em; }
+        button { min-height:44px;white-space:normal; }
+        .portal-tab { min-width:0; }.portal-tab span { max-width:100%;overflow-wrap:anywhere; }
+        @media(max-width:639px) {
+          body { padding-bottom:calc(120px + env(safe-area-inset-bottom)); }
+          .portal-tab { justify-content:flex-start;min-height:86px;font-size:11px;line-height:1.5; }
+          .board-heading { flex-direction:column;gap:12px; }
+          .request-workspace > .flex { flex-wrap:wrap;gap:12px; }
+          .home-hero h2 { font-size:clamp(24px,7vw,30px);line-height:1.4; }
+        }
+header > div > .flex:last-child { flex-wrap:wrap; }
+header .bg-white { flex-shrink:0; }
 </style>
 </head>
 <body class="bg-slate-100 font-sans text-slate-800 min-h-screen flex flex-col justify-between">
@@ -100,29 +147,34 @@
         </div>
     </header>
 
-    <!-- Navigation Tabs -->
-    <div class="bg-white shadow border-b border-slate-200">
-        <div class="max-w-4xl mx-auto flex">
-            <button onclick="switchTab('calc')" id="tab-calc" class="w-1/3 py-3.5 tab-active flex justify-center items-center gap-2 text-sm transition-all">
-                <i class="fa-solid fa-calculator text-base"></i>
-                <span data-key="nav_calc">OT Calculator</span>
-            </button>
-            <button onclick="switchTab('forms')" id="tab-forms" class="w-1/3 py-3.5 tab-inactive flex justify-center items-center gap-2 text-sm transition-all">
-                <i class="fa-solid fa-file-signature text-base"></i>
-                <span data-key="nav_leave">Forms</span>
-            </button>
-            <button onclick="switchTab('support')" id="tab-support" class="w-1/3 py-3.5 tab-inactive flex justify-center items-center gap-2 text-sm transition-all">
-                <i class="fa-solid fa-headset text-base"></i>
-                <span data-key="nav_support">Support</span>
-            </button>
-        </div>
-    </div>
+    <nav class="portal-nav" aria-label="Main navigation"><div class="portal-nav-inner">
+<button type="button" onclick="switchTab('home')" id="tab-home" class="portal-tab" aria-selected="true"><i class="fa-solid fa-house" aria-hidden="true"></i><span data-key="nav_home">Home</span></button>
+<button type="button" onclick="switchTab('calc')" id="tab-calc" class="portal-tab" aria-selected="false"><i class="fa-solid fa-calculator" aria-hidden="true"></i><span data-key="nav_calc">Calculator</span></button>
+<button type="button" onclick="switchTab('forms')" id="tab-forms" class="portal-tab" aria-selected="false"><i class="fa-solid fa-file-signature" aria-hidden="true"></i><span data-key="nav_leave">Forms</span></button>
+<button type="button" onclick="switchTab('support')" id="tab-support" class="portal-tab" aria-selected="false"><i class="fa-solid fa-paper-plane" aria-hidden="true"></i><span data-key="nav_submit">New Request</span></button>
+<button type="button" onclick="switchTab('track')" id="tab-track" class="portal-tab" aria-selected="false"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><span data-key="nav_track">Track Request</span></button>
+    </div></nav>
 
     <!-- Main Content Area -->
     <main class="max-w-3xl w-full mx-auto p-4 space-y-6 my-2">
 
+        <section id="section-home" class="space-y-6">
+            <div class="home-hero"><p class="eyebrow" data-key="home_eyebrow">EMPLOYEE HELP & INFORMATION</p><h2 data-key="home_title">Stay informed. Get support.</h2><p data-key="home_intro">Your notice board and employee services, together in one place.</p><div class="hero-note" data-key="independent_notice">Independently maintained employee help portal. Not an official company system.</div></div>
+            <div class="service-shortcuts">
+                <button type="button" onclick="switchTab('support')"><i class="fa-solid fa-paper-plane" aria-hidden="true"></i><strong data-key="nav_submit">New Request</strong><span data-key="shortcut_submit">Send a question to support</span></button>
+                <button type="button" onclick="switchTab('track')"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><strong data-key="nav_track">Track Request</strong><span data-key="shortcut_track">View progress and responses</span></button>
+                <button type="button" onclick="switchTab('calc')"><i class="fa-solid fa-calculator" aria-hidden="true"></i><strong data-key="nav_calc">Calculator</strong><span data-key="shortcut_calc">Check your estimated payslip</span></button>
+            </div>
+            <div class="notice-board">
+                <div class="board-heading"><div><p class="eyebrow" data-key="notice_eyebrow">LATEST UPDATES</p><h2 data-key="notice_title">Employee notice board</h2></div><button type="button" id="btnRefreshNotices" onclick="loadNotices(true)" class="secondary-action"><i class="fa-solid fa-rotate" aria-hidden="true"></i><span data-key="notice_refresh">Refresh</span></button></div>
+                <p id="noticeFeedStatus" role="status" aria-live="polite"></p>
+                <div id="noticeList" class="notice-list"></div>
+                <p id="noticeLastChecked" class="text-xs text-slate-500"></p>
+            </div>
+        </section>
+
         <!-- ================= TAB 1: OT & PAYSLIP CALCULATOR ================= -->
-        <section id="section-calc" class="space-y-4">
+        <section id="section-calc" class="hidden space-y-4">
             <div class="bg-amber-50 border-l-4 border-amber-500 p-3.5 rounded-r-lg shadow-sm text-xs text-amber-900 space-y-1">
                 <div class="font-bold flex items-center gap-1.5">
                     <i class="fa-solid fa-calendar-days text-amber-600 text-sm"></i>
@@ -406,6 +458,7 @@
 
         <!-- ================= TAB 3: SUPPORT SECTION ================= -->
         <section id="section-support" class="hidden space-y-6">
+            <div class="service-heading"><p class="eyebrow" data-key="submit_eyebrow">EMPLOYEE SUPPORT</p><h2 data-key="submit_title">How can we help?</h2><p data-key="submit_intro">Submit your concern here. Follow its progress in the separate Track Request page.</p></div>
             
             <!-- Official SAP SuccessFactors Mobile App Download Box -->
             <div class="bg-gradient-to-r from-blue-900 to-slate-900 text-white p-5 rounded-xl shadow-sm border border-blue-800 space-y-3">
@@ -440,10 +493,7 @@
                     <div class="bg-amber-50 border border-amber-300 rounded-xl p-4 space-y-2" role="note">
                         <p class="font-bold text-amber-900" data-key="private_link_title">Important: save your private tracking link</p>
                         <p class="text-sm text-amber-900" data-key="private_link_notice">After submitting, copy and save your private tracking link. It works on any device and protects your request and support response from other people. Your ticket number and mobile number alone cannot unlock your request. Keep the link private. If lost, support must verify your identity before issuing a replacement.</p>
-                        <label class="flex items-start gap-2 text-sm text-amber-900">
-                            <input type="checkbox" id="saveLinkAcknowledged" required class="mt-1">
-                            <span data-key="private_link_confirm">I understand that I must save my private link after submitting.</span>
-                        </label>
+
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
@@ -456,6 +506,10 @@
                         </div>
                     </div>
 
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div><label for="ticketPin" class="block font-semibold mb-2" data-key="pin_choose">Choose a 6-digit PIN</label><input id="ticketPin" type="password" inputmode="numeric" pattern="[0-9]{6}" minlength="6" maxlength="6" autocomplete="new-password" required class="w-full border border-slate-300 p-3 rounded-lg"></div>
+                        <div><label for="ticketPinConfirm" class="block font-semibold mb-2" data-key="pin_confirm">Enter PIN again</label><input id="ticketPinConfirm" type="password" inputmode="numeric" pattern="[0-9]{6}" minlength="6" maxlength="6" autocomplete="new-password" required class="w-full border border-slate-300 p-3 rounded-lg"></div>
+                    </div>
                     <div>
                         <label class="block text-xs font-bold uppercase text-slate-700 mb-1" data-key="lbl_category">Category of Issue *</label>
                         <select id="issueCategory" class="w-full border border-slate-300 p-2.5 rounded-lg text-sm bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none">
@@ -484,16 +538,20 @@
                     <p id="savedTicketNumber" class="text-sm break-all"></p>
                     <button type="button" onclick="checkSavedTicket()" class="w-full bg-blue-900 text-white rounded-lg p-3 font-bold"><span data-ne="मेरो अनुरोध हेर्नुहोस्">Check My Request</span></button>
                     <button type="button" onclick="copyTrackingLink()" class="w-full bg-white border border-blue-900 text-blue-900 rounded-lg p-3 font-bold"><span data-ne="अनुरोध हेर्ने लिङ्क कपी गर्नुहोस्">Copy Tracking Link</span></button>
-                    <p class="text-sm"><span data-ne="यो निजी लिङ्क सुरक्षित राख्नुहोस्, जस्तै WhatsApp मा आफैँलाई पठाउनुहोस्। अनुरोध हेर्न यो लिङ्क र दर्ता गरिएको मोबाइल नम्बर दुवै चाहिन्छ। लिङ्क अरूलाई नदिनुहोस्।">Save this private link, for example in WhatsApp Message Yourself. The link and registered mobile number are required to access your request. Do not share the link with others.</span></p>
+                    <p class="text-sm"><span data-key="pin_receipt">Save this private link, for example in WhatsApp Message Yourself. The link and registered mobile number are required to access your request. Do not share the link with others.</span></p>
                     <textarea id="privateTrackingLink" readonly aria-label="Private tracking link" class="w-full border rounded p-2 text-xs" rows="3"></textarea>
                     <p id="trackingCopyMessage" class="text-sm"></p>
                 </div>
             </div>
 
+        </section>
+
+        <section id="section-track" class="hidden space-y-6">
+            <div class="service-heading"><p class="eyebrow" data-key="track_eyebrow">PRIVATE REQUEST CENTRE</p><h2 data-key="track_title">Your request, clearly tracked.</h2><p data-key="track_intro">Verify your details to view the latest status and response from support.</p></div>
             <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 space-y-4">
                 <h2 class="text-base font-bold text-slate-800 border-b pb-2 flex items-center gap-2">
                     <i class="fa-solid fa-magnifying-glass text-blue-600"></i>
-                    <span data-key="check_status">2. Track Existing Ticket Status</span>
+                    <span data-key="check_status">Verify your request</span>
                 </h2>
 
                 <div class="flex flex-col sm:flex-row gap-2">
@@ -504,7 +562,7 @@
                     </button>
                 </div>
 
-                <p class="text-sm text-slate-600"><span data-ne="आफ्नो अनुरोध हेर्न सुरक्षित राखेको निजी लिङ्क खोल्नुहोस्। हराएको छ भने टिकट नम्बर दिएर सहायता टोलीलाई सम्पर्क गर्नुहोस्।">Open your saved private link to check your request automatically. If you lost it, contact support with your ticket number.</span></p>
+                <p class="text-sm text-slate-600"><span data-key="pin_track_help">Open your saved private link to check your request automatically. If you lost it, contact support with your ticket number.</span></p>
                 <details id="legacyCodeSection" class="text-sm border rounded-lg p-3">
                     <summary class="cursor-pointer font-semibold"><span data-key="legacy_code_label">Use a previously saved access code</span></summary>
                     <p class="my-2"><span data-ne="माथि टिकट नम्बर लेख्नुहोस् र तल सुरक्षित राखेको कोड टाँस्नुहोस्। त्यसपछि खोज्नुहोस् थिच्नुहोस्। अनुरोध भेटिएपछि निजी लिङ्क कपी गर्न सक्नुहुन्छ।">Enter your ticket number above and paste your saved code below once. Then press Search. You can copy a private link after the request is found.</span></p>
@@ -514,21 +572,30 @@
                     <label for="trackPhone" class="block font-bold text-sm" data-key="track_phone_label">Registered mobile number</label>
                     <p class="text-sm" data-key="track_phone_help">Enter the same mobile number used when submitting this request, including the country code if you entered it then.</p>
                     <input id="trackPhone" type="tel" inputmode="tel" autocomplete="off" maxlength="40" class="w-full border rounded-lg p-3" aria-describedby="trackPhoneHelp">
+                    <label for="trackPin" class="block font-semibold text-sm" data-key="pin_enter">Your 6-digit PIN</label>
+                    <input id="trackPin" type="password" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="off" class="w-full border rounded-lg p-3">
+                    <p class="text-sm" data-key="pin_legacy">Old ticket without a PIN? Use your saved private link, or contact support to set a PIN after identity verification.</p>
                     <button type="button" id="btnVerifyPhone" onclick="trackTicket()" class="w-full bg-blue-900 hover:bg-blue-800 text-white rounded-lg p-3 font-bold" data-key="track_verify_submit">Submit</button>
                     <span id="trackPhoneHelp" class="text-xs" data-key="track_phone_action">Press Submit to verify your mobile number and view the status.</span>
                 </div>
                 <p id="trackProgress" role="status" aria-live="polite" class="text-sm font-semibold text-blue-900"></p>
-                <div id="statusResult" class="hidden border border-slate-200 p-4 rounded-xl bg-slate-50 space-y-3">
+                <div id="statusResult" class="hidden request-workspace space-y-5">
                     <div class="flex justify-between items-center border-b border-slate-200 pb-2">
                         <span class="font-bold text-sm text-slate-800" id="resTicketNo">Ticket #</span>
                         <span id="resStatusBadge" class="px-2.5 py-1 text-xs rounded-full font-bold uppercase bg-yellow-100 text-yellow-800">OPEN</span>
                     </div>
 
-                    <div class="text-xs space-y-1">
+                    <div class="request-facts">
+                        <div><span data-key="request_category">Category</span><strong id="resCategory">—</strong></div>
+                        <div><span data-key="request_created">Submitted</span><strong id="resCreated">—</strong></div>
+                        <div><span data-key="request_updated">Last updated</span><strong id="resUpdated">—</strong></div>
+                    </div>
+                    <div class="response-panel">
                         <p class="text-slate-500 font-semibold uppercase" data-key="lbl_hr_comment">Support Response:</p>
                         <div id="resHRComment" class="p-3 bg-white border rounded-lg text-slate-700 whitespace-pre-wrap font-sans">Under review...</div>
                     </div>
 
+                    <div class="tracking-tools"><button type="button" onclick="copyTrackingLink()" class="secondary-action" data-key="save_private_link">Copy private tracking link</button><p id="trackCopyMessage" role="status" class="text-sm"></p></div>
                     <div id="reopenBox" class="pt-2 border-t border-slate-200 space-y-2">
                         <p class="text-xs text-red-600 font-bold flex items-center gap-1" data-key="msg_not_satisfied">
                             <i class="fa-solid fa-circle-exclamation"></i> Not satisfied with the resolution?
@@ -549,7 +616,7 @@
         <div class="max-w-4xl mx-auto px-4 space-y-1">
             <p><span data-ne="कर्मचारी सहायता सेवा">Internal Employee Assistance Service</span></p>
             <p class="text-slate-500"><span data-ne="अनुमानित रकम जानकारीका लागि मात्र हो। आधिकारिक रकम SAP तलब प्रक्रियाअनुसार हुन्छ।">Approximations are for reference only. Official figures are subject to SAP payroll processing.</span></p>
-            <p class="text-blue-400 font-medium pt-1">Designed & Deployed by Jitendra — Admin (KAEFER Saudi Arabia)</p>
+            <p class="text-blue-400 font-medium pt-1">Independently maintained by Jitendra | Employee Help Portal</p>
         </div>
     </footer>
 
@@ -699,19 +766,27 @@
 
         Object.entries({"en": {"private_link_title": "Important: save your private tracking link", "private_link_notice": "After submitting, copy and save your private tracking link. It works on any device and protects your request and support response from other people. Your ticket number and mobile number alone cannot unlock your request. Keep the link private. If lost, support must verify your identity before issuing a replacement.", "private_link_confirm": "I understand that I must save my private link after submitting.", "legacy_code_label": "Use a previously saved access code", "track_link_required": "Open or paste your private tracking link, or expand “Use a previously saved access code” in this tracking section and paste your saved code there. If lost, contact support for identity-checked recovery."}, "ne": {"private_link_title": "महत्त्वपूर्ण: निजी लिङ्क सुरक्षित राख्नुहोस्", "private_link_notice": "अनुरोध पठाएपछि निजी लिङ्क कपी गरी सुरक्षित राख्नुहोस्। यो जुनसुकै उपकरणमा चल्छ र तपाईंको अनुरोध तथा जवाफ अरूबाट सुरक्षित राख्छ। टिकट र मोबाइल नम्बर मात्रले अनुरोध खोल्न मिल्दैन। लिङ्क अरूलाई नदिनुहोस्। हराएमा नयाँ लिङ्क दिनुअघि सहायता टोलीले तपाईंको पहिचान जाँच गर्नुपर्छ।", "private_link_confirm": "अनुरोध पठाएपछि निजी लिङ्क सुरक्षित राख्नुपर्छ भन्ने बुझेको छु।", "legacy_code_label": "पहिले सुरक्षित राखेको पहुँच कोड प्रयोग गर्नुहोस्", "track_link_required": "निजी लिङ्क खोल्नुहोस् वा टाँस्नुहोस्। अथवा यही खण्डमा “पहिले सुरक्षित राखेको पहुँच कोड प्रयोग गर्नुहोस्” खोलेर कोड टाँस्नुहोस्। हराएमा पहिचान जाँच गरी नयाँ लिङ्क लिन सहायता टोलीलाई सम्पर्क गर्नुहोस्।"}, "hi": {"private_link_title": "महत्वपूर्ण: अपना निजी लिंक सुरक्षित रखें", "private_link_notice": "अनुरोध भेजने के बाद निजी लिंक कॉपी करके सुरक्षित रखें। यह किसी भी डिवाइस पर काम करता है और आपकी जानकारी व सहायता के जवाब को सुरक्षित रखता है। केवल टिकट और मोबाइल नंबर से अनुरोध नहीं खुलेगा। लिंक साझा न करें। खोने पर सहायता टीम पहचान जाँचकर नया लिंक देगी।", "private_link_confirm": "मैं समझता हूँ कि अनुरोध भेजने के बाद निजी लिंक सुरक्षित रखना जरूरी है।", "legacy_code_label": "पहले सुरक्षित रखा गया एक्सेस कोड इस्तेमाल करें", "track_link_required": "निजी लिंक खोलें या पेस्ट करें, या इसी भाग में “पहले सुरक्षित रखा गया एक्सेस कोड इस्तेमाल करें” खोलकर अपना कोड पेस्ट करें। खोने पर पहचान जाँच और नए लिंक के लिए सहायता से संपर्क करें।"}, "ar": {"private_link_title": "مهم: احفظ رابط المتابعة الخاص", "private_link_notice": "بعد إرسال الطلب، انسخ الرابط الخاص واحفظه. يعمل على أي جهاز ويحمي طلبك ورد الدعم من الآخرين. رقم الطلب والجوال وحدهما لا يكفيان للوصول. لا تشارك الرابط. عند فقدانه يتحقق الدعم من هويتك قبل إصدار رابط جديد.", "private_link_confirm": "أفهم أن علي حفظ الرابط الخاص بعد إرسال الطلب.", "legacy_code_label": "استخدام رمز وصول محفوظ سابقاً", "track_link_required": "افتح الرابط الخاص أو الصقه، أو افتح «استخدام رمز وصول محفوظ سابقاً» في قسم المتابعة والصق الرمز فيه. إذا فقدته، تواصل مع الدعم للتحقق من هويتك وإصدار رابط جديد."}, "ur": {"private_link_title": "اہم: اپنا نجی ٹریکنگ لنک محفوظ رکھیں", "private_link_notice": "درخواست بھیجنے کے بعد نجی لنک کاپی اور محفوظ کریں۔ یہ کسی بھی ڈیوائس پر کام کرتا ہے اور آپ کی درخواست اور سپورٹ جواب دوسروں سے محفوظ رکھتا ہے۔ صرف ٹکٹ اور موبائل نمبر کافی نہیں۔ لنک شیئر نہ کریں۔ کھو جانے پر سپورٹ شناخت چیک کرکے نیا لنک دے گی۔", "private_link_confirm": "میں سمجھتا ہوں کہ درخواست بھیجنے کے بعد نجی لنک محفوظ کرنا ضروری ہے۔", "legacy_code_label": "پہلے محفوظ کیا گیا رسائی کوڈ استعمال کریں", "track_link_required": "نجی لنک کھولیں یا پیسٹ کریں، یا اسی ٹریکنگ حصے میں «پہلے محفوظ کیا گیا رسائی کوڈ استعمال کریں» کھول کر کوڈ پیسٹ کریں۔ کھو جانے پر شناخت کی جانچ اور نئے لنک کے لیے سپورٹ سے رابطہ کریں۔"}}).forEach(([lang,values])=>Object.assign(translations[lang],values));
 
+        Object.entries({"en": {"nav_home": "Home", "nav_submit": "New Request", "nav_track": "Track Request", "home_eyebrow": "EMPLOYEE HELP & INFORMATION", "home_title": "Stay informed. Get support.", "home_intro": "Your notice board and employee services, together in one place.", "independent_notice": "Independently maintained employee help portal. Not an official company system.", "shortcut_submit": "Send a question to support", "shortcut_track": "View progress and responses", "shortcut_calc": "Check your estimated payslip", "notice_eyebrow": "LATEST UPDATES", "notice_title": "Employee notice board", "notice_refresh": "Refresh", "notice_loading": "Loading notices…", "notice_empty": "No published notices to display. Please check again later.", "notice_error": "Notices could not be loaded. Press Refresh to try again.", "notice_checked": "Last checked", "notice_read": "Open link", "track_eyebrow": "PRIVATE REQUEST CENTRE", "track_title": "Your request, clearly tracked.", "track_intro": "Verify your details to view the latest status and response from support.", "request_category": "Category", "request_created": "Submitted", "request_updated": "Last updated", "save_private_link": "Copy private tracking link", "submit_eyebrow": "EMPLOYEE SUPPORT", "submit_title": "How can we help?", "submit_intro": "Submit your concern here. Follow its progress in the separate Track Request page."}, "ne": {"nav_home": "गृहपृष्ठ", "nav_submit": "नयाँ अनुरोध", "nav_track": "अनुरोध हेर्नुहोस्", "home_eyebrow": "कर्मचारी सहायता र सूचना", "home_title": "जानकारी लिनुहोस्। सहायता पाउनुहोस्।", "home_intro": "सूचना र कर्मचारी सेवाहरू एउटै स्थानमा।", "independent_notice": "स्वतन्त्र रूपमा सञ्चालित कर्मचारी सहायता पोर्टल। कम्पनीको आधिकारिक प्रणाली होइन।", "shortcut_submit": "सहायता टोलीलाई प्रश्न पठाउनुहोस्", "shortcut_track": "अनुरोधको प्रगति र जवाफ हेर्नुहोस्", "shortcut_calc": "अनुमानित तलब हेर्नुहोस्", "notice_eyebrow": "पछिल्ला जानकारी", "notice_title": "कर्मचारी सूचना पाटी", "notice_refresh": "पुनः हेर्नुहोस्", "notice_loading": "सूचनाहरू लोड हुँदैछन्…", "notice_empty": "अहिले प्रकाशित सूचना छैन। पछि फेरि हेर्नुहोस्।", "notice_error": "सूचनाहरू लोड भएनन्। पुनः हेर्नुहोस् थिच्नुहोस्।", "notice_checked": "पछिल्लो जाँच", "notice_read": "लिङ्क खोल्नुहोस्", "track_eyebrow": "निजी अनुरोध केन्द्र", "track_title": "आफ्नो अनुरोधको स्थिति हेर्नुहोस्।", "track_intro": "पछिल्लो स्थिति र सहायता टोलीको जवाफ हेर्न विवरण जाँच गर्नुहोस्।", "request_category": "प्रकार", "request_created": "पठाएको मिति", "request_updated": "पछिल्लो अद्यावधिक", "save_private_link": "निजी लिङ्क कपी गर्नुहोस्", "submit_eyebrow": "कर्मचारी सहायता", "submit_title": "कसरी सहायता गर्न सक्छौँ?", "submit_intro": "यहाँ समस्या पठाउनुहोस्। छुट्टै अनुरोध हेर्ने पृष्ठमा प्रगति हेर्नुहोस्।"}, "hi": {"nav_home": "होम", "nav_submit": "नया अनुरोध", "nav_track": "अनुरोध देखें", "home_eyebrow": "कर्मचारी सहायता और सूचना", "home_title": "जानकारी पाएं। सहायता लें।", "home_intro": "सूचनाएं और कर्मचारी सेवाएं एक ही जगह।", "independent_notice": "स्वतंत्र कर्मचारी सहायता पोर्टल। कंपनी की आधिकारिक प्रणाली नहीं है।", "shortcut_submit": "सहायता को प्रश्न भेजें", "shortcut_track": "प्रगति और जवाब देखें", "shortcut_calc": "अनुमानित वेतन देखें", "notice_eyebrow": "नई जानकारी", "notice_title": "कर्मचारी सूचना बोर्ड", "notice_refresh": "रीफ्रेश", "notice_loading": "सूचनाएं लोड हो रही हैं…", "notice_empty": "अभी कोई प्रकाशित सूचना नहीं है। बाद में देखें।", "notice_error": "सूचनाएं लोड नहीं हुईं। रीफ्रेश दबाएं।", "notice_checked": "पिछली जाँच", "notice_read": "लिंक खोलें", "track_eyebrow": "निजी अनुरोध केंद्र", "track_title": "अपने अनुरोध की स्थिति देखें।", "track_intro": "नवीनतम स्थिति और सहायता का जवाब देखने के लिए विवरण सत्यापित करें।", "request_category": "श्रेणी", "request_created": "जमा किया", "request_updated": "अंतिम अपडेट", "save_private_link": "निजी लिंक कॉपी करें", "submit_eyebrow": "कर्मचारी सहायता", "submit_title": "हम कैसे मदद करें?", "submit_intro": "समस्या यहाँ दर्ज करें। अलग अनुरोध देखें पृष्ठ पर प्रगति देखें।"}, "ar": {"nav_home": "الرئيسية", "nav_submit": "طلب جديد", "nav_track": "متابعة الطلب", "home_eyebrow": "مساعدة الموظفين والمعلومات", "home_title": "ابق على اطلاع. احصل على الدعم.", "home_intro": "لوحة الإعلانات وخدمات الموظفين في مكان واحد.", "independent_notice": "بوابة مساعدة مستقلة للموظفين. ليست نظاماً رسمياً للشركة.", "shortcut_submit": "أرسل سؤالاً للدعم", "shortcut_track": "تابع التقدم والردود", "shortcut_calc": "راجع راتبك التقديري", "notice_eyebrow": "آخر المستجدات", "notice_title": "لوحة إعلانات الموظفين", "notice_refresh": "تحديث", "notice_loading": "جارٍ تحميل الإعلانات…", "notice_empty": "لا توجد إعلانات منشورة حالياً. تحقق لاحقاً.", "notice_error": "تعذر تحميل الإعلانات. اضغط تحديث للمحاولة.", "notice_checked": "آخر تحقق", "notice_read": "فتح الرابط", "track_eyebrow": "مركز الطلبات الخاص", "track_title": "تابع طلبك بوضوح.", "track_intro": "تحقق من بياناتك لعرض أحدث حالة ورد الدعم.", "request_category": "الفئة", "request_created": "تاريخ التقديم", "request_updated": "آخر تحديث", "save_private_link": "نسخ رابط المتابعة الخاص", "submit_eyebrow": "دعم الموظفين", "submit_title": "كيف يمكننا مساعدتك؟", "submit_intro": "أرسل طلبك هنا. تابع تقدمه في صفحة متابعة الطلب المنفصلة."}, "ur": {"nav_home": "ہوم", "nav_submit": "نئی درخواست", "nav_track": "درخواست دیکھیں", "home_eyebrow": "ملازمین کی مدد اور معلومات", "home_title": "باخبر رہیں۔ مدد حاصل کریں۔", "home_intro": "نوٹس بورڈ اور ملازمین کی خدمات ایک جگہ۔", "independent_notice": "آزاد ملازمین ہیلپ پورٹل۔ کمپنی کا سرکاری نظام نہیں۔", "shortcut_submit": "سپورٹ کو سوال بھیجیں", "shortcut_track": "پیش رفت اور جواب دیکھیں", "shortcut_calc": "تخمینہ شدہ تنخواہ دیکھیں", "notice_eyebrow": "تازہ معلومات", "notice_title": "ملازمین کا نوٹس بورڈ", "notice_refresh": "ریفریش", "notice_loading": "نوٹس لوڈ ہو رہے ہیں…", "notice_empty": "ابھی کوئی شائع شدہ نوٹس نہیں۔ بعد میں دیکھیں۔", "notice_error": "نوٹس لوڈ نہیں ہوئے۔ ریفریش دبائیں۔", "notice_checked": "آخری جانچ", "notice_read": "لنک کھولیں", "track_eyebrow": "نجی درخواست مرکز", "track_title": "اپنی درخواست کی حالت دیکھیں۔", "track_intro": "تازہ اسٹیٹس اور سپورٹ جواب کے لیے اپنی تفصیلات کی تصدیق کریں۔", "request_category": "قسم", "request_created": "جمع کرنے کی تاریخ", "request_updated": "آخری اپ ڈیٹ", "save_private_link": "نجی ٹریکنگ لنک کاپی کریں", "submit_eyebrow": "ملازمین کی سپورٹ", "submit_title": "ہم کیسے مدد کریں؟", "submit_intro": "اپنا مسئلہ یہاں جمع کریں۔ الگ درخواست دیکھیں صفحے پر پیش رفت دیکھیں۔"}}).forEach(([lang,values])=>Object.assign(translations[lang],values));
+
+
+Object.assign(translations.en,{"pin_choose": "Choose a 6-digit PIN", "pin_confirm": "Enter PIN again", "pin_enter": "Your 6-digit PIN", "pin_mismatch": "Enter the same six digits in both PIN fields.", "pin_auth_failed": "Check your ticket number, registered mobile number and PIN.", "pin_receipt": "Keep your ticket number and PIN safe. Use them with your mobile number on any device. The private link is an optional backup; keep it private.", "pin_track_help": "Enter your ticket number, then your registered mobile number and PIN. Forgotten PIN? Contact support for identity verification.", "pin_legacy": "Old ticket without a PIN? Use your saved private link, or contact support to set a PIN after identity verification.", "private_link_title": "Simple, private tracking — no SMS charge", "private_link_notice": "Choose a six-digit PIN you can remember. You will use your ticket number, registered mobile number and PIN to check your request on any device. Do not share your PIN. Support can help with a forgotten PIN after checking your identity.", "track_phone_action": "Enter your mobile number and PIN, then press Submit."});
+Object.assign(translations.ne,{"pin_choose": "६ अङ्कको PIN छान्नुहोस्", "pin_confirm": "PIN फेरि लेख्नुहोस्", "pin_enter": "तपाईंको ६ अङ्कको PIN", "pin_mismatch": "दुवै ठाउँमा एउटै ६ अङ्कको PIN लेख्नुहोस्।", "pin_auth_failed": "टिकट नम्बर, दर्ता गरिएको मोबाइल नम्बर र PIN जाँच्नुहोस्।", "pin_receipt": "टिकट नम्बर र PIN सुरक्षित राख्नुहोस्। मोबाइल नम्बरसँगै जुनसुकै उपकरणमा प्रयोग गर्न सक्नुहुन्छ। निजी लिङ्क वैकल्पिक हो; अरूलाई नदिनुहोस्।", "pin_track_help": "टिकट नम्बरपछि दर्ता गरिएको मोबाइल नम्बर र PIN लेख्नुहोस्। PIN बिर्सिएमा पहिचान जाँचका लागि सहायता टोलीलाई सम्पर्क गर्नुहोस्।", "pin_legacy": "पुरानो टिकटमा PIN छैन? सुरक्षित निजी लिङ्क प्रयोग गर्नुहोस् वा पहिचान जाँचपछि PIN बनाउन सहायता टोलीलाई सम्पर्क गर्नुहोस्।", "private_link_title": "सरल र निजी ट्र्याकिङ — SMS शुल्क छैन", "private_link_notice": "सम्झन सक्ने ६ अङ्कको PIN छान्नुहोस्। जुनसुकै उपकरणमा टिकट नम्बर, दर्ता गरिएको मोबाइल नम्बर र PIN प्रयोग गर्नुहोस्। PIN अरूलाई नदिनुहोस्। बिर्सिएमा पहिचान जाँचपछि सहायता पाउन सक्नुहुन्छ।", "track_phone_action": "मोबाइल नम्बर र PIN लेखेर Submit थिच्नुहोस्।"});
+Object.assign(translations.hi,{"pin_choose": "6 अंकों का PIN चुनें", "pin_confirm": "PIN दोबारा लिखें", "pin_enter": "आपका 6 अंकों का PIN", "pin_mismatch": "दोनों स्थानों पर एक ही 6 अंक लिखें।", "pin_auth_failed": "टिकट नंबर, पंजीकृत मोबाइल नंबर और PIN जाँचें।", "pin_receipt": "टिकट नंबर और PIN सुरक्षित रखें। मोबाइल नंबर के साथ किसी भी डिवाइस पर उपयोग करें। निजी लिंक वैकल्पिक है; इसे साझा न करें।", "pin_track_help": "टिकट नंबर के बाद पंजीकृत मोबाइल नंबर और PIN लिखें। PIN भूलने पर पहचान सत्यापन के लिए सहायता से संपर्क करें।", "pin_legacy": "पुराने टिकट में PIN नहीं है? निजी लिंक उपयोग करें या पहचान सत्यापन के बाद सहायता से PIN बनवाएँ।", "private_link_title": "सरल, निजी ट्रैकिंग — SMS शुल्क नहीं", "private_link_notice": "याद रखने योग्य 6 अंकों का PIN चुनें। किसी भी डिवाइस पर टिकट नंबर, पंजीकृत मोबाइल नंबर और PIN से स्थिति देखें। PIN साझा न करें। भूलने पर पहचान जाँच के बाद सहायता मिलेगी।", "track_phone_action": "मोबाइल नंबर और PIN लिखकर Submit दबाएँ।"});
+Object.assign(translations.ar,{"pin_choose": "اختر رمز PIN من 6 أرقام", "pin_confirm": "أدخل الرمز مرة أخرى", "pin_enter": "رمز PIN الخاص بك من 6 أرقام", "pin_mismatch": "أدخل نفس الأرقام الستة في الحقلين.", "pin_auth_failed": "تحقق من رقم الطلب ورقم الجوال المسجل ورمز PIN.", "pin_receipt": "احتفظ برقم الطلب ورمز PIN بأمان. استخدمهما مع رقم الجوال على أي جهاز. الرابط الخاص اختياري؛ لا تشاركه.", "pin_track_help": "أدخل رقم الطلب ثم رقم الجوال المسجل ورمز PIN. نسيت الرمز؟ تواصل مع الدعم للتحقق من هويتك.", "pin_legacy": "طلب قديم بلا PIN؟ استخدم رابطك الخاص أو تواصل مع الدعم لإعداد رمز بعد التحقق من الهوية.", "private_link_title": "متابعة سهلة وخاصة — دون رسوم SMS", "private_link_notice": "اختر رمزاً من ستة أرقام يمكنك تذكره. تابع طلبك على أي جهاز باستخدام رقم الطلب والجوال المسجل والرمز. لا تشارك الرمز. يساعدك الدعم بعد التحقق من الهوية إذا نسيته.", "track_phone_action": "أدخل رقم الجوال ورمز PIN ثم اضغط إرسال."});
+Object.assign(translations.ur,{"pin_choose": "6 ہندسوں کا PIN منتخب کریں", "pin_confirm": "PIN دوبارہ لکھیں", "pin_enter": "آپ کا 6 ہندسوں کا PIN", "pin_mismatch": "دونوں خانوں میں یکساں 6 ہندسے لکھیں۔", "pin_auth_failed": "ٹکٹ نمبر، رجسٹرڈ موبائل نمبر اور PIN چیک کریں۔", "pin_receipt": "ٹکٹ نمبر اور PIN محفوظ رکھیں۔ موبائل نمبر کے ساتھ کسی بھی ڈیوائس پر استعمال کریں۔ نجی لنک اختیاری ہے؛ اسے شیئر نہ کریں۔", "pin_track_help": "ٹکٹ نمبر کے بعد رجسٹرڈ موبائل نمبر اور PIN لکھیں۔ PIN بھول جائیں تو شناخت کی تصدیق کے لیے مدد سے رابطہ کریں۔", "pin_legacy": "پرانے ٹکٹ کا PIN نہیں؟ نجی لنک استعمال کریں یا شناخت کی تصدیق کے بعد مدد سے PIN بنوائیں۔", "private_link_title": "آسان، نجی ٹریکنگ — SMS فیس نہیں", "private_link_notice": "یاد رہنے والا 6 ہندسوں کا PIN منتخب کریں۔ کسی بھی ڈیوائس پر ٹکٹ نمبر، رجسٹرڈ موبائل نمبر اور PIN سے درخواست دیکھیں۔ PIN شیئر نہ کریں۔ بھولنے پر شناخت کی تصدیق کے بعد مدد ملے گی۔", "track_phone_action": "موبائل نمبر اور PIN لکھ کر Submit دبائیں۔"});
+        let currentTab='home';
         function switchTab(tab) {
-            const validTabs = ['calc', 'forms', 'support'];
-            if (!validTabs.includes(tab)) tab = 'calc';
-
-            document.getElementById('section-calc').classList.toggle('hidden', tab !== 'calc');
-            document.getElementById('section-forms').classList.toggle('hidden', tab !== 'forms');
-            document.getElementById('section-support').classList.toggle('hidden', tab !== 'support');
-
-            ['calc', 'forms', 'support'].forEach(name => {
-                const el = document.getElementById('tab-' + name);
-                const active = name === tab;
-                el.className = `w-1/3 py-3.5 ${active ? 'tab-active' : 'tab-inactive'} flex justify-center items-center gap-2 text-sm transition-all`;
+            const tabs=['home','calc','forms','support','track'];
+            if (!tabs.includes(tab)) tab='home';
+            currentTab=tab;
+            tabs.forEach(name=>{
+                document.getElementById('section-'+name).classList.toggle('hidden',name!==tab);
+                const button=document.getElementById('tab-'+name);
+                button.className='portal-tab '+(name===tab?'portal-tab-active':'');
+                button.setAttribute('aria-selected',String(name===tab));
             });
+            if (tab==='home') loadNotices();
+            window.scrollTo({top:0,behavior:'smooth'});
         }
 
         const nepaliMessages = {"Link copied. Save it in a private place.": "लिङ्क कपी भयो। सुरक्षित स्थानमा राख्नुहोस्।", "Select and copy the link above, then save it in a private place.": "माथिको लिङ्क छानेर कपी गर्नुहोस् र सुरक्षित राख्नुहोस्।", "Your request was sent back to support.": "तपाईंको अनुरोध सहायता टोलीमा पुनः पठाइयो।", "Please type a reason.": "कृपया कारण लेख्नुहोस्।", "Check your request using its private link first.": "पहिले निजी लिङ्कबाट अनुरोध हेर्नुहोस्।", "Under review...": "समीक्षा हुँदैछ...", "Ticket update failed. Please try again or contact support.": "अनुरोध अद्यावधिक भएन। फेरि प्रयास गर्नुहोस् वा सहायता टोलीलाई सम्पर्क गर्नुहोस्।", "Please open or paste your saved private tracking link. If you saved an old code, use the old access code option. Otherwise contact support with your ticket number.": "सुरक्षित राखेको निजी लिङ्क खोल्नुहोस् वा टाँस्नुहोस्। पुरानो कोड छ भने त्यसको विकल्प प्रयोग गर्नुहोस्। अन्यथा टिकट नम्बर दिएर सहायता टोलीलाई सम्पर्क गर्नुहोस्।"};
@@ -745,6 +820,7 @@
                 document.getElementById('trackingCopyMessage').textContent = '';
             }
             updateNokShare();
+            if (typeof noticeRecords!=='undefined') renderNotices();
         }
 
         async function fetchVisitorCount() {
@@ -1057,10 +1133,12 @@
                 empId: document.getElementById('empId').value.trim(),
                 phone: document.getElementById('empPhone').value.trim(),
                 category: document.getElementById('issueCategory').value,
-                details: document.getElementById('issueDetails').value.trim()
+                details: document.getElementById('issueDetails').value.trim(),
+                pin: document.getElementById('ticketPin').value
             };
 
             try {
+                if (!/^\d{6}$/.test(payload.pin) || payload.pin!==document.getElementById('ticketPinConfirm').value) throw new Error(trackMessage('pin_mismatch'));
                 payload.requestId=requestIdFor('CREATE_TICKET',payload);
                 const data=await portalRequest(payload);
                 if (data.success) {
@@ -1121,7 +1199,7 @@
 
         async function copyTrackingLink() {
             const input = document.getElementById('privateTrackingLink');
-            const message = document.getElementById('trackingCopyMessage');
+            const message = document.getElementById(currentTab==='track'?'trackCopyMessage':'trackingCopyMessage');
             try {
                 await navigator.clipboard.writeText(input.value);
                 message.textContent = uiText('Link copied. Save it in a private place.');
@@ -1133,6 +1211,7 @@
 
         function checkSavedTicket() {
             if (!latestTracking) return;
+            switchTab('track');
             document.getElementById('trackTicketId').value = latestTracking.ticketId;
             trackTicket();
         }
@@ -1161,16 +1240,14 @@
             }
             if (showPhoneOnly || trackingPhoneForTicket !== ticketId || phoneBox.hidden) {
                 trackingPhoneForTicket = ticketId;
-                phoneInput.value = ''; phoneBox.hidden = false;
+                phoneInput.value = ''; document.getElementById('trackPin').value=''; phoneBox.hidden = false;
                 progress.textContent = trackMessage('track_phone_action');
                 phoneInput.focus(); phoneBox.scrollIntoView({behavior:'smooth', block:'nearest'});
                 return;
             }
-            if (!validTicketAccess(ticketId,accessToken)) {
-                progress.textContent = trackMessage('track_link_required');
-                document.getElementById('legacyCodeSection').open=true;
-                document.getElementById('legacyTicketCode').focus();
-                return;
+            const pin = document.getElementById('trackPin').value;
+            if (!validTicketAccess(ticketId,accessToken) && !/^\d{6}$/.test(pin)) {
+                progress.textContent = trackMessage('pin_enter'); document.getElementById('trackPin').focus(); return;
             }
             const phone = phoneInput.value.trim();
             if (!/^[+\d\s().-]+$/.test(phone) || phone.replace(/\D/g,'').length < 7 || phone.replace(/\D/g,'').length > 15) {
@@ -1178,14 +1255,14 @@
             }
             trackingBusy = true;
             const originalButton = button.innerHTML;
-            button.disabled = true; searchButton.disabled = true; input.disabled = true; phoneInput.disabled = true;
+            button.disabled = true; searchButton.disabled = true; input.disabled = true; phoneInput.disabled = true; document.getElementById('trackPin').disabled=true;
             button.setAttribute('aria-busy', 'true');
             button.textContent = trackMessage('track_loading');
             progress.textContent = trackMessage('track_wait');
             try {
-                const data=await portalRequest({action:'TRACK_TICKET',ticketId,phone,accessToken});
+                const data=await portalRequest({action:'TRACK_TICKET',ticketId,phone,accessToken,pin:pin||undefined});
                 if (!data.found) {
-                    progress.textContent = data.code==='RATE_LIMITED' ? trackMessage('track_limited') : data.code==='AUTH_REQUIRED' ? trackMessage('track_link_required') : data.code==='AUTH_FAILED' ? trackMessage('track_mismatch') : trackMessage('track_connection');
+                    progress.textContent = data.code==='RATE_LIMITED' ? trackMessage('track_limited') : data.code==='AUTH_REQUIRED' ? trackMessage('track_link_required') : data.code==='AUTH_FAILED' ? trackMessage('pin_auth_failed') : trackMessage('track_connection');
                     if (data.code==='AUTH_REQUIRED') document.getElementById('legacyCodeSection').open=true;
                     return;
                 }
@@ -1197,6 +1274,9 @@
                 resDiv.classList.remove('hidden');
                 document.getElementById('resTicketNo').textContent = 'Ticket #' + ticketId;
                 document.getElementById('resStatusBadge').textContent = data.status;
+                document.getElementById('resCategory').textContent=data.category||'—';
+                document.getElementById('resCreated').textContent=formatPortalDate(data.createdAt);
+                document.getElementById('resUpdated').textContent=formatPortalDate(data.updatedAt);
                 document.getElementById('resHRComment').textContent = data.hrComment || uiText('Under review...');
                 progress.textContent = trackMessage('track_verified');
                 resDiv.scrollIntoView({behavior:'smooth', block:'nearest'});
@@ -1204,11 +1284,13 @@
                 progress.textContent = trackMessage('track_connection');
             } finally {
                 trackingBusy = false;
-                button.disabled = false; searchButton.disabled = false; input.disabled = false; phoneInput.disabled = false;
+                button.disabled = false; searchButton.disabled = false; input.disabled = false; phoneInput.disabled = false; document.getElementById('trackPin').disabled=false;
                 button.removeAttribute('aria-busy'); button.innerHTML = originalButton;
             }
         }
 
+        document.getElementById('trackPin').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();trackTicket();}});
+        document.getElementById('trackPin').addEventListener('input',()=>{verifiedTicketId=null;document.getElementById('statusResult').classList.add('hidden');});
         async function reopenTicket() {
             const ticketId = verifiedTicketId;
             const comment = document.getElementById('reopenComment').value.trim();
@@ -1236,9 +1318,46 @@
             if (!access) { alert(uiText('This tracking link is invalid. Contact support.')); return; }
             ticketAccess.set(access.ticketId, access.accessToken);
             document.getElementById('trackTicketId').value = access.ticketId;
-            switchTab('support');
+            switchTab('track');
             trackTicket();
         }
+
+        let noticeRecords=[], noticesBusy=false, noticesLoadedAt=0, noticeFeedError=false;
+        function formatPortalDate(value) {
+            if (!value || !Number.isFinite(Date.parse(value))) return '—';
+            const lang=document.getElementById('langSelect').value;
+            return new Intl.DateTimeFormat(lang,{dateStyle:'medium',timeStyle:'short',timeZone:'Asia/Riyadh'}).format(new Date(value));
+        }
+        function renderNotices() {
+            const lang=document.getElementById('langSelect').value.toUpperCase();
+            const list=document.getElementById('noticeList');list.replaceChildren();
+            const visible=noticeRecords.filter(n=>(n.language==='ALL'||n.language===lang)&&(!n.expiresAt||Date.parse(n.expiresAt)>Date.now()));
+            visible.forEach(n=>{
+                const card=document.createElement('article');card.className='notice-card';card.dataset.priority=n.priority;
+                const meta=document.createElement('div');meta.className='notice-meta';
+                const tag=document.createElement('span');tag.textContent=[n.category,n.priority==='NORMAL'?'':n.priority].filter(Boolean).join(' · ');
+                const date=document.createElement('time');date.dateTime=n.publishedAt;date.textContent=formatPortalDate(n.publishedAt);meta.append(tag,date);
+                const title=document.createElement('h3');title.textContent=n.title;
+                const body=document.createElement('p');body.className='notice-body';body.textContent=n.message;card.append(meta,title,body);
+                try { const url=new URL(n.linkUrl);if(url.protocol==='https:'&&!url.username&&!url.password) { const link=document.createElement('a');link.href=url.href;link.target='_blank';link.rel='noopener noreferrer';link.className='secondary-action';link.textContent=n.linkLabel||trackMessage('notice_read');card.append(link); } } catch (_) {}
+                list.append(card);
+            });
+            if (!noticesBusy) document.getElementById('noticeFeedStatus').textContent=noticeFeedError?trackMessage('notice_error'):visible.length?'':trackMessage('notice_empty');
+        }
+        async function loadNotices(force=false) {
+            if(noticesBusy)return;
+            if(!force&&noticesLoadedAt&&Date.now()-noticesLoadedAt<60000)return;
+            noticesBusy=true;const button=document.getElementById('btnRefreshNotices');button.disabled=true;
+            const status=document.getElementById('noticeFeedStatus');status.textContent=trackMessage('notice_loading');
+            try {
+                const data=await portalRequest({action:'GET_NOTICES'});
+                if(!data.success||!Array.isArray(data.notices))throw new Error('Notice feed unavailable');
+                noticeRecords=data.notices;noticesLoadedAt=Date.now();noticesBusy=false;noticeFeedError=false;renderNotices();
+                document.getElementById('noticeLastChecked').textContent=trackMessage('notice_checked')+': '+formatPortalDate(data.fetchedAt);
+            } catch (_) { noticeFeedError=true;noticesBusy=false;renderNotices(); }
+            finally { noticesBusy=false;button.disabled=false; }
+        }
+        setInterval(()=>{if(currentTab==='home'&&!document.hidden)loadNotices(true);},120000);
 
         document.getElementById('trackTicketId').addEventListener('input', () => {
             verifiedTicketId = null;
@@ -1262,6 +1381,7 @@
         calculate();
         toggleSecondNominee();
         fetchVisitorCount();
+        switchTab('home');
         loadPrivateTrackingLink();
     </script>
 </body>
