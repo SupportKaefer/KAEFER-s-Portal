@@ -5,6 +5,14 @@
     <meta name="referrer" content="no-referrer">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Employee Self-Service & Support Portal</title>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com data:; img-src 'self' data: blob:; connect-src 'self' https://script.google.com https://script.googleusercontent.com; object-src 'none'; base-uri 'none'; form-action 'none'">
+    <script>
+        let initialPrivateTrackingUrl = '';
+        if (location.hash.startsWith('#ticket=')) {
+            initialPrivateTrackingUrl = location.href;
+            history.replaceState(null, '', location.pathname + location.search);
+        }
+    </script>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
@@ -411,11 +419,11 @@
                     </div>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-                    <a href="https://play.google.com/store/apps/details?id=com.successfactors.successfactors&pcampaignid=web_share" target="_blank" 
+                    <a href="https://play.google.com/store/apps/details?id=com.successfactors.successfactors&pcampaignid=web_share" target="_blank" rel="noopener noreferrer" 
                        class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white text-xs px-4 py-2.5 rounded-lg font-semibold flex items-center justify-center gap-2.5 transition-all shadow">
                         <i class="fa-brands fa-google-play text-green-400 text-base"></i> Google Play (Android)
                     </a>
-                    <a href="https://apps.apple.com/us/app/sap-successfactors-mobile/id426562526" target="_blank" 
+                    <a href="https://apps.apple.com/us/app/sap-successfactors-mobile/id426562526" target="_blank" rel="noopener noreferrer" 
                        class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white text-xs px-4 py-2.5 rounded-lg font-semibold flex items-center justify-center gap-2.5 transition-all shadow">
                         <i class="fa-brands fa-app-store text-blue-400 text-base"></i> App Store (iOS)
                     </a>
@@ -541,6 +549,32 @@
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx3VxFUifCyxPpd9s1JI6ZL4a2RUY2PrsPRnkIY3ep5XNnt0wAA20gpB-uAIXJh75IU/exec";
 
+        const pendingRequestIds = new Map();
+        function requestIdFor(action, content) {
+            const signature = JSON.stringify(content);
+            const previous = pendingRequestIds.get(action);
+            if (previous && previous.signature === signature) return previous.id;
+            const bytes = crypto.getRandomValues(new Uint8Array(16));
+            bytes[6]=(bytes[6]&15)|64;bytes[8]=(bytes[8]&63)|128;
+            const hex=Array.from(bytes,b=>b.toString(16).padStart(2,'0')).join('');
+            const id=hex.slice(0,8)+'-'+hex.slice(8,12)+'-'+hex.slice(12,16)+'-'+hex.slice(16,20)+'-'+hex.slice(20);
+            pendingRequestIds.set(action,{signature,id});return id;
+        }
+        async function portalRequest(payload) {
+            const controller = new AbortController();
+            const timeout = setTimeout(()=>controller.abort(),25000);
+            try {
+                const response=await fetch(SCRIPT_URL,{method:'POST',redirect:'follow',credentials:'omit',cache:'no-store',referrerPolicy:'no-referrer',signal:controller.signal,headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});
+                if (!response.ok) throw new Error('Portal connection failed. Please retry.');
+                let data;try { data=await response.json(); } catch (_) { throw new Error('Unexpected server response. Check deployment access and try again.'); }
+                if (!data || typeof data!=='object' || Array.isArray(data) || typeof data.success!=='boolean') throw new Error('Unexpected server response.');
+                return data;
+            } catch (err) {
+                if (err.name==='AbortError') throw new Error('Connection timed out. The server may have saved your submission. Retry the same details; do not create a different request.');
+                throw err;
+            } finally { clearTimeout(timeout); }
+        }
+
         const translations = {
             en: {
                 header_title: "Employee Portal", header_sub: "Payslip Calculator & Support Center",
@@ -647,6 +681,14 @@
             ur:{track_verify_submit:'جمع کریں',track_phone_action:'موبائل نمبر کی تصدیق اور اسٹیٹس دیکھنے کے لیے جمع کریں دبائیں۔'}
         }).forEach(([lang, values]) => Object.assign(translations[lang], values));
 
+        Object.entries({
+            en:'Open or paste your saved private tracking link, or enter your old code below. Ticket number and mobile number alone cannot grant access. If the link/code is lost, contact support.',
+            ne:'निजी लिङ्क खोल्नुहोस् वा टाँस्नुहोस्, अथवा तल पुरानो कोड लेख्नुहोस्। टिकट र मोबाइल नम्बर मात्रले पहुँच दिँदैन। लिङ्क वा कोड हराएमा सहायता टोलीलाई सम्पर्क गर्नुहोस्।',
+            hi:'निजी लिंक खोलें या पेस्ट करें, या नीचे पुराना कोड दर्ज करें। केवल टिकट और मोबाइल नंबर से प्रवेश नहीं मिलेगा। लिंक/कोड खो गया हो तो सहायता से संपर्क करें।',
+            ar:'افتح الرابط الخاص أو الصقه، أو أدخل الرمز السابق أدناه. رقم الطلب والجوال وحدهما لا يمنحان الوصول. تواصل مع الدعم إذا فقدت الرابط أو الرمز.',
+            ur:'نجی لنک کھولیں یا پیسٹ کریں، یا نیچے پرانا کوڈ درج کریں۔ صرف ٹکٹ اور موبائل نمبر کافی نہیں۔ لنک یا کوڈ کھو گیا ہو تو سپورٹ سے رابطہ کریں۔'
+        }).forEach(([lang,text])=>translations[lang].track_link_required=text);
+
         function switchTab(tab) {
             const validTabs = ['calc', 'forms', 'support'];
             if (!validTabs.includes(tab)) tab = 'calc';
@@ -696,14 +738,14 @@
         }
 
         async function fetchVisitorCount() {
-            const countEl = document.getElementById('visitorCount');
+            const countEl=document.getElementById('visitorCount');
+            const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),10000);
             try {
-                const response = await fetch(`${SCRIPT_URL}?action=VISITOR_COUNT`, { redirect: "follow" });
-                const data = await response.json();
-                countEl.innerText = (data && data.success) ? data.count.toLocaleString() : "1,250";
-            } catch (error) {
-                countEl.innerText = "1,250";
-            }
+                const response=await fetch(`${SCRIPT_URL}?action=VISITOR_COUNT`,{redirect:'follow',credentials:'omit',cache:'no-store',signal:controller.signal});
+                const data=await response.json();
+                countEl.textContent=response.ok && data.success && Number.isFinite(data.count) ? data.count.toLocaleString() : '—';
+            } catch (_) { countEl.textContent='—'; }
+            finally { clearTimeout(timer); }
         }
 
         function calculate() {
@@ -868,12 +910,22 @@
         }
 
         async function generateNextOfKinPdf(data, submissionId) {
-            const templateResponse = await fetch(NOK_PDF_TEMPLATE_URL, { cache: "no-store" });
-            if (!templateResponse.ok) throw new Error("Official PDF template could not be loaded. Check the GitHub PDF filename/path.");
+            const controller=new AbortController();
+            const timer=setTimeout(()=>controller.abort(),15000);
+            let templateBytes;
+            try {
+                const templateResponse=await fetch(NOK_PDF_TEMPLATE_URL,{cache:'no-store',signal:controller.signal});
+                if (!templateResponse.ok) throw new Error('Official PDF template could not be loaded.');
+                templateBytes=await templateResponse.arrayBuffer();
+            } finally { clearTimeout(timer); }
 
-            const templateBytes = await templateResponse.arrayBuffer();
+
+
             const pdfDoc = await PDFLib.PDFDocument.load(templateBytes);
             const font = await pdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
+            try {
+                for (const record of [data.declarant,data.nominee1,data.nominee2]) for (const value of Object.values(record)) font.encodeText(String(value));
+            } catch (_) { throw new Error('The official PDF font supports Latin characters only. Enter PDF details in English/Latin characters before submitting.'); }
             const pages = pdfDoc.getPages();
 
             if (pages.length < 2) throw new Error("The official template must contain two pages.");
@@ -922,21 +974,17 @@
         }
 
         async function markNokPdfGenerated(submissionId, accessToken) {
-            try {
-                await fetch(SCRIPT_URL, {
-                    method: "POST",
-                    redirect: "follow",
-                    headers: { "Content-Type": "text/plain;charset=utf-8" },
-                    body: JSON.stringify({ action: "UPDATE_NOK_STATUS", submissionId, accessToken, status: "PDF GENERATED" })
-                });
-            } catch (_) {}
+            const result=await portalRequest({action:'UPDATE_NOK_STATUS',submissionId,accessToken,status:'PDF GENERATED'});
+            if (!result.success) throw new Error(result.error || 'PDF status was not updated.');
         }
 
         async function handleNextOfKinSubmit(e) {
             e.preventDefault();
             const btn = document.getElementById('btnNokSubmit');
+            if (btn.disabled) return;
             const msg = document.getElementById('nokMsg');
             const original = btn.innerHTML;
+            let savedReference = '';
 
             btn.disabled = true;
             btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i><span>' + uiText('Saving data...') + '</span>';
@@ -947,19 +995,14 @@
                 validateNokData(data);
                 await generateNextOfKinPdf(data, "Layout validation");
 
-                const response = await fetch(SCRIPT_URL, {
-                    method: "POST",
-                    redirect: "follow",
-                    headers: { "Content-Type": "text/plain;charset=utf-8" },
-                    body: JSON.stringify({ action: "CREATE_NEXT_OF_KIN", ...data })
-                });
-
-                const result = await response.json();
+                const requestId=requestIdFor('CREATE_NEXT_OF_KIN',data);
+                const result=await portalRequest({action:'CREATE_NEXT_OF_KIN',requestId,...data});
                 if (!result.success) throw new Error(result.error || "The application could not be recorded.");
                 if (typeof result.submissionId !== "string" || !/^NOK-\d{8}-\d+$/.test(result.submissionId)) {
                     throw new Error("The server did not return a valid Next-of-Kin reference. The record may already have been saved; check NEXT_OF_KIN_APPLICATIONS before submitting again. Update the existing Apps Script deployment to the matching backend version.");
                 }
 
+                savedReference=result.submissionId;
                 btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i><span>' + uiText('Preparing official PDF...') + '</span>';
                 const pdfBytes = await generateNextOfKinPdf(data, result.submissionId);
 
@@ -972,19 +1015,18 @@
                     ? result.pdfFileName : fallbackFileName;
 
                 downloadPdfBytes(pdfBytes, fileName);
-                markNokPdfGenerated(result.submissionId, result.accessToken);
+                let statusWarning='';
+                try { await markNokPdfGenerated(result.submissionId,result.accessToken); } catch (_) { statusWarning=' PDF downloaded, but its sheet status was not confirmed. Contact support with your reference.'; }
 
                 msg.className = 'p-4 rounded-lg text-xs font-semibold bg-green-50 text-green-800 border border-green-200 space-y-1';
-                msg.innerHTML = `<div>✅ Data saved successfully.</div>
-                                 <div>Reference: <code class="font-mono font-bold">${result.submissionId}</code></div>
-                                 <div>The PDF download has started. Print it and complete Section 4 manually.</div>`;
+                msg.textContent = `Data saved. Reference: ${result.submissionId}. The PDF download has started. Print it and complete Section 4 manually.${statusWarning}`;
                 msg.classList.remove('hidden');
 
                 document.getElementById('nokForm').reset();
                 toggleSecondNominee();
             } catch (err) {
                 msg.className = 'p-4 rounded-lg text-xs font-semibold bg-red-50 text-red-800 border border-red-200';
-                msg.textContent = '⚠️ ' + err.message;
+                msg.textContent = (savedReference ? 'Data was saved under '+savedReference+'. Download failed. Retry the same details to recover this record. ' : '') + err.message;
                 msg.classList.remove('hidden');
             } finally {
                 btn.disabled = false;
@@ -995,6 +1037,7 @@
         async function submitTicket(e) {
             e.preventDefault();
             const btn = document.getElementById('btnSubmit');
+            if (btn.disabled) return;
             const originalContent = btn.innerHTML;
             btn.innerText = uiText('Submitting...');
             btn.disabled = true;
@@ -1008,14 +1051,8 @@
             };
 
             try {
-                const response = await fetch(SCRIPT_URL, {
-                    method: "POST",
-                    redirect: "follow",
-                    headers: { "Content-Type": "text/plain;charset=utf-8" },
-                    body: JSON.stringify(payload)
-                });
-                const data = await response.json();
-
+                payload.requestId=requestIdFor('CREATE_TICKET',payload);
+                const data=await portalRequest(payload);
                 if (data.success) {
                     showTrackingReceipt(data.ticketId, data.accessToken);
                     document.getElementById('supportForm').reset();
@@ -1029,7 +1066,7 @@
                     alert("⚠️ Server Warning: " + (data.error || "Could not process request."));
                 }
             } catch (err) {
-                alert("⚠️ Connection error or request processing issue.");
+                alert(err.message || "Connection error. Retry the same details.");
             } finally {
                 btn.innerHTML = originalContent;
                 btn.disabled = false;
@@ -1119,6 +1156,9 @@
                 phoneInput.focus(); phoneBox.scrollIntoView({behavior:'smooth', block:'nearest'});
                 return;
             }
+            if (!validTicketAccess(ticketId,accessToken)) {
+                progress.textContent = trackMessage('track_link_required'); return;
+            }
             const phone = phoneInput.value.trim();
             if (!/^[+\d\s().-]+$/.test(phone) || phone.replace(/\D/g,'').length < 7 || phone.replace(/\D/g,'').length > 15) {
                 progress.textContent = trackMessage('track_phone_required'); phoneInput.focus(); return;
@@ -1129,14 +1169,10 @@
             button.setAttribute('aria-busy', 'true');
             button.textContent = trackMessage('track_loading');
             progress.textContent = trackMessage('track_wait');
-            const controller = new AbortController();
-            const timeout = setTimeout(() => controller.abort(), 25000);
             try {
-                const response = await fetch(SCRIPT_URL, {method:'POST', redirect:'follow', signal:controller.signal, headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify({action:'TRACK_TICKET', ticketId, phone, ...(accessToken ? {accessToken} : {})})});
-                if (!response.ok) throw new Error('CONNECTION');
-                const data = await response.json();
+                const data=await portalRequest({action:'TRACK_TICKET',ticketId,phone,accessToken});
                 if (!data.found) {
-                    progress.textContent = (data.error || '').includes('Too many attempts') ? trackMessage('track_limited') : trackMessage('track_mismatch');
+                    progress.textContent = data.code==='RATE_LIMITED' ? trackMessage('track_limited') : data.code==='AUTH_REQUIRED' ? trackMessage('track_link_required') : data.code==='AUTH_FAILED' ? trackMessage('track_mismatch') : trackMessage('track_connection');
                     return;
                 }
                 const token = data.accessToken || accessToken;
@@ -1153,7 +1189,7 @@
             } catch (_) {
                 progress.textContent = trackMessage('track_connection');
             } finally {
-                clearTimeout(timeout); trackingBusy = false;
+                trackingBusy = false;
                 button.disabled = false; searchButton.disabled = false; input.disabled = false; phoneInput.disabled = false;
                 button.removeAttribute('aria-busy'); button.innerHTML = originalButton;
             }
@@ -1168,8 +1204,7 @@
             if (button.disabled) return;
             button.disabled = true;
             try {
-                const response = await fetch(SCRIPT_URL, {method:'POST', redirect:'follow', headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify({action:'REOPEN_TICKET', ticketId, comment, accessToken:ticketAccess.get(ticketId)})});
-                const result = await response.json();
+                const result=await portalRequest({action:'REOPEN_TICKET',ticketId,comment,phone:document.getElementById('trackPhone').value.trim(),accessToken:ticketAccess.get(ticketId)});
                 if (!result.success) throw new Error(result.error || 'Update failed.');
                 alert(uiText('Your request was sent back to support.'));
                 document.getElementById('reopenComment').value = '';
@@ -1179,8 +1214,9 @@
         }
 
         function loadPrivateTrackingLink() {
-            if (!location.hash.startsWith('#ticket=')) return;
-            const access = parseTrackingLink(location.href);
+            if (!initialPrivateTrackingUrl) return;
+            const access = parseTrackingLink(initialPrivateTrackingUrl);
+            initialPrivateTrackingUrl = '';
             // Remove the private fragment from the visible address; retain it in memory only.
             history.replaceState(null, '', location.pathname + location.search);
             if (!access) { alert(uiText('This tracking link is invalid. Contact support.')); return; }
