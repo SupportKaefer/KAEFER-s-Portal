@@ -110,6 +110,22 @@
         }
 header > div > .flex:last-child { flex-wrap:wrap; }
 header .bg-white { flex-shrink:0; }
+
+        #btnTrack { flex:0 0 auto;min-width:110px;white-space:nowrap; }
+        #trackTicketId { min-width:0;flex:1;direction:ltr; }
+        .conversation-header { display:flex;align-items:center;flex-wrap:wrap;gap:10px; }
+        .conversation-header h3 { flex:1;font-size:18px;font-weight:700; }
+        .conversation-list { display:flex;flex-direction:column;gap:14px;padding:18px 0; }
+        .chat-bubble { max-width:88%;padding:14px 16px;border:1px solid #cbd5e1;border-radius:16px;background:#f1f5f9;color:#0f172a; }
+        .chat-mine { align-self:flex-end;background:#dbeafe;border-color:#93c5fd; }
+        .chat-support { align-self:flex-start;background:#f1f5f9; }
+        .chat-event { align-self:center;text-align:center;background:#fff;font-size:13px; }
+        .chat-bubble p { white-space:pre-wrap;overflow-wrap:anywhere;margin:8px 0;line-height:1.7; }
+        .chat-bubble small { color:#475569;font-size:12px; }
+        @media(max-width:639px){.portal-tab{min-height:70px;font-size:10px;}.portal-tab span{overflow-wrap:normal;}body{padding-bottom:calc(94px + env(safe-area-inset-bottom));}.chat-bubble{max-width:95%;}}
+        :root { color-scheme:light; }
+        .text-slate-400,.text-slate-500 { color:#475569; }
+        .bg-blue-900 .text-blue-200,.bg-blue-950 .text-blue-200 { color:#dbeafe; }
 </style>
 </head>
 <body class="bg-slate-100 font-sans text-slate-800 min-h-screen flex flex-col justify-between">
@@ -554,8 +570,9 @@ header .bg-white { flex-shrink:0; }
                     <span data-key="check_status">Verify your request</span>
                 </h2>
 
+                <label for="trackTicketId" class="block font-semibold" data-key="chat_ticket">Ticket number</label>
                 <div class="flex flex-col sm:flex-row gap-2">
-                    <input type="text" id="trackTicketId" placeholder="Paste your private tracking link or enter Ticket #" data-ne-placeholder="निजी लिङ्क टाँस्नुहोस् वा टिकट नम्बर लेख्नुहोस्" class="w-full border border-slate-300 p-2.5 rounded-lg text-sm font-semibold uppercase focus:ring-2 focus:ring-blue-600 focus:outline-none">
+                    <input type="text" id="trackTicketId" placeholder="T-000001" class="w-full border border-slate-300 p-2.5 rounded-lg text-sm font-semibold focus:ring-2 focus:ring-blue-600 focus:outline-none">
                     <button onclick="trackTicket(true)" id="btnTrack" class="bg-slate-800 hover:bg-slate-900 text-white px-6 py-2.5 rounded-lg font-bold text-sm transition-all flex items-center justify-center gap-2">
                         <i class="fa-solid fa-search"></i>
                         <span data-key="btn_search">Search</span>
@@ -590,11 +607,15 @@ header .bg-white { flex-shrink:0; }
                         <div><span data-key="request_created">Submitted</span><strong id="resCreated">—</strong></div>
                         <div><span data-key="request_updated">Last updated</span><strong id="resUpdated">—</strong></div>
                     </div>
-                    <div class="response-panel">
-                        <p class="text-slate-500 font-semibold uppercase" data-key="lbl_hr_comment">Support Response:</p>
-                        <div id="resHRComment" class="p-3 bg-white border rounded-lg text-slate-700 whitespace-pre-wrap font-sans">Under review...</div>
-                    </div>
-
+                    <div class="conversation-header"><h3 data-key="chat_title">Conversation history</h3><button type="button" class="secondary-action" onclick="refreshConversation()" data-key="chat_refresh">Refresh</button><button type="button" class="secondary-action" onclick="finishChat()" data-key="chat_finish">Finish / Sign out</button></div>
+                    <p class="text-sm" data-key="chat_privacy">Private session. Finish when using a shared device. Inactive sessions expire after 10 minutes.</p>
+                    <div id="conversationList" class="conversation-list" aria-label="Ticket conversation"></div>
+                    <p id="chatNotice" role="status" aria-live="polite"></p>
+                    <form onsubmit="sendChatMessage(event)" class="space-y-3">
+                        <label for="chatDraft" class="block font-semibold" data-key="chat_reply">Your message</label>
+                        <textarea id="chatDraft" rows="3" maxlength="2000" required class="w-full border rounded-lg p-3"></textarea>
+                        <button id="chatSend" type="submit" class="w-full bg-blue-900 text-white rounded-lg p-3 font-bold" data-key="chat_send">Send message</button>
+                    </form>
                     <div class="tracking-tools"><button type="button" onclick="copyTrackingLink()" class="secondary-action" data-key="save_private_link">Copy private tracking link</button><p id="trackCopyMessage" role="status" class="text-sm"></p></div>
                     <div id="reopenBox" class="pt-2 border-t border-slate-200 space-y-2">
                         <p class="text-xs text-red-600 font-bold flex items-center gap-1" data-key="msg_not_satisfied">
@@ -774,6 +795,12 @@ Object.assign(translations.ne,{"pin_choose": "६ अङ्कको PIN छा�
 Object.assign(translations.hi,{"pin_choose": "6 अंकों का PIN चुनें", "pin_confirm": "PIN दोबारा लिखें", "pin_enter": "आपका 6 अंकों का PIN", "pin_mismatch": "दोनों स्थानों पर एक ही 6 अंक लिखें।", "pin_auth_failed": "टिकट नंबर, पंजीकृत मोबाइल नंबर और PIN जाँचें।", "pin_receipt": "टिकट नंबर और PIN सुरक्षित रखें। मोबाइल नंबर के साथ किसी भी डिवाइस पर उपयोग करें। निजी लिंक वैकल्पिक है; इसे साझा न करें।", "pin_track_help": "टिकट नंबर के बाद पंजीकृत मोबाइल नंबर और PIN लिखें। PIN भूलने पर पहचान सत्यापन के लिए सहायता से संपर्क करें।", "pin_legacy": "पुराने टिकट में PIN नहीं है? निजी लिंक उपयोग करें या पहचान सत्यापन के बाद सहायता से PIN बनवाएँ।", "private_link_title": "सरल, निजी ट्रैकिंग — SMS शुल्क नहीं", "private_link_notice": "याद रखने योग्य 6 अंकों का PIN चुनें। किसी भी डिवाइस पर टिकट नंबर, पंजीकृत मोबाइल नंबर और PIN से स्थिति देखें। PIN साझा न करें। भूलने पर पहचान जाँच के बाद सहायता मिलेगी।", "track_phone_action": "मोबाइल नंबर और PIN लिखकर Submit दबाएँ।"});
 Object.assign(translations.ar,{"pin_choose": "اختر رمز PIN من 6 أرقام", "pin_confirm": "أدخل الرمز مرة أخرى", "pin_enter": "رمز PIN الخاص بك من 6 أرقام", "pin_mismatch": "أدخل نفس الأرقام الستة في الحقلين.", "pin_auth_failed": "تحقق من رقم الطلب ورقم الجوال المسجل ورمز PIN.", "pin_receipt": "احتفظ برقم الطلب ورمز PIN بأمان. استخدمهما مع رقم الجوال على أي جهاز. الرابط الخاص اختياري؛ لا تشاركه.", "pin_track_help": "أدخل رقم الطلب ثم رقم الجوال المسجل ورمز PIN. نسيت الرمز؟ تواصل مع الدعم للتحقق من هويتك.", "pin_legacy": "طلب قديم بلا PIN؟ استخدم رابطك الخاص أو تواصل مع الدعم لإعداد رمز بعد التحقق من الهوية.", "private_link_title": "متابعة سهلة وخاصة — دون رسوم SMS", "private_link_notice": "اختر رمزاً من ستة أرقام يمكنك تذكره. تابع طلبك على أي جهاز باستخدام رقم الطلب والجوال المسجل والرمز. لا تشارك الرمز. يساعدك الدعم بعد التحقق من الهوية إذا نسيته.", "track_phone_action": "أدخل رقم الجوال ورمز PIN ثم اضغط إرسال."});
 Object.assign(translations.ur,{"pin_choose": "6 ہندسوں کا PIN منتخب کریں", "pin_confirm": "PIN دوبارہ لکھیں", "pin_enter": "آپ کا 6 ہندسوں کا PIN", "pin_mismatch": "دونوں خانوں میں یکساں 6 ہندسے لکھیں۔", "pin_auth_failed": "ٹکٹ نمبر، رجسٹرڈ موبائل نمبر اور PIN چیک کریں۔", "pin_receipt": "ٹکٹ نمبر اور PIN محفوظ رکھیں۔ موبائل نمبر کے ساتھ کسی بھی ڈیوائس پر استعمال کریں۔ نجی لنک اختیاری ہے؛ اسے شیئر نہ کریں۔", "pin_track_help": "ٹکٹ نمبر کے بعد رجسٹرڈ موبائل نمبر اور PIN لکھیں۔ PIN بھول جائیں تو شناخت کی تصدیق کے لیے مدد سے رابطہ کریں۔", "pin_legacy": "پرانے ٹکٹ کا PIN نہیں؟ نجی لنک استعمال کریں یا شناخت کی تصدیق کے بعد مدد سے PIN بنوائیں۔", "private_link_title": "آسان، نجی ٹریکنگ — SMS فیس نہیں", "private_link_notice": "یاد رہنے والا 6 ہندسوں کا PIN منتخب کریں۔ کسی بھی ڈیوائس پر ٹکٹ نمبر، رجسٹرڈ موبائل نمبر اور PIN سے درخواست دیکھیں۔ PIN شیئر نہ کریں۔ بھولنے پر شناخت کی تصدیق کے بعد مدد ملے گی۔", "track_phone_action": "موبائل نمبر اور PIN لکھ کر Submit دبائیں۔"});
+
+Object.assign(translations.en,{"chat_title": "Conversation history", "chat_refresh": "Refresh", "chat_finish": "Finish / Sign out", "chat_privacy": "Private session. Finish on shared devices. Inactivity expires after 10 minutes.", "chat_reply": "Your message", "chat_send": "Send message", "chat_sent": "Message sent.", "chat_sending": "Sending…", "chat_failed": "Could not send. Your draft is kept; retry.", "chat_expired": "Session ended. Verify your ticket again.", "chat_legacy": "Earlier record — time not recorded", "chat_you": "You", "chat_support": "Support Team", "chat_system": "System", "chat_ticket": "Ticket number"});
+Object.assign(translations.ne,{"chat_title": "कुराकानीको इतिहास", "chat_refresh": "ताजा गर्नुहोस्", "chat_finish": "समाप्त / साइन आउट", "chat_privacy": "निजी सत्र। साझा उपकरणमा सकिएपछि बन्द गर्नुहोस्। १० मिनेट निष्क्रिय भए सत्र समाप्त हुन्छ।", "chat_reply": "तपाईंको सन्देश", "chat_send": "सन्देश पठाउनुहोस्", "chat_sent": "सन्देश पठाइयो।", "chat_sending": "पठाउँदै…", "chat_failed": "पठाउन सकिएन। मस्यौदा सुरक्षित छ; फेरि प्रयास गर्नुहोस्।", "chat_expired": "सत्र समाप्त भयो। टिकट फेरि प्रमाणित गर्नुहोस्।", "chat_legacy": "पुरानो रेकर्ड — समय दर्ता गरिएको छैन", "chat_you": "तपाईं", "chat_support": "सहायता टोली", "chat_system": "प्रणाली", "chat_ticket": "टिकट नम्बर"});
+Object.assign(translations.hi,{"chat_title": "बातचीत का इतिहास", "chat_refresh": "ताज़ा करें", "chat_finish": "समाप्त / साइन आउट", "chat_privacy": "निजी सत्र। साझा डिवाइस पर समाप्त करें। 10 मिनट निष्क्रिय रहने पर सत्र समाप्त होगा।", "chat_reply": "आपका संदेश", "chat_send": "संदेश भेजें", "chat_sent": "संदेश भेजा गया।", "chat_sending": "भेज रहे हैं…", "chat_failed": "भेज नहीं सके। मसौदा सुरक्षित है; फिर कोशिश करें।", "chat_expired": "सत्र समाप्त। टिकट फिर सत्यापित करें।", "chat_legacy": "पुराना रिकॉर्ड — समय दर्ज नहीं", "chat_you": "आप", "chat_support": "सहायता टीम", "chat_system": "सिस्टम", "chat_ticket": "टिकट नंबर"});
+Object.assign(translations.ar,{"chat_title": "سجل المحادثة", "chat_refresh": "تحديث", "chat_finish": "إنهاء / تسجيل الخروج", "chat_privacy": "جلسة خاصة. أنهها على الأجهزة المشتركة. تنتهي بعد 10 دقائق دون نشاط.", "chat_reply": "رسالتك", "chat_send": "إرسال الرسالة", "chat_sent": "تم إرسال الرسالة.", "chat_sending": "جارٍ الإرسال…", "chat_failed": "تعذر الإرسال. تم الاحتفاظ بالمسودة؛ حاول مجدداً.", "chat_expired": "انتهت الجلسة. تحقق من الطلب مجدداً.", "chat_legacy": "سجل سابق — الوقت غير مسجل", "chat_you": "أنت", "chat_support": "فريق الدعم", "chat_system": "النظام", "chat_ticket": "رقم الطلب"});
+Object.assign(translations.ur,{"chat_title": "گفتگو کی تاریخ", "chat_refresh": "تازہ کریں", "chat_finish": "ختم / سائن آؤٹ", "chat_privacy": "نجی سیشن۔ مشترکہ ڈیوائس پر ختم کریں۔ 10 منٹ غیر فعال رہنے پر ختم ہو گا۔", "chat_reply": "آپ کا پیغام", "chat_send": "پیغام بھیجیں", "chat_sent": "پیغام بھیج دیا گیا۔", "chat_sending": "بھیج رہے ہیں…", "chat_failed": "بھیج نہیں سکے۔ مسودہ محفوظ ہے؛ دوبارہ کوشش کریں۔", "chat_expired": "سیشن ختم۔ ٹکٹ دوبارہ تصدیق کریں۔", "chat_legacy": "پرانا ریکارڈ — وقت درج نہیں", "chat_you": "آپ", "chat_support": "سپورٹ ٹیم", "chat_system": "سسٹم", "chat_ticket": "ٹکٹ نمبر"});
         let currentTab='home';
         function switchTab(tab) {
             const tabs=['home','calc','forms','support','track'];
@@ -821,6 +848,7 @@ Object.assign(translations.ur,{"pin_choose": "6 ہندسوں کا PIN منتخب
             }
             updateNokShare();
             if (typeof noticeRecords!=='undefined') renderNotices();
+            if(typeof chatMessages!=='undefined'&&chatMessages.length)renderConversation(chatMessages);
         }
 
         async function fetchVisitorCount() {
@@ -1224,6 +1252,7 @@ Object.assign(translations.ur,{"pin_choose": "6 ہندسوں کا PIN منتخب
         }
         async function trackTicket(showPhoneOnly = false) {
             if (trackingBusy) return;
+            if(chatSession){const old=chatSession;chatSession=null;portalRequest({action:'END_SESSION',ticketId:old.ticketId,sessionToken:old.sessionToken}).catch(()=>{});document.getElementById('conversationList').replaceChildren();}
             const button = document.getElementById('btnVerifyPhone');
             const searchButton = document.getElementById('btnTrack');
             const input = document.getElementById('trackTicketId');
@@ -1277,7 +1306,9 @@ Object.assign(translations.ur,{"pin_choose": "6 ہندسوں کا PIN منتخب
                 document.getElementById('resCategory').textContent=data.category||'—';
                 document.getElementById('resCreated').textContent=formatPortalDate(data.createdAt);
                 document.getElementById('resUpdated').textContent=formatPortalDate(data.updatedAt);
-                document.getElementById('resHRComment').textContent = data.hrComment || uiText('Under review...');
+                chatSession={ticketId,sessionToken:data.sessionToken,activity:Date.now()};
+                renderConversation(data.messages||[]);document.getElementById('trackPin').value='';
+                document.getElementById('chatNotice').textContent='';
                 progress.textContent = trackMessage('track_verified');
                 resDiv.scrollIntoView({behavior:'smooth', block:'nearest'});
             } catch (_) {
@@ -1289,6 +1320,65 @@ Object.assign(translations.ur,{"pin_choose": "6 ہندسوں کا PIN منتخب
             }
         }
 
+
+        let chatSession=null,chatBusy=false,chatRefreshBusy=false,pendingChat=null,chatMessages=[];
+        function renderConversation(messages){
+            chatMessages=messages;
+            const list=document.getElementById('conversationList');list.replaceChildren();
+            messages.forEach(message=>{
+                const article=document.createElement('article');article.className='chat-bubble '+(message.role==='EMPLOYEE'?'chat-mine':message.role==='SUPPORT'?'chat-support':'chat-event');
+                const author=document.createElement('strong');author.textContent=trackMessage(message.role==='EMPLOYEE'?'chat_you':message.role==='SUPPORT'?'chat_support':'chat_system');
+                const text=document.createElement('p');text.textContent=message.text||'';
+                const time=document.createElement('small');time.textContent=message.at?formatPortalDate(message.at):trackMessage('chat_legacy');
+                article.append(author,text,time);list.append(article);
+            });
+        }
+        function finishChat(notify=true){
+            const session=chatSession;chatSession=null;verifiedTicketId=null;chatMessages=[];pendingChat=null;
+            if(session){ticketAccess.delete(session.ticketId);portalRequest({action:'END_SESSION',ticketId:session.ticketId,sessionToken:session.sessionToken}).catch(()=>{});}
+            latestTracking=null;document.getElementById('ticketSuccess').hidden=true;document.getElementById('privateTrackingLink').value='';
+            document.getElementById('statusResult').classList.add('hidden');document.getElementById('conversationList').replaceChildren();
+            ['chatDraft','trackPhone','trackPin','legacyTicketCode','reopenComment'].forEach(id=>document.getElementById(id).value='');
+            ['resTicketNo','resCategory','resCreated','resUpdated','resStatusBadge','chatNotice','savedTicketNumber','trackCopyMessage'].forEach(id=>document.getElementById(id).textContent='');
+            if(notify)document.getElementById('trackProgress').textContent=trackMessage('chat_expired');
+        }
+        async function refreshConversation(){
+            if(!chatSession||chatRefreshBusy||chatBusy)return;
+            const session=chatSession;chatRefreshBusy=true;
+            try{
+                const result=await portalRequest({action:'GET_CONVERSATION',ticketId:session.ticketId,sessionToken:session.sessionToken});
+                if(chatSession!==session)return;
+                if(result.code==='SESSION_EXPIRED'){finishChat();return;}
+                if(!result.success)throw new Error('Refresh failed');
+                renderConversation(result.messages);document.getElementById('resStatusBadge').textContent=result.status;document.getElementById('resUpdated').textContent=formatPortalDate(result.updatedAt);
+            }catch(_){if(chatSession===session)document.getElementById('chatNotice').textContent=trackMessage('track_connection');}
+            finally{chatRefreshBusy=false;}
+        }
+        async function sendChatMessage(event){
+            event.preventDefault();if(chatBusy||!chatSession)return;
+            const session=chatSession,input=document.getElementById('chatDraft'),message=input.value.trim();if(!message)return;
+            if(!pendingChat||pendingChat.message!==message)pendingChat={message,id:crypto.randomUUID()};
+            const button=document.getElementById('chatSend'),notice=document.getElementById('chatNotice');chatBusy=true;button.disabled=true;input.disabled=true;notice.textContent=trackMessage('chat_sending');
+            try{
+                const result=await portalRequest({action:'SEND_MESSAGE',ticketId:session.ticketId,sessionToken:session.sessionToken,message,messageId:pendingChat.id});
+                if(chatSession!==session)return;
+                if(result.code==='SESSION_EXPIRED'){finishChat();return;}
+                if(!result.success)throw new Error('Send failed');
+                input.value='';pendingChat=null;renderConversation(result.messages);notice.textContent=trackMessage('chat_sent');
+            }catch(_){if(chatSession===session)notice.textContent=trackMessage('chat_failed');}
+            finally{chatBusy=false;button.disabled=false;input.disabled=false;}
+        }
+        document.addEventListener('pointerdown',()=>{if(chatSession)chatSession.activity=Date.now();});
+        document.addEventListener('keydown',()=>{if(chatSession)chatSession.activity=Date.now();});
+        setInterval(()=>{if(!chatSession)return;if(Date.now()-chatSession.activity>600000){finishChat();return;}if(!document.hidden&&currentTab==='track')refreshConversation();},30000);
+        document.addEventListener('visibilitychange',()=>{if(chatSession&&Date.now()-chatSession.activity>600000)finishChat();});
+
+        function invalidateChat(){
+            if(!chatSession)return;const old=chatSession;chatSession=null;verifiedTicketId=null;chatMessages=[];
+            ticketAccess.delete(old.ticketId);portalRequest({action:'END_SESSION',ticketId:old.ticketId,sessionToken:old.sessionToken}).catch(()=>{});
+            document.getElementById('conversationList').replaceChildren();document.getElementById('statusResult').classList.add('hidden');
+        }
+        ['trackTicketId','trackPhone','trackPin'].forEach(id=>document.getElementById(id).addEventListener('input',invalidateChat));
         document.getElementById('trackPin').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();trackTicket();}});
         document.getElementById('trackPin').addEventListener('input',()=>{verifiedTicketId=null;document.getElementById('statusResult').classList.add('hidden');});
         async function reopenTicket() {
@@ -1300,7 +1390,7 @@ Object.assign(translations.ur,{"pin_choose": "6 ہندسوں کا PIN منتخب
             if (button.disabled) return;
             button.disabled = true;
             try {
-                const result=await portalRequest({action:'REOPEN_TICKET',ticketId,comment,phone:document.getElementById('trackPhone').value.trim(),accessToken:ticketAccess.get(ticketId)});
+                const result=await portalRequest({action:'REOPEN_TICKET',ticketId,comment,messageId:requestIdFor('REOPEN_TICKET',{ticketId,comment}),phone:document.getElementById('trackPhone').value.trim(),accessToken:ticketAccess.get(ticketId)});
                 if (!result.success) throw new Error(result.error || 'Update failed.');
                 alert(uiText('Your request was sent back to support.'));
                 document.getElementById('reopenComment').value = '';
