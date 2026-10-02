@@ -437,6 +437,14 @@
                 </h2>
                 
                 <form id="supportForm" onsubmit="submitTicket(event)" class="space-y-4">
+                    <div class="bg-amber-50 border border-amber-300 rounded-xl p-4 space-y-2" role="note">
+                        <p class="font-bold text-amber-900" data-key="private_link_title">Important: save your private tracking link</p>
+                        <p class="text-sm text-amber-900" data-key="private_link_notice">After submitting, copy and save your private tracking link. It works on any device and protects your request and support response from other people. Your ticket number and mobile number alone cannot unlock your request. Keep the link private. If lost, support must verify your identity before issuing a replacement.</p>
+                        <label class="flex items-start gap-2 text-sm text-amber-900">
+                            <input type="checkbox" id="saveLinkAcknowledged" required class="mt-1">
+                            <span data-key="private_link_confirm">I understand that I must save my private link after submitting.</span>
+                        </label>
+                    </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs font-bold uppercase text-slate-700 mb-1" data-key="lbl_emp_id">Employee ID *</label>
@@ -476,7 +484,7 @@
                     <p id="savedTicketNumber" class="text-sm break-all"></p>
                     <button type="button" onclick="checkSavedTicket()" class="w-full bg-blue-900 text-white rounded-lg p-3 font-bold"><span data-ne="मेरो अनुरोध हेर्नुहोस्">Check My Request</span></button>
                     <button type="button" onclick="copyTrackingLink()" class="w-full bg-white border border-blue-900 text-blue-900 rounded-lg p-3 font-bold"><span data-ne="अनुरोध हेर्ने लिङ्क कपी गर्नुहोस्">Copy Tracking Link</span></button>
-                    <p class="text-sm"><span data-ne="यो निजी लिङ्क सुरक्षित राख्नुहोस्, जस्तै WhatsApp मा आफैँलाई पठाउनुहोस्। लिङ्क भएको व्यक्तिले तपाईंको अनुरोध हेर्न सक्छ। अरूलाई नदिनुहोस्।">Save this private link, for example in WhatsApp Message Yourself. Anyone with this link can access your request. Do not share it with others.</span></p>
+                    <p class="text-sm"><span data-ne="यो निजी लिङ्क सुरक्षित राख्नुहोस्, जस्तै WhatsApp मा आफैँलाई पठाउनुहोस्। अनुरोध हेर्न यो लिङ्क र दर्ता गरिएको मोबाइल नम्बर दुवै चाहिन्छ। लिङ्क अरूलाई नदिनुहोस्।">Save this private link, for example in WhatsApp Message Yourself. The link and registered mobile number are required to access your request. Do not share the link with others.</span></p>
                     <textarea id="privateTrackingLink" readonly aria-label="Private tracking link" class="w-full border rounded p-2 text-xs" rows="3"></textarea>
                     <p id="trackingCopyMessage" class="text-sm"></p>
                 </div>
@@ -497,8 +505,8 @@
                 </div>
 
                 <p class="text-sm text-slate-600"><span data-ne="आफ्नो अनुरोध हेर्न सुरक्षित राखेको निजी लिङ्क खोल्नुहोस्। हराएको छ भने टिकट नम्बर दिएर सहायता टोलीलाई सम्पर्क गर्नुहोस्।">Open your saved private link to check your request automatically. If you lost it, contact support with your ticket number.</span></p>
-                <details class="text-sm border rounded-lg p-3">
-                    <summary class="cursor-pointer font-semibold"><span data-ne="पहिलेको पहुँच कोड छ?">Already have an old access code?</span></summary>
+                <details id="legacyCodeSection" class="text-sm border rounded-lg p-3">
+                    <summary class="cursor-pointer font-semibold"><span data-key="legacy_code_label">Use a previously saved access code</span></summary>
                     <p class="my-2"><span data-ne="माथि टिकट नम्बर लेख्नुहोस् र तल सुरक्षित राखेको कोड टाँस्नुहोस्। त्यसपछि खोज्नुहोस् थिच्नुहोस्। अनुरोध भेटिएपछि निजी लिङ्क कपी गर्न सक्नुहुन्छ।">Enter your ticket number above and paste your saved code below once. Then press Search. You can copy a private link after the request is found.</span></p>
                     <input id="legacyTicketCode" type="password" autocomplete="off" aria-label="Previously issued ticket access code" class="w-full border rounded p-2" placeholder="Paste your previously saved code" data-ne-placeholder="पहिले सुरक्षित राखेको कोड टाँस्नुहोस्">
                 </details>
@@ -688,6 +696,8 @@
             ar:'افتح الرابط الخاص أو الصقه، أو أدخل الرمز السابق أدناه. رقم الطلب والجوال وحدهما لا يمنحان الوصول. تواصل مع الدعم إذا فقدت الرابط أو الرمز.',
             ur:'نجی لنک کھولیں یا پیسٹ کریں، یا نیچے پرانا کوڈ درج کریں۔ صرف ٹکٹ اور موبائل نمبر کافی نہیں۔ لنک یا کوڈ کھو گیا ہو تو سپورٹ سے رابطہ کریں۔'
         }).forEach(([lang,text])=>translations[lang].track_link_required=text);
+
+        Object.entries({"en": {"private_link_title": "Important: save your private tracking link", "private_link_notice": "After submitting, copy and save your private tracking link. It works on any device and protects your request and support response from other people. Your ticket number and mobile number alone cannot unlock your request. Keep the link private. If lost, support must verify your identity before issuing a replacement.", "private_link_confirm": "I understand that I must save my private link after submitting.", "legacy_code_label": "Use a previously saved access code", "track_link_required": "Open or paste your private tracking link, or expand “Use a previously saved access code” in this tracking section and paste your saved code there. If lost, contact support for identity-checked recovery."}, "ne": {"private_link_title": "महत्त्वपूर्ण: निजी लिङ्क सुरक्षित राख्नुहोस्", "private_link_notice": "अनुरोध पठाएपछि निजी लिङ्क कपी गरी सुरक्षित राख्नुहोस्। यो जुनसुकै उपकरणमा चल्छ र तपाईंको अनुरोध तथा जवाफ अरूबाट सुरक्षित राख्छ। टिकट र मोबाइल नम्बर मात्रले अनुरोध खोल्न मिल्दैन। लिङ्क अरूलाई नदिनुहोस्। हराएमा नयाँ लिङ्क दिनुअघि सहायता टोलीले तपाईंको पहिचान जाँच गर्नुपर्छ।", "private_link_confirm": "अनुरोध पठाएपछि निजी लिङ्क सुरक्षित राख्नुपर्छ भन्ने बुझेको छु।", "legacy_code_label": "पहिले सुरक्षित राखेको पहुँच कोड प्रयोग गर्नुहोस्", "track_link_required": "निजी लिङ्क खोल्नुहोस् वा टाँस्नुहोस्। अथवा यही खण्डमा “पहिले सुरक्षित राखेको पहुँच कोड प्रयोग गर्नुहोस्” खोलेर कोड टाँस्नुहोस्। हराएमा पहिचान जाँच गरी नयाँ लिङ्क लिन सहायता टोलीलाई सम्पर्क गर्नुहोस्।"}, "hi": {"private_link_title": "महत्वपूर्ण: अपना निजी लिंक सुरक्षित रखें", "private_link_notice": "अनुरोध भेजने के बाद निजी लिंक कॉपी करके सुरक्षित रखें। यह किसी भी डिवाइस पर काम करता है और आपकी जानकारी व सहायता के जवाब को सुरक्षित रखता है। केवल टिकट और मोबाइल नंबर से अनुरोध नहीं खुलेगा। लिंक साझा न करें। खोने पर सहायता टीम पहचान जाँचकर नया लिंक देगी।", "private_link_confirm": "मैं समझता हूँ कि अनुरोध भेजने के बाद निजी लिंक सुरक्षित रखना जरूरी है।", "legacy_code_label": "पहले सुरक्षित रखा गया एक्सेस कोड इस्तेमाल करें", "track_link_required": "निजी लिंक खोलें या पेस्ट करें, या इसी भाग में “पहले सुरक्षित रखा गया एक्सेस कोड इस्तेमाल करें” खोलकर अपना कोड पेस्ट करें। खोने पर पहचान जाँच और नए लिंक के लिए सहायता से संपर्क करें।"}, "ar": {"private_link_title": "مهم: احفظ رابط المتابعة الخاص", "private_link_notice": "بعد إرسال الطلب، انسخ الرابط الخاص واحفظه. يعمل على أي جهاز ويحمي طلبك ورد الدعم من الآخرين. رقم الطلب والجوال وحدهما لا يكفيان للوصول. لا تشارك الرابط. عند فقدانه يتحقق الدعم من هويتك قبل إصدار رابط جديد.", "private_link_confirm": "أفهم أن علي حفظ الرابط الخاص بعد إرسال الطلب.", "legacy_code_label": "استخدام رمز وصول محفوظ سابقاً", "track_link_required": "افتح الرابط الخاص أو الصقه، أو افتح «استخدام رمز وصول محفوظ سابقاً» في قسم المتابعة والصق الرمز فيه. إذا فقدته، تواصل مع الدعم للتحقق من هويتك وإصدار رابط جديد."}, "ur": {"private_link_title": "اہم: اپنا نجی ٹریکنگ لنک محفوظ رکھیں", "private_link_notice": "درخواست بھیجنے کے بعد نجی لنک کاپی اور محفوظ کریں۔ یہ کسی بھی ڈیوائس پر کام کرتا ہے اور آپ کی درخواست اور سپورٹ جواب دوسروں سے محفوظ رکھتا ہے۔ صرف ٹکٹ اور موبائل نمبر کافی نہیں۔ لنک شیئر نہ کریں۔ کھو جانے پر سپورٹ شناخت چیک کرکے نیا لنک دے گی۔", "private_link_confirm": "میں سمجھتا ہوں کہ درخواست بھیجنے کے بعد نجی لنک محفوظ کرنا ضروری ہے۔", "legacy_code_label": "پہلے محفوظ کیا گیا رسائی کوڈ استعمال کریں", "track_link_required": "نجی لنک کھولیں یا پیسٹ کریں، یا اسی ٹریکنگ حصے میں «پہلے محفوظ کیا گیا رسائی کوڈ استعمال کریں» کھول کر کوڈ پیسٹ کریں۔ کھو جانے پر شناخت کی جانچ اور نئے لنک کے لیے سپورٹ سے رابطہ کریں۔"}}).forEach(([lang,values])=>Object.assign(translations[lang],values));
 
         function switchTab(tab) {
             const validTabs = ['calc', 'forms', 'support'];
@@ -1157,7 +1167,10 @@
                 return;
             }
             if (!validTicketAccess(ticketId,accessToken)) {
-                progress.textContent = trackMessage('track_link_required'); return;
+                progress.textContent = trackMessage('track_link_required');
+                document.getElementById('legacyCodeSection').open=true;
+                document.getElementById('legacyTicketCode').focus();
+                return;
             }
             const phone = phoneInput.value.trim();
             if (!/^[+\d\s().-]+$/.test(phone) || phone.replace(/\D/g,'').length < 7 || phone.replace(/\D/g,'').length > 15) {
@@ -1173,6 +1186,7 @@
                 const data=await portalRequest({action:'TRACK_TICKET',ticketId,phone,accessToken});
                 if (!data.found) {
                     progress.textContent = data.code==='RATE_LIMITED' ? trackMessage('track_limited') : data.code==='AUTH_REQUIRED' ? trackMessage('track_link_required') : data.code==='AUTH_FAILED' ? trackMessage('track_mismatch') : trackMessage('track_connection');
+                    if (data.code==='AUTH_REQUIRED') document.getElementById('legacyCodeSection').open=true;
                     return;
                 }
                 const token = data.accessToken || accessToken;
