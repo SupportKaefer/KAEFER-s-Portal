@@ -607,9 +607,10 @@ header .bg-white { flex-shrink:0; }
                         <div><span data-key="request_created">Submitted</span><strong id="resCreated">—</strong></div>
                         <div><span data-key="request_updated">Last updated</span><strong id="resUpdated">—</strong></div>
                     </div>
-                    <div class="conversation-header"><h3 data-key="chat_title">Conversation history</h3><button type="button" class="secondary-action" onclick="refreshConversation()" data-key="chat_refresh">Refresh</button><button type="button" class="secondary-action" onclick="finishChat()" data-key="chat_finish">Finish / Sign out</button></div>
+                    <div class="conversation-header"><h3 data-key="chat_title">Conversation history</h3><button type="button" class="secondary-action" onclick="refreshConversation(true)" data-key="chat_refresh">Refresh</button><button type="button" class="secondary-action" onclick="finishChat()" data-key="chat_finish">Finish / Sign out</button></div>
                     <p class="text-sm" data-key="chat_privacy">Private session. Finish when using a shared device. Inactive sessions expire after 10 minutes.</p>
                     <div id="conversationList" class="conversation-list" aria-label="Ticket conversation"></div>
+                    <button id="chatMore" type="button" hidden class="secondary-action" onclick="refreshConversation(true)" data-key="chat_more">Load more messages</button>
                     <p id="chatNotice" role="status" aria-live="polite"></p>
                     <form onsubmit="sendChatMessage(event)" class="space-y-3">
                         <label for="chatDraft" class="block font-semibold" data-key="chat_reply">Your message</label>
@@ -801,6 +802,7 @@ Object.assign(translations.ne,{"chat_title": "कुराकानीको इ
 Object.assign(translations.hi,{"chat_title": "बातचीत का इतिहास", "chat_refresh": "ताज़ा करें", "chat_finish": "समाप्त / साइन आउट", "chat_privacy": "निजी सत्र। साझा डिवाइस पर समाप्त करें। 10 मिनट निष्क्रिय रहने पर सत्र समाप्त होगा।", "chat_reply": "आपका संदेश", "chat_send": "संदेश भेजें", "chat_sent": "संदेश भेजा गया।", "chat_sending": "भेज रहे हैं…", "chat_failed": "भेज नहीं सके। मसौदा सुरक्षित है; फिर कोशिश करें।", "chat_expired": "सत्र समाप्त। टिकट फिर सत्यापित करें।", "chat_legacy": "पुराना रिकॉर्ड — समय दर्ज नहीं", "chat_you": "आप", "chat_support": "सहायता टीम", "chat_system": "सिस्टम", "chat_ticket": "टिकट नंबर"});
 Object.assign(translations.ar,{"chat_title": "سجل المحادثة", "chat_refresh": "تحديث", "chat_finish": "إنهاء / تسجيل الخروج", "chat_privacy": "جلسة خاصة. أنهها على الأجهزة المشتركة. تنتهي بعد 10 دقائق دون نشاط.", "chat_reply": "رسالتك", "chat_send": "إرسال الرسالة", "chat_sent": "تم إرسال الرسالة.", "chat_sending": "جارٍ الإرسال…", "chat_failed": "تعذر الإرسال. تم الاحتفاظ بالمسودة؛ حاول مجدداً.", "chat_expired": "انتهت الجلسة. تحقق من الطلب مجدداً.", "chat_legacy": "سجل سابق — الوقت غير مسجل", "chat_you": "أنت", "chat_support": "فريق الدعم", "chat_system": "النظام", "chat_ticket": "رقم الطلب"});
 Object.assign(translations.ur,{"chat_title": "گفتگو کی تاریخ", "chat_refresh": "تازہ کریں", "chat_finish": "ختم / سائن آؤٹ", "chat_privacy": "نجی سیشن۔ مشترکہ ڈیوائس پر ختم کریں۔ 10 منٹ غیر فعال رہنے پر ختم ہو گا۔", "chat_reply": "آپ کا پیغام", "chat_send": "پیغام بھیجیں", "chat_sent": "پیغام بھیج دیا گیا۔", "chat_sending": "بھیج رہے ہیں…", "chat_failed": "بھیج نہیں سکے۔ مسودہ محفوظ ہے؛ دوبارہ کوشش کریں۔", "chat_expired": "سیشن ختم۔ ٹکٹ دوبارہ تصدیق کریں۔", "chat_legacy": "پرانا ریکارڈ — وقت درج نہیں", "chat_you": "آپ", "chat_support": "سپورٹ ٹیم", "chat_system": "سسٹم", "chat_ticket": "ٹکٹ نمبر"});
+        Object.entries({en:'Load more messages',ne:'थप सन्देशहरू देखाउनुहोस्',hi:'और संदेश देखें',ar:'تحميل المزيد من الرسائل',ur:'مزید پیغامات دیکھیں'}).forEach(([lang,text])=>translations[lang].chat_more=text);
         let currentTab='home';
         function switchTab(tab) {
             const tabs=['home','calc','forms','support','track'];
@@ -1306,7 +1308,8 @@ Object.assign(translations.ur,{"chat_title": "گفتگو کی تاریخ", "chat
                 document.getElementById('resCategory').textContent=data.category||'—';
                 document.getElementById('resCreated').textContent=formatPortalDate(data.createdAt);
                 document.getElementById('resUpdated').textContent=formatPortalDate(data.updatedAt);
-                chatSession={ticketId,sessionToken:data.sessionToken,activity:Date.now()};
+                chatSession={ticketId,sessionToken:data.sessionToken,activity:Date.now(),cursor:data.cursor||0,nextPoll:Date.now()+45000,delay:45000};
+                document.getElementById('chatMore').hidden=!data.hasMore;
                 renderConversation(data.messages||[]);document.getElementById('trackPin').value='';
                 document.getElementById('chatNotice').textContent='';
                 progress.textContent = trackMessage('track_verified');
@@ -1333,6 +1336,7 @@ Object.assign(translations.ur,{"chat_title": "گفتگو کی تاریخ", "chat
                 article.append(author,text,time);list.append(article);
             });
         }
+        function mergeConversation(messages,reset=false){const map=new Map((reset?[]:chatMessages).map(m=>[m.id,m]));messages.forEach(m=>map.set(m.id,m));renderConversation([...map.values()]);}
         function finishChat(notify=true){
             const session=chatSession;chatSession=null;verifiedTicketId=null;chatMessages=[];pendingChat=null;
             if(session){ticketAccess.delete(session.ticketId);portalRequest({action:'END_SESSION',ticketId:session.ticketId,sessionToken:session.sessionToken}).catch(()=>{});}
@@ -1342,17 +1346,19 @@ Object.assign(translations.ur,{"chat_title": "گفتگو کی تاریخ", "chat
             ['resTicketNo','resCategory','resCreated','resUpdated','resStatusBadge','chatNotice','savedTicketNumber','trackCopyMessage'].forEach(id=>document.getElementById(id).textContent='');
             if(notify)document.getElementById('trackProgress').textContent=trackMessage('chat_expired');
         }
-        async function refreshConversation(){
+        async function refreshConversation(manual=false){
             if(!chatSession||chatRefreshBusy||chatBusy)return;
             const session=chatSession;chatRefreshBusy=true;
             try{
-                const result=await portalRequest({action:'GET_CONVERSATION',ticketId:session.ticketId,sessionToken:session.sessionToken});
+                const result=await portalRequest({action:'GET_CONVERSATION',ticketId:session.ticketId,sessionToken:session.sessionToken,cursor:session.cursor,active:session.activity>(session.reportedActivity||0)});
                 if(chatSession!==session)return;
                 if(result.code==='SESSION_EXPIRED'){finishChat();return;}
                 if(!result.success)throw new Error('Refresh failed');
-                renderConversation(result.messages);document.getElementById('resStatusBadge').textContent=result.status;document.getElementById('resUpdated').textContent=formatPortalDate(result.updatedAt);
-            }catch(_){if(chatSession===session)document.getElementById('chatNotice').textContent=trackMessage('track_connection');}
-            finally{chatRefreshBusy=false;}
+                session.reportedActivity=session.activity;session.delay=45000;session.cursor=result.cursor;
+                document.getElementById('chatMore').hidden=!result.hasMore;
+                mergeConversation(result.messages,result.reset);document.getElementById('resStatusBadge').textContent=result.status;document.getElementById('resUpdated').textContent=formatPortalDate(result.updatedAt);
+            }catch(_){session.delay=Math.min(240000,session.delay*2);if(chatSession===session)document.getElementById('chatNotice').textContent=trackMessage('track_connection');}
+            finally{session.nextPoll=Date.now()+session.delay+Math.random()*10000;chatRefreshBusy=false;}
         }
         async function sendChatMessage(event){
             event.preventDefault();if(chatBusy||!chatSession)return;
@@ -1360,17 +1366,17 @@ Object.assign(translations.ur,{"chat_title": "گفتگو کی تاریخ", "chat
             if(!pendingChat||pendingChat.message!==message)pendingChat={message,id:crypto.randomUUID()};
             const button=document.getElementById('chatSend'),notice=document.getElementById('chatNotice');chatBusy=true;button.disabled=true;input.disabled=true;notice.textContent=trackMessage('chat_sending');
             try{
-                const result=await portalRequest({action:'SEND_MESSAGE',ticketId:session.ticketId,sessionToken:session.sessionToken,message,messageId:pendingChat.id});
+                const result=await portalRequest({action:'SEND_MESSAGE',ticketId:session.ticketId,sessionToken:session.sessionToken,message,messageId:pendingChat.id,cursor:session.cursor});
                 if(chatSession!==session)return;
                 if(result.code==='SESSION_EXPIRED'){finishChat();return;}
                 if(!result.success)throw new Error('Send failed');
-                input.value='';pendingChat=null;renderConversation(result.messages);notice.textContent=trackMessage('chat_sent');
+                input.value='';pendingChat=null;session.activity=Date.now();session.cursor=result.cursor;document.getElementById('chatMore').hidden=!result.hasMore;mergeConversation(result.messages,result.reset);notice.textContent=trackMessage('chat_sent');
             }catch(_){if(chatSession===session)notice.textContent=trackMessage('chat_failed');}
             finally{chatBusy=false;button.disabled=false;input.disabled=false;}
         }
         document.addEventListener('pointerdown',()=>{if(chatSession)chatSession.activity=Date.now();});
         document.addEventListener('keydown',()=>{if(chatSession)chatSession.activity=Date.now();});
-        setInterval(()=>{if(!chatSession)return;if(Date.now()-chatSession.activity>600000){finishChat();return;}if(!document.hidden&&currentTab==='track')refreshConversation();},30000);
+        setInterval(()=>{if(!chatSession)return;if(Date.now()-chatSession.activity>600000){finishChat();return;}if(!document.hidden&&currentTab==='track'&&Date.now()>=chatSession.nextPoll)refreshConversation();},5000);
         document.addEventListener('visibilitychange',()=>{if(chatSession&&Date.now()-chatSession.activity>600000)finishChat();});
 
         function invalidateChat(){
